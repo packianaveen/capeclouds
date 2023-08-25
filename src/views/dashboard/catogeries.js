@@ -8,6 +8,9 @@ import axios from 'axios';
 import Modal from '@mui/material/Modal';
 import Swal from 'sweetalert2';
 import { url } from 'src/constant';
+
+import Blog from './components/Blog';
+
 const SamplePage = () => {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
@@ -92,12 +95,17 @@ const SamplePage = () => {
         {data.map((it, x) => (
           <Card style={{ margin: '10px', cursor: 'pointer' }} onClick={() => hanldeService(x)}>
             <CardContent>
-              <img height="80px" width="200px" src={`${url}/Images/` + it.photo} />
+              <img
+                style={{ objectFit: 'contain' }}
+                height="80px"
+                width="200px"
+                src={`${url}/Images/` + it.photo}
+              />
               <Typography
                 style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                variant="h5"
+                variant="h6"
               >
-                {it.name}
+                <p>{it.name}</p>
               </Typography>
             </CardContent>
           </Card>
@@ -116,12 +124,15 @@ const SamplePage = () => {
                 sx={{
                   display: 'flex',
                   flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   p: 1,
                   m: 1,
                   bgcolor: 'background.paper',
                   borderRadius: 1,
                   flexWrap: 'wrap',
                   overflow: 'scroll',
+                  overflowX: 'hidden',
                   height: '400px',
                 }}
               >
@@ -132,6 +143,7 @@ const SamplePage = () => {
                       style={{
                         margin: '10px',
                         cursor: 'pointer',
+                        height: '120px',
                         width: '200px',
                         display: 'flex',
                         alignItems: 'center',
@@ -139,7 +151,12 @@ const SamplePage = () => {
                       }}
                     >
                       <CardContent>
-                        <img height="80px" width="100%" src={`${url}/Images/` + it.photo} />
+                        <img
+                          style={{ objectFit: 'fill' }}
+                          height="80px"
+                          width="100%"
+                          src={`${url}/Images/` + it.photo}
+                        />
                         <Typography
                           style={{
                             display: 'flex',
@@ -184,6 +201,9 @@ const SamplePage = () => {
           </Box>
         </Box>
       </Modal>
+      <Box>
+        <Blog />
+      </Box>
     </PageContainer>
   );
 };

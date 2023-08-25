@@ -1,84 +1,76 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { CardContent, Typography, Grid, Rating, Tooltip, Fab } from '@mui/material';
-import img1 from 'src/assets/images/products/s4.jpg';
-import img2 from 'src/assets/images/products/s5.jpg';
-import img3 from 'src/assets/images/products/s7.jpg';
-import img4 from 'src/assets/images/products/s11.jpg';
-import { Stack } from '@mui/system';
-import { IconBasket } from '@tabler/icons';
-import BlankCard from '../../../components/shared/BlankCard';
-
-const ecoCard = [
-    {
-        title: 'Boat Headphone',
-        subheader: 'September 14, 2023',
-        photo: img1,
-        salesPrice: 375,
-        price: 285,
-        rating: 4,
-    },
-    {
-        title: 'MacBook Air Pro',
-        subheader: 'September 14, 2023',
-        photo: img2,
-        salesPrice: 650,
-        price: 900,
-        rating: 5,
-    },
-    {
-        title: 'Red Valvet Dress',
-        subheader: 'September 14, 2023',
-        photo: img3,
-        salesPrice: 150,
-        price: 200,
-        rating: 3,
-    },
-    {
-        title: 'Cute Soft Teddybear',
-        subheader: 'September 14, 2023',
-        photo: img4,
-        salesPrice: 285,
-        price: 345,
-        rating: 2,
-    },
-];
-
-const Blog = () => {
-    return (
-        <Grid container spacing={3}>
-            {ecoCard.map((product, index) => (
-                <Grid item sm={12} md={4} lg={3} key={index}>
-                    <BlankCard>
-                        <Typography component={Link} to="/">
-                            <img src={product.photo} alt="img" width="100%" />
-                        </Typography>
-                        <Tooltip title="Add To Cart">
-                            <Fab
-                                size="small"
-                                color="primary"
-                                sx={{ bottom: '75px', right: '15px', position: 'absolute' }}
-                            >
-                                <IconBasket size="16" />
-                            </Fab>
-                        </Tooltip>
-                        <CardContent sx={{ p: 3, pt: 2 }}>
-                            <Typography variant="h6">{product.title}</Typography>
-                            <Stack direction="row" alignItems="center" justifyContent="space-between" mt={1}>
-                                <Stack direction="row" alignItems="center">
-                                    <Typography variant="h6">${product.price}</Typography>
-                                    <Typography color="textSecondary" ml={1} sx={{ textDecoration: 'line-through' }}>
-                                        ${product.salesPrice}
-                                    </Typography>
-                                </Stack>
-                                <Rating name="read-only" size="small" value={product.rating} readOnly />
-                            </Stack>
-                        </CardContent>
-                    </BlankCard>
-                </Grid>
-            ))}
-        </Grid>
-    );
+import 'react-slideshow-image/dist/styles.css';
+import { Slide } from 'react-slideshow-image';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { url } from 'src/constant';
+import { Box } from '@mui/material';
+const AdSlide = () => {
+  const [adSlide, setAdslide] = useState([]);
+  const [trand, settrend] = useState([]);
+  const [newad, setNewad] = useState([]);
+  useEffect(() => {
+    axios.get(`${url}/api/getbottomAd`).then((response) => {
+      if (response.data.length > 0) {
+        setAdslide(response.data);
+        console.log(response.data);
+      }
+    });
+    axios.get(`${url}/api/gettrendAd`).then((response) => {
+      if (response.data.length > 0) {
+        settrend(response.data);
+        console.log(response.data);
+      }
+    });
+    axios.get(`${url}/api/getAd`).then((response) => {
+      if (response.data.length > 0) {
+        setNewad(response.data);
+        console.log(response.data);
+      }
+    });
+  }, []);
+  const images = [
+    'https://images.unsplash.com/photo-1509721434272-b79147e0e708?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80',
+    'https://images.unsplash.com/photo-1506710507565-203b9f24669b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1536&q=80',
+    'https://images.unsplash.com/photo-1536987333706-fc9adfb10d91?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80',
+  ];
+  return (
+    <>
+      <Slide autoplay>
+        {adSlide.map((it) => (
+          <div className="each-slide-effect">
+            <div style={{ backgroundImage: `${url}/Images/` + it.photo }}>
+              {' '}
+              <img height="auto" width="100%" src={`${url}/Images/` + it.photo} />
+            </div>
+          </div>
+        ))}
+      </Slide>
+      <Box mt={2}>
+        <Slide autoplay>
+          {trand.map((it) => (
+            <div className="each-slide-effect" style={{ height: '500px' }}>
+              <div style={{ backgroundImage: `${url}/Images/` + it.photo }}>
+                {' '}
+                <img height="auto" width="100%" src={`${url}/Images/` + it.photo} />
+              </div>
+            </div>
+          ))}
+        </Slide>
+      </Box>
+      <Box mt={2}>
+        <Slide autoplay>
+          {newad.map((it) => (
+            <div className="each-slide-effect" style={{ height: '500px' }}>
+              <div style={{ backgroundImage: `${url}/Images/` + it.photo }}>
+                {' '}
+                <img height="auto" width="100%" src={`${url}/Images/` + it.photo} />
+              </div>
+            </div>
+          ))}
+        </Slide>
+      </Box>
+    </>
+  );
 };
 
-export default Blog;
+export default AdSlide;

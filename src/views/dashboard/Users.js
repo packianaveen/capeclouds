@@ -153,6 +153,7 @@ const Users = () => {
                   <TableCell>ID</TableCell>
                   <TableCell align="center">Phone</TableCell>
                   <TableCell align="center">Pin code</TableCell>
+                  <TableCell align="center">Service Center</TableCell>
                   <TableCell align="center">Create date</TableCell>
                   {/* <TableCell align="right">Service center</TableCell> */}
                   {/* <TableCell align="right">Status</TableCell> */}
@@ -171,6 +172,7 @@ const Users = () => {
                       </TableCell>
                       <TableCell align="center">{it.phone}</TableCell>
                       <TableCell align="center">{it.pin}</TableCell>
+                      <TableCell align="center">{it.admin ? it.admin : 'Default'}</TableCell>
                       <TableCell align="center">
                         {' '}
                         {moment(it.createdAt).format('DD/MM/YYYY')}

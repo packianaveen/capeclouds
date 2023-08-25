@@ -49,7 +49,9 @@ const Admin = () => {
   const [cat, setCat] = useState([]);
   const [Status, Setstatus] = useState('Enable');
   const [qrOpen, setQrOpen] = useState(false);
-  const [userId, setuserid] = JSON.parse(localStorage.getItem('user'))._id;
+
+  const [link, setLink] = useState('');
+
   useEffect(() => {
     axios
       .get(`${url}/api/get-catogery`)
@@ -67,6 +69,8 @@ const Admin = () => {
       .catch(function (error) {
         console.log(error);
       });
+    const userId = JSON.parse(localStorage.getItem('user'))._id;
+    setLink(`http://localhost:3000/auth/Register/id=${userId}`);
   }, []);
 
   const style = {
@@ -233,9 +237,14 @@ const Admin = () => {
                       <TableCell align="center">{it.pin}</TableCell>
                       <TableCell align="center">{it.phoneNo}</TableCell>
                       <TableCell align="center">
-                        <ContentCopyIcon />
+                        <ContentCopyIcon
+                          style={{ cursor: 'pointer' }}
+                          onClick={() => {
+                            navigator.clipboard.writeText(link);
+                          }}
+                        />
                       </TableCell>
-                      <TableCell>
+                      {/* <TableCell>
                         <WhatsappShareButton
                           url={'http://localhost:3000/auth/login/' + userId}
                           // title="Share"
@@ -243,16 +252,9 @@ const Admin = () => {
                           {' '}
                           <ContentCopyIcon />
                         </WhatsappShareButton>
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell align="center" onClick={() => setQrOpen(true)}>
-                        <DownloadIcon
-                          onClick={() => {
-                            navigator.clipboard.writeText(
-                              `http://localhost:3000/auth/login/${userId}`,
-                            );
-                          }}
-                          style={{ cursor: 'pointer' }}
-                        />
+                        <DownloadIcon style={{ cursor: 'pointer' }} />
                       </TableCell>
                       <TableCell align="center">
                         <DeleteIcon

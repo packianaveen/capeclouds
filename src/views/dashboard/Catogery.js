@@ -280,33 +280,32 @@ const Catogery = () => {
             </FormControl>
             <Box mt={2}>
               <InputLabel htmlFor="component-outlined">Select Services</InputLabel>
-              <SimpleBar style={{ maxHeight: 500 }} autoHide={false}>
-                <FormGroup mt={2}>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'row !important',
-                      MaxHeight: '500px',
-                      flexWrap: 'wrap',
-                    }}
-                  >
-                    {cat.map((it, index) => (
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            key={it.name}
-                            isChecked={it.checked}
-                            onChange={() => updateCheckStatus(index)}
-                            label={it.name}
-                            index={index}
-                          />
-                        }
-                        label={it.name}
-                      />
-                    ))}
-                  </Box>
-                </FormGroup>
-              </SimpleBar>
+
+              <FormGroup mt={2}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row !important',
+                    MaxHeight: '100px',
+                    flexWrap: 'wrap',
+                  }}
+                >
+                  {cat.map((it, index) => (
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          key={it.name}
+                          isChecked={it.checked}
+                          onChange={() => updateCheckStatus(index)}
+                          label={it.name}
+                          index={index}
+                        />
+                      }
+                      label={it.name}
+                    />
+                  ))}
+                </Box>
+              </FormGroup>
             </Box>
           </Box>
           <Box m={1}>
