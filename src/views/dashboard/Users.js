@@ -28,7 +28,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { url } from 'src/constant';
+import moment from 'moment';
 const Users = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -49,7 +50,7 @@ const Users = () => {
     setNewAd({ ...newad, [e.target.name]: e.target.value });
   };
   useEffect(() => {
-    axios.get('http://localhost:7098/api/getbottomAd').then((response) => {
+    axios.get(`${url}/api/getusers`).then((response) => {
       if (response.data.length > 0) {
         console.log(response.data);
         setInitialAd(response.data);
@@ -58,7 +59,7 @@ const Users = () => {
   }, []);
 
   const editElement = (id) => {
-    axios.get(`http://localhost:7098/api/editbottomAd/${id}`).then((response) => {
+    axios.get(`${url}/api/editbottomAd/${id}`).then((response) => {
       console.log(response.data.photo);
       setNewAd({ name: response.data.name, photo: response.data.photo, url: response.data.url });
       setOpen(true);
@@ -68,7 +69,7 @@ const Users = () => {
   };
   const deleteElement = (id) => {
     axios
-      .delete(`http://localhost:7098/api/deletebottomAd/${id}`)
+      .delete(`${url}/api/deleteuser/${id}`)
       .then((response) => {
         console.log(response);
         const data = intialAd.filter((it) => it._id !== response.data._id);
@@ -91,7 +92,7 @@ const Users = () => {
 
     // console.log(formData);
     axios
-      .post('http://localhost:7098/api/bottomadd', ad, {
+      .post(`${url}/api/bottomadd`, ad, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -121,6 +122,17 @@ const Users = () => {
   return (
     <Box mt={4}>
       <DashboardCard title="Users">
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="colored"
+        />
         <Box
           m={1}
           //margin
@@ -139,14 +151,15 @@ const Users = () => {
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
-                  <TableCell align="right">Phone</TableCell>
-                  <TableCell align="right">Pin code</TableCell>
-                  <TableCell align="right">Service center</TableCell>
-                  <TableCell align="right">Status</TableCell>
-                  <TableCell align="right">Action</TableCell>
+                  <TableCell align="center">Phone</TableCell>
+                  <TableCell align="center">Pin code</TableCell>
+                  <TableCell align="center">Create date</TableCell>
+                  {/* <TableCell align="right">Service center</TableCell> */}
+                  {/* <TableCell align="right">Status</TableCell> */}
+                  <TableCell align="center">Action</TableCell>
                 </TableRow>
               </TableHead>
-              {/* {intialAd && (
+              {intialAd && (
                 <TableBody>
                   {intialAd.map((it, x) => (
                     <TableRow
@@ -156,32 +169,23 @@ const Users = () => {
                       <TableCell component="th" scope="row">
                         {x + 1}
                       </TableCell>
-                      <TableCell align="right">{it.name}</TableCell>
-                      <TableCell align="right">{it.status}</TableCell>
-                      <TableCell align="right">{it.orderNo}</TableCell>
-                      <TableCell align="right">
-                        <img
-                          height="40px"
-                          width="60px"
-                          src={'http://localhost:7098/Images/' + it.photo}
-                        />
+                      <TableCell align="center">{it.phone}</TableCell>
+                      <TableCell align="center">{it.pin}</TableCell>
+                      <TableCell align="center">
+                        {' '}
+                        {moment(it.createdAt).format('DD/MM/YYYY')}
                       </TableCell>
-                      <TableCell align="right">
+                      <TableCell align="center">
                         <DeleteIcon
                           color="red"
                           style={{ color: 'red', cursor: 'pointer' }}
                           onClick={() => deleteElement(it._id)}
                         />
-
-                        <EditIcon
-                          style={{ color: 'green', cursor: 'pointer' }}
-                          onClick={() => editElement(it._id)}
-                        />
                       </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
-              )} */}
+              )}
             </Table>
           </TableContainer>
         </div>

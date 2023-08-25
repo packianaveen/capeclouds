@@ -1,18 +1,20 @@
 import React from 'react';
-import Menuitems from './MenuItems';
+import { Menuitems, userMenu } from './MenuItems';
 import { useLocation } from 'react-router';
 import { Box, List } from '@mui/material';
 import NavItem from './NavItem';
 import NavGroup from './NavGroup/NavGroup';
+import { useAuth } from 'src/routes/AuthProvider';
 
 const SidebarItems = () => {
   const { pathname } = useLocation();
   const pathDirect = pathname;
-
+  const auth = useAuth();
+  const path = auth.user == 1 ? Menuitems : userMenu;
   return (
     <Box sx={{ px: 3 }}>
       <List sx={{ pt: 2 }} className="sidebarNav">
-        {Menuitems.map((item) => {
+        {path.map((item) => {
           // {/********SubHeader**********/}
           if (item.subheader) {
             return <NavGroup item={item} key={item.subheader} />;

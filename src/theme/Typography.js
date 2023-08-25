@@ -12,6 +12,7 @@ const typography = {
     lineHeight: '2.25rem',
     fontFamily: "'Plus Jakarta Sans', sans-serif;",
   },
+
   h3: {
     fontWeight: 600,
     fontSize: '1.5rem',

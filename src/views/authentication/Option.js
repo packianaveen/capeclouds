@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
-import { Grid, Box, Card, Stack, Typography } from '@mui/material';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Grid, Box, Card, Stack, Button } from '@mui/material';
 import axios from 'axios';
 // components
 import PageContainer from 'src/components/container/PageContainer';
@@ -15,14 +15,16 @@ import { ToastContainer, toast } from 'react-toastify';
 import { useAuth } from '../../routes/AuthProvider';
 import { useLocation } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
-import { url } from '../../constant';
+import { url } from 'src/constant';
 import { replace } from 'lodash';
-const Login2 = () => {
+const Option = () => {
   const [phone, setPhone] = useState('');
   const [pin, setPin] = useState('');
   const [password, setPassword] = useState('');
   const [login, setLogin] = useState(false);
   const [reg, setReg] = useState(false);
+  let phoneno = useParams();
+  console.log(phoneno);
   // const navigate = useNavigate();
   const auth = useAuth();
 
@@ -45,9 +47,8 @@ const Login2 = () => {
       if (response.data.length > 0) {
         setLogin(true);
       } else {
-        navigate(`/auth/option/${phone}`, { replace: true });
-        // setLogin(false);
-        // setReg(true);
+        setLogin(false);
+        setReg(true);
       }
     });
   };
@@ -161,42 +162,22 @@ const Login2 = () => {
               <Box display="flex" alignItems="center" justifyContent="center">
                 <Logo />
               </Box>
-              <AuthLogin
-                phone={phone}
-                setPhone={setPhone}
-                login={login}
-                reg={reg}
-                pin={pin}
-                setPin={setPin}
-                password={password}
-                setPassword={setPassword}
-                submitLogin={submitLogin}
-                submitAccLogin={submitAccLogin}
-                submitRegister={submitRegister}
-                subtext={
-                  <Typography variant="subtitle1" textAlign="center" color="textSecondary" mb={1}>
-                    Login
-                  </Typography>
-                }
-                subtitle={
-                  <Stack direction="row" spacing={1} justifyContent="center" mt={3}>
-                    <Typography color="textSecondary" variant="h6" fontWeight="500">
-                      New to Modernize?
-                    </Typography>
-                    <Typography
-                      component={Link}
-                      to="/auth/register"
-                      fontWeight="500"
-                      sx={{
-                        textDecoration: 'none',
-                        color: 'primary.main',
-                      }}
-                    >
-                      Create an account
-                    </Typography>
-                  </Stack>
-                }
-              />
+              <Box m={2} display="flex" alignItems="center" justifyContent="center">
+                <Button
+                  variant="contained"
+                  fullWidth
+                  onClick={() => {
+                    navigate(`/auth/register/${phoneno.phone}/64e010106e8dff51db94b01c`);
+                  }}
+                >
+                  Manual Registration
+                </Button>
+              </Box>
+              <Box m={2} display="flex" alignItems="center" justifyContent="center">
+                <Button variant="contained" fullWidth>
+                  Qr code Scan
+                </Button>
+              </Box>
             </Card>
           </Grid>
         </Grid>
@@ -206,4 +187,4 @@ const Login2 = () => {
   );
 };
 
-export default Login2;
+export default Option;

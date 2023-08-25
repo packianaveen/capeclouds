@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Avatar,
   Box,
@@ -14,14 +14,24 @@ import {
 import { IconListCheck, IconMail, IconUser } from '@tabler/icons';
 
 import ProfileImg from 'src/assets/images/profile/user-1.jpg';
+import { useAuth } from 'src/routes/AuthProvider';
 
 const Profile = () => {
   const [anchorEl2, setAnchorEl2] = useState(null);
+  const navigate = useNavigate();
+  const auth = useAuth();
+  console.log(auth);
   const handleClick2 = (event) => {
     setAnchorEl2(event.currentTarget);
   };
   const handleClose2 = () => {
     setAnchorEl2(null);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    auth.logout();
+    navigate('/auth/login');
   };
 
   return (
@@ -84,7 +94,7 @@ const Profile = () => {
           <ListItemText>My Tasks</ListItemText>
         </MenuItem> */}
         <Box mt={1} py={1} px={2}>
-          <Button to="/auth/login" variant="outlined" color="primary" component={Link} fullWidth>
+          <Button onClick={handleLogout} variant="outlined" color="primary" fullWidth>
             Logout
           </Button>
         </Box>

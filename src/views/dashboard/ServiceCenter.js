@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 import PageContainer from 'src/components/container/PageContainer';
 import DashboardCard from '../../components/shared/DashboardCard';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Modal from '@mui/material/Modal';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -26,20 +27,40 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import Checkbox from '@mui/material/Checkbox';
+import FormGroup from '@mui/material/FormGroup';
 import { ToastContainer, toast } from 'react-toastify';
+import DownloadIcon from '@mui/icons-material/Download';
 import 'react-toastify/dist/ReactToastify.css';
+import QRCode from 'qrcode.react';
+import { TelegramShareButton, WhatsappShareButton } from 'react-share';
+import { url } from 'src/constant';
 const Admin = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [name, setName] = useState('');
-  const [order, setOrder] = useState('');
+  const [phone, setPhone] = useState('');
+  const [address, setAddress] = useState('');
+
   const [data, setData] = useState('');
+  const [pin, setPin] = useState('');
   const [photo, setPhoto] = useState('');
+  const [cat, setCat] = useState([]);
   const [Status, Setstatus] = useState('Enable');
+  const [qrOpen, setQrOpen] = useState(false);
+  const [userId, setuserid] = JSON.parse(localStorage.getItem('user'))._id;
   useEffect(() => {
     axios
-      .get('http://localhost:7098/api/get-catogery')
+      .get(`${url}/api/get-catogery`)
+      .then((response) => {
+        setCat(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    axios
+      .get(`${url}/api/getCenter`)
       .then((response) => {
         setData(response.data);
       })
@@ -63,16 +84,35 @@ const Admin = () => {
     console.log(e.target.files[0]);
     setPhoto(e.target.files[0]);
   };
-  const createCatogeries = (e) => {
+  const updateCheckStatus = (index) => {
+    setCat(
+      cat.map((topping, currentIndex) =>
+        currentIndex === index ? { ...topping, checked: !topping.checked } : topping,
+      ),
+
+      console.log(cat),
+    );
+
+    // or
+    // setToppings([
+    //   ...toppings.slice(0, index),
+    //   { ...toppings[index], checked: !toppings[index].checked },
+    //   ...toppings.slice(index + 1),
+    // ]);
+  };
+  const createServiceCenter = (e) => {
     console.log(photo);
     axios
       .post(
-        'http://localhost:7098/api/create-catogery',
+        `${url}/api/addCenter`,
         {
           name: name,
-          orderNo: order,
+          phoneNo: phone,
           status: Status,
+          address: address,
+          services: JSON.stringify(cat),
           photo: photo,
+          pin: pin,
         },
         {
           headers: {
@@ -92,10 +132,23 @@ const Admin = () => {
         console.log(error);
       });
   };
+  const downloadQR = () => {
+    const qrCodeURL = document
+      .getElementById('qrCodeEl')
+      .toDataURL('image/png')
+      .replace('image/png', 'image/octet-stream');
+    console.log(qrCodeURL);
+    let aEl = document.createElement('a');
+    aEl.href = qrCodeURL;
+    aEl.download = 'QR_Code.png';
+    document.body.appendChild(aEl);
+    aEl.click();
+    document.body.removeChild(aEl);
+  };
   const deleteCatogory = (id) => {
     console.log(id);
     axios
-      .delete(`http://localhost:7098/api/delete-catogery/${id}`)
+      .delete(`${url}/api/deleteCenter/${id}`)
       .then((response) => {
         toast.success('SucessFully Updated');
         console.log('sucess');
@@ -105,19 +158,19 @@ const Admin = () => {
         toast.error('failed');
       });
   };
-  const editCatogory = (id) => {
-    axios.get(`http://localhost:7098/api/edit-catogery/${id}`).then((response) => {
-      console.log(response.data);
-      setName(response.data.name);
-      setPhoto(response.data.photo);
-      setOrder(response.data.orderNo);
-      Setstatus(response.data.status);
-      // setNewAd({ name: response.data.name, photo: response.data.photo, url: response.data.url });
-      setOpen(true);
+  // const editCatogory = (id) => {
+  //   axios.get(`${url}/api/edit-catogery/${id}`).then((response) => {
+  //     console.log(response.data);
+  //     setName(response.data.name);
+  //     setPhoto(response.data.photo);
+  //     setOrder(response.data.orderNo);
+  //     Setstatus(response.data.status);
+  //     // setNewAd({ name: response.data.name, photo: response.data.photo, url: response.data.url });
+  //     setOpen(true);
 
-      // setInitialAd(response.data);
-    });
-  };
+  //     // setInitialAd(response.data);
+  //   });
+  // };
   return (
     <PageContainer title="Services Table">
       <ToastContainer
@@ -132,7 +185,7 @@ const Admin = () => {
         theme="colored"
       />
 
-      <DashboardCard title="Services Table">
+      <DashboardCard title="Services Center">
         <Box
           m={1}
           //margin
@@ -151,11 +204,14 @@ const Admin = () => {
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
-                  <TableCell align="right">Name</TableCell>
-                  <TableCell align="right">Status</TableCell>
-                  <TableCell align="right">Order No</TableCell>
-                  <TableCell align="right">Image</TableCell>
-                  <TableCell align="right">Action</TableCell>
+                  <TableCell align="center">Name</TableCell>
+                  <TableCell align="center">Image</TableCell>
+                  <TableCell align="center">Status</TableCell>
+                  <TableCell align="center">Pin code</TableCell>
+                  <TableCell align="center">Phone</TableCell>
+                  <TableCell align="center">QR Code</TableCell>
+                  <TableCell align="center">Link</TableCell>
+                  <TableCell align="center">Action</TableCell>
                 </TableRow>
               </TableHead>
               {data && (
@@ -168,17 +224,37 @@ const Admin = () => {
                       <TableCell component="th" scope="row">
                         {x + 1}
                       </TableCell>
-                      <TableCell align="right">{it.name}</TableCell>
-                      <TableCell align="right">{it.status}</TableCell>
-                      <TableCell align="right">{it.orderNo}</TableCell>
-                      <TableCell align="right">
-                        <img
-                          height="40px"
-                          width="60px"
-                          src={'http://localhost:7098/Images/' + it.photo}
+                      <TableCell align="center">{it.name}</TableCell>
+
+                      <TableCell align="center">
+                        <img height="40px" width="60px" src={`${url}/Images/` + it.photo} />
+                      </TableCell>
+                      <TableCell align="center">{it.status}</TableCell>
+                      <TableCell align="center">{it.pin}</TableCell>
+                      <TableCell align="center">{it.phoneNo}</TableCell>
+                      <TableCell align="center">
+                        <ContentCopyIcon />
+                      </TableCell>
+                      <TableCell>
+                        <WhatsappShareButton
+                          url={'http://localhost:3000/auth/login/' + userId}
+                          // title="Share"
+                        >
+                          {' '}
+                          <ContentCopyIcon />
+                        </WhatsappShareButton>
+                      </TableCell>
+                      <TableCell align="center" onClick={() => setQrOpen(true)}>
+                        <DownloadIcon
+                          onClick={() => {
+                            navigator.clipboard.writeText(
+                              `http://localhost:3000/auth/login/${userId}`,
+                            );
+                          }}
+                          style={{ cursor: 'pointer' }}
                         />
                       </TableCell>
-                      <TableCell align="right">
+                      <TableCell align="center">
                         <DeleteIcon
                           color="red"
                           style={{ color: 'red', cursor: 'pointer' }}
@@ -187,7 +263,7 @@ const Admin = () => {
 
                         <EditIcon
                           style={{ color: 'green', cursor: 'pointer' }}
-                          onClick={() => editCatogory(it._id)}
+                          // onClick={() => editCatogory(it._id)}
                         />
                       </TableCell>
                     </TableRow>
@@ -211,17 +287,7 @@ const Admin = () => {
               <OutlinedInput fullWidth id="component-outlined" defaultValue={name} label="Name" />
             </FormControl>
           </Box>
-          <Box m={1}>
-            <FormControl fullWidth onChange={(e) => setOrder(e.target.value)}>
-              <InputLabel htmlFor="component-outlined">Order Number</InputLabel>
-              <OutlinedInput
-                fullWidth
-                id="component-outlined"
-                defaultValue={order}
-                label="Order No"
-              />
-            </FormControl>
-          </Box>
+
           <Box m={1}>
             <FormControl fullWidth>
               {photo.length == 0 ? (
@@ -245,6 +311,68 @@ const Admin = () => {
             </FormControl>
           </Box>
           <Box m={1}>
+            <FormControl fullWidth onChange={(e) => setPhone(e.target.value)}>
+              <InputLabel htmlFor="component-outlined">Phone Number</InputLabel>
+              <OutlinedInput
+                fullWidth
+                id="component-outlined"
+                defaultValue={phone}
+                label="Order No"
+              />
+            </FormControl>
+          </Box>
+          <Box m={1}>
+            <FormControl fullWidth onChange={(e) => setAddress(e.target.value)}>
+              <InputLabel htmlFor="component-outlined">Address</InputLabel>
+              <OutlinedInput
+                fullWidth
+                id="component-outlined"
+                defaultValue={address}
+                label="Order No"
+              />
+            </FormControl>
+          </Box>
+          <Box m={1}>
+            <FormControl fullWidth onChange={(e) => setPin(e.target.value)}>
+              <InputLabel htmlFor="component-outlined">Pin code</InputLabel>
+              <OutlinedInput
+                fullWidth
+                id="component-outlined"
+                defaultValue={pin}
+                label="Order No"
+              />
+            </FormControl>
+          </Box>
+          <Box mt={2}>
+            <InputLabel htmlFor="component-outlined">Select Catagory</InputLabel>
+            <FormGroup mt={2}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row !important',
+                  MaxHeight: '500px',
+                  flexWrap: 'wrap',
+                  overflow: 'scroll',
+                }}
+              >
+                {cat.map((it, index) => (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        key={it.name}
+                        isChecked={it.checked}
+                        onChange={() => updateCheckStatus(index)}
+                        label={it.name}
+                        index={index}
+                      />
+                    }
+                    label={it.name}
+                  />
+                ))}
+              </Box>
+            </FormGroup>
+          </Box>
+          <Box m={1}>
             <FormControl fullWidth>
               <FormLabel id="demo-radio-buttons-group-label">Status</FormLabel>
               <RadioGroup
@@ -259,8 +387,33 @@ const Admin = () => {
             </FormControl>
           </Box>
           <Box>
-            <Button variant="contained" onClick={createCatogeries}>
+            <Button variant="contained" onClick={createServiceCenter}>
               Submit
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
+      <Modal
+        open={qrOpen}
+        onClose={() => setQrOpen(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style} component="form" encType="multipart/form-data">
+          <Box m={1}>
+            <QRCode
+              id="qrCodeEl"
+              value="http://localhost:3000/auth/login/${userId}"
+              size={290}
+              level={'H'}
+              bgColor={'#ffffff'}
+              includeMargin={true}
+            />
+          </Box>
+          <Box style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+            <Button variant="contained" onClick={downloadQR}>
+              {' '}
+              Download QR{' '}
             </Button>
           </Box>
         </Box>

@@ -28,7 +28,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { url } from 'src/constant';
 const Tranding = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -49,7 +49,7 @@ const Tranding = () => {
     setNewAd({ ...newad, [e.target.name]: e.target.value });
   };
   useEffect(() => {
-    axios.get('http://localhost:7098/api/gettrendAd').then((response) => {
+    axios.get(`${url}/api/gettrendAd`).then((response) => {
       if (response.data.length > 0) {
         console.log(response.data);
         setInitialAd(response.data);
@@ -58,7 +58,7 @@ const Tranding = () => {
   }, []);
 
   const editElement = (id) => {
-    axios.get(`http://localhost:7098/api/edittrendAd/${id}`).then((response) => {
+    axios.get(`${url}/api/edittrendAd/${id}`).then((response) => {
       console.log(response.data.photo);
       setNewAd({ name: response.data.name, photo: response.data.photo, url: response.data.url });
       setOpen(true);
@@ -68,7 +68,7 @@ const Tranding = () => {
   };
   const deleteElement = (id) => {
     axios
-      .delete(`http://localhost:7098/api/deletetrendAd/${id}`)
+      .delete(`${url}/api/deletetrendAd/${id}`)
       .then((response) => {
         console.log(response);
         const data = intialAd.filter((it) => it._id !== response.data._id);
@@ -91,7 +91,7 @@ const Tranding = () => {
 
     // console.log(formData);
     axios
-      .post('http://localhost:7098/api/trendadd', ad, {
+      .post(`${url}/api/trendadd`, ad, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -160,11 +160,7 @@ const Tranding = () => {
                       <TableCell align="right">{it.status}</TableCell>
                       <TableCell align="right">{it.orderNo}</TableCell>
                       <TableCell align="right">
-                        <img
-                          height="40px"
-                          width="60px"
-                          src={'http://localhost:7098/Images/' + it.photo}
-                        />
+                        <img height="40px" width="60px" src={`${url}/Images/` + it.photo} />
                       </TableCell>
                       <TableCell align="right">
                         <DeleteIcon

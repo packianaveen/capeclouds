@@ -52,6 +52,7 @@ const AuthLogin = ({
       {login || reg ? (
         <CustomTextField
           id="otp"
+          type="password"
           label="password"
           onChange={(e) => {
             setPassword(e.target.value);

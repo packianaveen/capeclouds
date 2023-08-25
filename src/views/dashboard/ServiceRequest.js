@@ -28,7 +28,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { url } from 'src/constant';
 const ServiceRequest = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -49,7 +49,7 @@ const ServiceRequest = () => {
     setNewAd({ ...newad, [e.target.name]: e.target.value });
   };
   useEffect(() => {
-    axios.get('http://localhost:7098/api/getbottomAd').then((response) => {
+    axios.get(`${url}/api/getbottomAd`).then((response) => {
       if (response.data.length > 0) {
         console.log(response.data);
         setInitialAd(response.data);
@@ -58,7 +58,7 @@ const ServiceRequest = () => {
   }, []);
 
   const editElement = (id) => {
-    axios.get(`http://localhost:7098/api/editbottomAd/${id}`).then((response) => {
+    axios.get(`${url}/api/editbottomAd/${id}`).then((response) => {
       console.log(response.data.photo);
       setNewAd({ name: response.data.name, photo: response.data.photo, url: response.data.url });
       setOpen(true);
@@ -68,7 +68,7 @@ const ServiceRequest = () => {
   };
   const deleteElement = (id) => {
     axios
-      .delete(`http://localhost:7098/api/deletebottomAd/${id}`)
+      .delete(`${url}/api/deletebottomAd/${id}`)
       .then((response) => {
         console.log(response);
         const data = intialAd.filter((it) => it._id !== response.data._id);
@@ -91,7 +91,7 @@ const ServiceRequest = () => {
 
     // console.log(formData);
     axios
-      .post('http://localhost:7098/api/bottomadd', ad, {
+      .post(`${url}/api/bottomadd`, ad, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -166,7 +166,7 @@ const ServiceRequest = () => {
                         <img
                           height="40px"
                           width="60px"
-                          src={'http://localhost:7098/Images/' + it.photo}
+                          src={'${url}/Images/' + it.photo}
                         />
                       </TableCell>
                       <TableCell align="right">

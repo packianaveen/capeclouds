@@ -14,6 +14,7 @@ import {
   OutlinedInput,
   FilledInput,
 } from '@mui/material';
+import SimpleBar from 'simplebar-react';
 import PageContainer from 'src/components/container/PageContainer';
 import DashboardCard from '../../components/shared/DashboardCard';
 import Modal from '@mui/material/Modal';
@@ -30,6 +31,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Checkbox from '@mui/material/Checkbox';
 import FormGroup from '@mui/material/FormGroup';
+import { check } from 'prettier';
+import { url } from 'src/constant';
 const Catogery = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -42,16 +45,38 @@ const Catogery = () => {
   const [Status, Setstatus] = useState('Enable');
   useEffect(() => {
     axios
-      .get('http://localhost:7098/api/get-catogery')
+      .get(`${url}/api/get-service`)
+      .then((response) => {
+        setCat(response.data.map((it) => ({ ...it, checked: false })));
+        console.log(response.data);
+        console.log(response.data.map((it) => ({ ...it, checked: false })));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    axios
+      .get(`${url}/api/get-catogery`)
       .then((response) => {
         setData(response.data);
-        setCat(response.data);
       })
       .catch(function (error) {
         console.log(error);
       });
   }, []);
+  const updateCheckStatus = (index) => {
+    setCat(
+      cat.map((it, currentIndex) =>
+        currentIndex === index ? { ...it, checked: !it.checked } : it,
+      ),
+    );
 
+    // or
+    // setCat([
+    //   ...cat.slice(0, index),
+    //   { ...cat[index], checked: !cat[index].checked },
+    //   ...cat.slice(index + 1),
+    // ]);
+  };
   const style = {
     position: 'absolute',
     top: '50%',
@@ -71,12 +96,13 @@ const Catogery = () => {
     console.log(photo);
     axios
       .post(
-        'http://localhost:7098/api/create-catogery',
+        `${url}/api/create-catogery`,
         {
           name: name,
           orderNo: order,
           status: Status,
           photo: photo,
+          services: JSON.stringify(cat),
         },
         {
           headers: {
@@ -99,10 +125,11 @@ const Catogery = () => {
   const deleteCatogory = (id) => {
     console.log(id);
     axios
-      .delete(`http://localhost:7098/api/delete-catogery/${id}`)
+      .delete(`${url}/api/delete-catogery/${id}`)
       .then((response) => {
         toast.success('SucessFully Updated');
-        console.log('sucess');
+        const data1 = data.filter((it) => it._id !== response.data._id);
+        setData(data1);
       })
       .catch((error) => {
         console.log(error);
@@ -110,12 +137,14 @@ const Catogery = () => {
       });
   };
   const editCatogory = (id) => {
-    axios.get(`http://localhost:7098/api/edit-catogery/${id}`).then((response) => {
-      console.log(response.data);
+    axios.get(`${url}/api/edit-catogery/${id}`).then((response) => {
+      console.log(JSON.parse(response.data.services));
+      setCat(JSON.parse(response.data.services));
       setName(response.data.name);
       setPhoto(response.data.photo);
       setOrder(response.data.orderNo);
       Setstatus(response.data.status);
+      console.log(cat);
       // setNewAd({ name: response.data.name, photo: response.data.photo, url: response.data.url });
       setOpen(true);
 
@@ -182,11 +211,7 @@ const Catogery = () => {
                         {it.orderNo}
                       </TableCell>
                       <TableCell width="20%" align="center">
-                        <img
-                          height="40px"
-                          width="60px"
-                          src={'http://localhost:7098/Images/' + it.photo}
-                        />
+                        <img height="40px" width="60px" src={`${url}/Images/` + it.photo} />
                       </TableCell>
                       <TableCell align="right">
                         <DeleteIcon
@@ -254,20 +279,34 @@ const Catogery = () => {
               )}
             </FormControl>
             <Box mt={2}>
-              <InputLabel htmlFor="component-outlined">Select Catagory</InputLabel>
-              <FormGroup mt={2}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'row !important',
-                    MaxHeight: '500px',
-                  }}
-                >
-                  {cat.map((it) => (
-                    <FormControlLabel control={<Checkbox />} label={it.name} />
-                  ))}
-                </Box>
-              </FormGroup>
+              <InputLabel htmlFor="component-outlined">Select Services</InputLabel>
+              <SimpleBar style={{ maxHeight: 500 }} autoHide={false}>
+                <FormGroup mt={2}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row !important',
+                      MaxHeight: '500px',
+                      flexWrap: 'wrap',
+                    }}
+                  >
+                    {cat.map((it, index) => (
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            key={it.name}
+                            isChecked={it.checked}
+                            onChange={() => updateCheckStatus(index)}
+                            label={it.name}
+                            index={index}
+                          />
+                        }
+                        label={it.name}
+                      />
+                    ))}
+                  </Box>
+                </FormGroup>
+              </SimpleBar>
             </Box>
           </Box>
           <Box m={1}>

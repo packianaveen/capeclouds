@@ -28,13 +28,16 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import { url } from 'src/constant';
 const BottomSide = () => {
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    setOpen(true);
+    setEditid('');
+  };
   const handleClose = () => setOpen(false);
   const [intialAd, setInitialAd] = useState([]);
-
+  const [editid, setEditid] = useState();
   const [newad, setNewAd] = useState({
     name: '',
     url: '',
@@ -49,7 +52,7 @@ const BottomSide = () => {
     setNewAd({ ...newad, [e.target.name]: e.target.value });
   };
   useEffect(() => {
-    axios.get('http://localhost:7098/api/getbottomAd').then((response) => {
+    axios.get(`${url}/api/getbottomAd`).then((response) => {
       if (response.data.length > 0) {
         console.log(response.data);
         setInitialAd(response.data);
@@ -58,17 +61,18 @@ const BottomSide = () => {
   }, []);
 
   const editElement = (id) => {
-    axios.get(`http://localhost:7098/api/editbottomAd/${id}`).then((response) => {
+    axios.get(`${url}/api/editbottomAd/${id}`).then((response) => {
       console.log(response.data.photo);
       setNewAd({ name: response.data.name, photo: response.data.photo, url: response.data.url });
       setOpen(true);
+      setEditid(id);
       console.log(newad.photo);
       // setInitialAd(response.data);
     });
   };
   const deleteElement = (id) => {
     axios
-      .delete(`http://localhost:7098/api/deletebottomAd/${id}`)
+      .delete(`${url}/api/deletebottomAd/${id}`)
       .then((response) => {
         console.log(response);
         const data = intialAd.filter((it) => it._id !== response.data._id);
@@ -88,24 +92,92 @@ const BottomSide = () => {
       photo: newad.photo,
     };
     // // formData.append('photo', newad.photo);
-
+    if (editid) {
+      console.log(typeof ad.photo);
+      if (typeof ad.photo == 'string') {
+        axios
+          .patch(`${url}/api/bottomedit/${editid}`, ad)
+          .then((response) => {
+            console.log((intialAd.find((it) => it._id == editid).name = newad.name));
+            intialAd.find((it) => it._id == editid).url = newad.url;
+            // intialAd.find((it) => it._id == editid).photo = newad.photo;
+            // setInitialAd([...intialAd, response.data]);
+            setOpen(false);
+            setNewAd({
+              name: '',
+              url: '',
+              photo: '',
+            });
+            toast.success('SucessFully Updated');
+          })
+          .catch((err) => {
+            toast.error('failed');
+            setOpen(false);
+          });
+      } else {
+        axios
+          .delete(`${url}/api/deletebottomAd/${editid}`)
+          .then((response) => {
+            console.log(intialAd);
+            const data = intialAd.filter((it) => it._id !== editid);
+            console.log(data);
+            // setInitialAd(data);
+            axios
+              .post(`${url}/api/bottomadd`, ad, {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                },
+              })
+              .then((response) => {
+                console.log(response.data);
+                setInitialAd([...data, response.data]);
+                setOpen(false);
+                setNewAd({
+                  name: '',
+                  url: '',
+                  photo: '',
+                });
+                toast.success('SucessFully Updated');
+              })
+              .catch((err) => {
+                toast.error('failed');
+                setOpen(false);
+              });
+          })
+          .catch((error) => {
+            toast.error('failed');
+          });
+      }
+    } else {
+      const ad = {
+        name: newad.name,
+        url: newad.url,
+        photo: newad.photo,
+      };
+      console.log(ad.photo);
+      axios
+        .post(`${url}/api/bottomadd`, ad, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+        .then((response) => {
+          console.log(response.data);
+          setInitialAd([...intialAd, response.data]);
+          setOpen(false);
+          setNewAd({
+            name: '',
+            url: '',
+            photo: '',
+          });
+          toast.success('SucessFully Updated');
+        })
+        .catch((err) => {
+          toast.error('failed');
+          setOpen(false);
+        });
+    }
     // console.log(formData);
-    axios
-      .post('http://localhost:7098/api/bottomadd', ad, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      .then((response) => {
-        console.log(response.data);
-        setInitialAd([...intialAd, response.data]);
-        setOpen(false);
-        toast.success('SucessFully Updated');
-      })
-      .catch((err) => {
-        toast.error('failed');
-        setOpen(false);
-      });
   };
   const style = {
     position: 'absolute',
@@ -140,8 +212,7 @@ const BottomSide = () => {
                 <TableRow>
                   <TableCell>ID</TableCell>
                   <TableCell align="right">Name</TableCell>
-                  <TableCell align="right">Status</TableCell>
-                  <TableCell align="right">Order No</TableCell>
+
                   <TableCell align="right">Image</TableCell>
                   <TableCell align="right">Action</TableCell>
                 </TableRow>
@@ -157,14 +228,9 @@ const BottomSide = () => {
                         {x + 1}
                       </TableCell>
                       <TableCell align="right">{it.name}</TableCell>
-                      <TableCell align="right">{it.status}</TableCell>
-                      <TableCell align="right">{it.orderNo}</TableCell>
+
                       <TableCell align="right">
-                        <img
-                          height="40px"
-                          width="60px"
-                          src={'http://localhost:7098/Images/' + it.photo}
-                        />
+                        <img height="40px" width="60px" src={`${url}/Images/` + it.photo} />
                       </TableCell>
                       <TableCell align="right">
                         <DeleteIcon

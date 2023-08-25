@@ -36,6 +36,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import BottomSide from './components/BottomSide';
 import Tranding from './components/Tranding';
+import { url } from 'src/constant';
 const FrontEnd = () => {
   const { themeColor, setTheme } = useContext(MyContext);
   const [color1, setColor] = React.useState('#ffffff');
@@ -72,13 +73,13 @@ const FrontEnd = () => {
     p: 4,
   };
   useEffect(() => {
-    axios.get('http://localhost:7098/api/getTheme').then((response) => {
+    axios.get(`${url}/api/getTheme`).then((response) => {
       if (response.data.length > 0) {
         console.log(response.data);
         setColor(response.data[0]);
       }
     });
-    axios.get('http://localhost:7098/api/getAd').then((response) => {
+    axios.get(`${url}/api/getAd`).then((response) => {
       if (response.data.length > 0) {
         console.log(response.data);
         console.log(intialAd.filter((it) => it._id == response.data._id));
@@ -88,11 +89,11 @@ const FrontEnd = () => {
   }, []);
   const submitTheme = () => {
     axios
-      .post(`http://localhost:7098/api/updatetheme/${color1._id}`, { color: color1 })
+      .post(`${url}/api/updatetheme/${color1._id}`, { color: color1 })
       .then((res) => setTheme(res.data.colur));
   };
   const editElement = (id) => {
-    axios.get(`http://localhost:7098/api/editAd/${id}`).then((response) => {
+    axios.get(`${url}/api/editAd/${id}`).then((response) => {
       console.log(response.data.photo);
       setNewAd({ name: response.data.name, photo: response.data.photo, url: response.data.url });
       setOpen(true);
@@ -102,7 +103,7 @@ const FrontEnd = () => {
   };
   const deleteElement = (id) => {
     axios
-      .delete(`http://localhost:7098/api/deleteAd/${id}`)
+      .delete(`${url}/api/deleteAd/${id}`)
       .then((response) => {
         console.log(response);
         const data = intialAd.filter((it) => it._id !== response.data._id);
@@ -121,11 +122,9 @@ const FrontEnd = () => {
       url: newad.url,
       photo: newad.photo,
     };
-    // // formData.append('photo', newad.photo);
 
-    // console.log(formData);
     axios
-      .post('http://localhost:7098/api/add', ad, {
+      .post(`${url}/api/add`, ad, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -133,6 +132,11 @@ const FrontEnd = () => {
       .then((response) => {
         console.log(response.data);
         setInitialAd([...intialAd, response.data]);
+        setNewAd({
+          name: '',
+          url: '',
+          photo: '',
+        });
         setOpen(false);
         toast.success('SucessFully Updated');
       })
@@ -204,11 +208,7 @@ const FrontEnd = () => {
                       <TableCell align="right">{it.name}</TableCell>
                       <TableCell align="right">{it.url}</TableCell>
                       <TableCell align="right">
-                        <img
-                          height="40px"
-                          width="60px"
-                          src={'http://localhost:7098/Images/' + it.photo}
-                        />
+                        <img height="40px" width="60px" src={'${url}/Images/' + it.photo} />
                       </TableCell>
                       <TableCell align="right">
                         <Box>

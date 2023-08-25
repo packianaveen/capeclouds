@@ -26,10 +26,11 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import moment from 'moment/moment';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { url } from 'src/constant';
-const Admin = () => {
+const Servicerequested = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -38,10 +39,12 @@ const Admin = () => {
   const [data, setData] = useState('');
   const [photo, setPhoto] = useState('');
   const [Status, Setstatus] = useState('Enable');
+
   useEffect(() => {
     axios
-      .get(`${url}/api/get-catogery`)
+      .get(`${url}/api/getRequestedservice`)
       .then((response) => {
+        console.log(response.data);
         setData(response.data);
       })
       .catch(function (error) {
@@ -68,7 +71,7 @@ const Admin = () => {
     console.log(photo);
     axios
       .post(
-        `${url}/api/create-catogery`,
+        `${url}/api/create-service`,
         {
           name: name,
           orderNo: order,
@@ -96,7 +99,7 @@ const Admin = () => {
   const deleteCatogory = (id) => {
     console.log(id);
     axios
-      .delete(`${url}/api/delete-catogery/${id}`)
+      .delete(`${url}/api/delete-service/${id}`)
       .then((response) => {
         toast.success('SucessFully Updated');
         console.log('sucess');
@@ -107,7 +110,7 @@ const Admin = () => {
       });
   };
   const editCatogory = (id) => {
-    axios.get(`${url}/api/edit-catogery/${id}`).then((response) => {
+    axios.get(`${url}/api/edit-service/${id}`).then((response) => {
       console.log(response.data);
       setName(response.data.name);
       setPhoto(response.data.photo);
@@ -133,7 +136,7 @@ const Admin = () => {
         theme="colored"
       />
 
-      <DashboardCard title="Services Table">
+      <DashboardCard title="Services Requested">
         <Box
           m={1}
           //margin
@@ -141,22 +144,17 @@ const Admin = () => {
           justifyContent="flex-end"
           alignItems="flex-end"
           //   sx={boxDefault}
-        >
-          <Button color="primary" variant="contained" size="large" onClick={handleOpen}>
-            Add
-          </Button>
-        </Box>
+        ></Box>
         <div style={{ height: 'auto', width: '100%' }}>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="simple table">
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
-                  <TableCell align="right">Name</TableCell>
-                  <TableCell align="right">Status</TableCell>
-                  <TableCell align="right">Order No</TableCell>
-                  <TableCell align="right">Image</TableCell>
-                  <TableCell align="right">Action</TableCell>
+                  <TableCell align="center">Catagory</TableCell>
+                  <TableCell align="center">Service</TableCell>
+                  <TableCell align="center">Status</TableCell>
+                  <TableCell align="center">Date</TableCell>
                 </TableRow>
               </TableHead>
               {data && (
@@ -169,23 +167,26 @@ const Admin = () => {
                       <TableCell component="th" scope="row">
                         {x + 1}
                       </TableCell>
-                      <TableCell align="right">{it.name}</TableCell>
-                      <TableCell align="right">{it.status}</TableCell>
-                      <TableCell align="right">{it.orderNo}</TableCell>
-                      <TableCell align="right">
-                        <img height="40px" width="60px" src={`${url}/Images/` + it.photo} />
+                      <TableCell align="center">{JSON.parse(it.catagery).name}</TableCell>
+                      <TableCell align="center">
+                        {JSON.parse(it.service)
+                          .filter((it) => it.req == true)
+                          .map((item) => item.name)}
                       </TableCell>
-                      <TableCell align="right">
-                        <DeleteIcon
-                          color="red"
-                          style={{ color: 'red', cursor: 'pointer' }}
-                          onClick={() => deleteCatogory(it._id)}
-                        />
-
-                        <EditIcon
-                          style={{ color: 'green', cursor: 'pointer' }}
-                          onClick={() => editCatogory(it._id)}
-                        />
+                      <TableCell align="center">
+                        <p
+                          style={{
+                            color: 'white',
+                            background: 'green',
+                            borderRadius: '5px',
+                            padding: '3px',
+                          }}
+                        >
+                          {it.status}
+                        </p>
+                      </TableCell>
+                      <TableCell align="center">
+                        {moment(it.createdAt).format('DD/MM/YYYY')}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -195,75 +196,8 @@ const Admin = () => {
           </TableContainer>
         </div>
       </DashboardCard>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style} component="form" encType="multipart/form-data">
-          <Box m={1}>
-            <FormControl fullWidth onChange={(e) => setName(e.target.value)}>
-              <InputLabel htmlFor="component-outlined">Name</InputLabel>
-              <OutlinedInput fullWidth id="component-outlined" defaultValue={name} label="Name" />
-            </FormControl>
-          </Box>
-          <Box m={1}>
-            <FormControl fullWidth onChange={(e) => setOrder(e.target.value)}>
-              <InputLabel htmlFor="component-outlined">Order Number</InputLabel>
-              <OutlinedInput
-                fullWidth
-                id="component-outlined"
-                defaultValue={order}
-                label="Order No"
-              />
-            </FormControl>
-          </Box>
-          <Box m={1}>
-            <FormControl fullWidth>
-              {photo.length == 0 ? (
-                <Button variant="contained" component="label" onChange={handlePhoto}>
-                  Upload File
-                  <input
-                    type="file"
-                    //    value={newad.photo && newad.photo}
-                    accept="image/*"
-                    id="file"
-                    name="photo"
-                    hidden
-                  />
-                </Button>
-              ) : (
-                <Button variant="contained" component="label" onChange={handlePhoto}>
-                  ReUpload
-                  <input type="file" accept="image/*" id="file" name="photo" hidden />
-                </Button>
-              )}
-            </FormControl>
-          </Box>
-          <Box m={1}>
-            <FormControl fullWidth>
-              <FormLabel id="demo-radio-buttons-group-label">Status</FormLabel>
-              <RadioGroup
-                aria-labelledby="demo-radio-buttons-group-label"
-                defaultValue={Status}
-                onChange={(e) => Setstatus(e.target.value)}
-                name="radio-buttons-group"
-              >
-                <FormControlLabel value="Enable" control={<Radio />} label="Enable" />
-                <FormControlLabel value="Disable" control={<Radio />} label="Disable" />
-              </RadioGroup>
-            </FormControl>
-          </Box>
-          <Box>
-            <Button variant="contained" onClick={createCatogeries}>
-              Submit
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
     </PageContainer>
   );
 };
 
-export default Admin;
+export default Servicerequested;

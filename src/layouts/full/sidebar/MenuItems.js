@@ -10,54 +10,28 @@ import {
 
 import { uniqueId } from 'lodash';
 
-const Menuitems = [
-  // {
-  //   navlabel: true,
-  //   subheader: 'Home',
-  // },
-
-  {
-    id: uniqueId(),
-    title: 'Admin',
-    icon: IconLayoutDashboard,
-    href: '/admin',
-  },
-  // {
-  //   navlabel: true,
-  //   subheader: 'Utilities',
-  // },
+export const Menuitems = [
   {
     id: uniqueId(),
     title: 'Catogery',
     icon: IconTypography,
     href: '/catogery',
   },
+
   {
     id: uniqueId(),
     title: 'Services',
     icon: IconCopy,
     href: '/Services',
   },
-  // {
-  //   navlabel: true,
-  //   subheader: 'Auth',
-  // },
+
   {
     id: uniqueId(),
     title: 'Service Center',
     icon: IconLogin,
     href: '/Servicecenter',
   },
-  {
-    id: uniqueId(),
-    title: 'Roles',
-    icon: IconUserPlus,
-    href: '/roles',
-  },
-  // {
-  //   navlabel: true,
-  //   subheader: 'Extra',
-  // },
+
   {
     id: uniqueId(),
     title: 'Service Requested',
@@ -78,4 +52,23 @@ const Menuitems = [
   },
 ];
 
-export default Menuitems;
+export const userMenu = [
+  {
+    id: uniqueId(),
+    title: 'Catogeries',
+    icon: IconTypography,
+    href: '/catogeries',
+  },
+  {
+    id: uniqueId(),
+    title: 'Service Requested',
+    icon: IconMoodHappy,
+    href: '/servicerequested',
+  },
+  {
+    id: uniqueId(),
+    title: 'Service History',
+    icon: IconMoodHappy,
+    href: '/servicehistory',
+  },
+];

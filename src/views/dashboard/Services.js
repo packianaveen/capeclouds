@@ -28,6 +28,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { url } from 'src/constant';
 const Admin = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -36,10 +37,11 @@ const Admin = () => {
   const [order, setOrder] = useState('');
   const [data, setData] = useState('');
   const [photo, setPhoto] = useState('');
+  const [editid, setEditid] = useState('');
   const [Status, Setstatus] = useState('Enable');
   useEffect(() => {
     axios
-      .get('http://localhost:7098/api/get-catogery')
+      .get(`${url}/api/get-service`)
       .then((response) => {
         setData(response.data);
       })
@@ -65,39 +67,112 @@ const Admin = () => {
   };
   const createCatogeries = (e) => {
     console.log(photo);
-    axios
-      .post(
-        'http://localhost:7098/api/create-catogery',
-        {
-          name: name,
-          orderNo: order,
-          status: Status,
-          photo: photo,
-        },
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
+    if (editid) {
+      if (typeof photo == 'string') {
+        axios
+          .patch(`${url}/api/serviceedit/${editid}`, {
+            name: name,
+            orderNo: order,
+            status: Status,
+            photo: photo,
+          })
+          .then((response) => {
+            console.log((data.find((it) => it._id == editid).name = name));
+            data.find((it) => it._id == editid).status = Status;
+            data.find((it) => it._id == editid).orderNo = order;
+            // intialAd.find((it) => it._id == editid).photo = newad.photo;
+            // setInitialAd([...intialAd, response.data]);
+            setOpen(false);
+
+            toast.success('SucessFully Updated');
+          })
+          .catch((err) => {
+            toast.error('failed');
+            setOpen(false);
+          });
+      } else {
+        axios
+          .delete(`${url}/api/delete-service/${editid}`)
+          .then((response) => {
+            toast.success('SucessFully Updated');
+            const data1 = data.filter((it) => it._id !== editid);
+            axios
+              .post(
+                `${url}/api/create-service`,
+                {
+                  name: name,
+                  orderNo: order,
+                  status: Status,
+                  photo: photo,
+                },
+                {
+                  headers: {
+                    'Content-Type': 'multipart/form-data',
+                  },
+                },
+              )
+              .then((response) => {
+                console.log(response);
+                setData([...data1, response.data]);
+                setOpen(false);
+                setName('');
+                setOrder('');
+                setPhoto('');
+                Setstatus('');
+                toast.success('SucessFully Updated');
+              })
+              .catch((error) => {
+                toast.error('failed');
+                setOpen(false);
+                console.log(error);
+              });
+          })
+          .catch((error) => {
+            console.log(error);
+            toast.error('failed');
+          });
+      }
+    } else {
+      axios
+        .post(
+          `${url}/api/create-service`,
+          {
+            name: name,
+            orderNo: order,
+            status: Status,
+            photo: photo,
           },
-        },
-      )
-      .then((response) => {
-        console.log(response);
-        setData([...data, response.data]);
-        setOpen(false);
-        toast.success('SucessFully Updated');
-      })
-      .catch((error) => {
-        toast.error('failed');
-        setOpen(false);
-        console.log(error);
-      });
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          },
+        )
+        .then((response) => {
+          console.log(response);
+          setData([...data, response.data]);
+          setOpen(false);
+          setName('');
+          setOrder('');
+          setPhoto('');
+          Setstatus('');
+          toast.success('SucessFully Updated');
+        })
+        .catch((error) => {
+          toast.error('failed');
+          setOpen(false);
+          console.log(error);
+        });
+    }
   };
   const deleteCatogory = (id) => {
     console.log(id);
     axios
-      .delete(`http://localhost:7098/api/delete-catogery/${id}`)
+      .delete(`${url}/api/delete-service/${id}`)
       .then((response) => {
         toast.success('SucessFully Updated');
+        const data1 = data.filter((it) => it._id !== response.data._id);
+        setData(data1);
         console.log('sucess');
       })
       .catch((error) => {
@@ -106,12 +181,14 @@ const Admin = () => {
       });
   };
   const editCatogory = (id) => {
-    axios.get(`http://localhost:7098/api/edit-catogery/${id}`).then((response) => {
+    axios.get(`${url}/api/edit-service/${id}`).then((response) => {
       console.log(response.data);
       setName(response.data.name);
       setPhoto(response.data.photo);
       setOrder(response.data.orderNo);
       Setstatus(response.data.status);
+      setEditid(id);
+
       // setNewAd({ name: response.data.name, photo: response.data.photo, url: response.data.url });
       setOpen(true);
 
@@ -151,11 +228,11 @@ const Admin = () => {
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
-                  <TableCell align="right">Name</TableCell>
-                  <TableCell align="right">Status</TableCell>
-                  <TableCell align="right">Order No</TableCell>
-                  <TableCell align="right">Image</TableCell>
-                  <TableCell align="right">Action</TableCell>
+                  <TableCell align="center">Name</TableCell>
+                  <TableCell align="center">Status</TableCell>
+                  <TableCell align="center">Order No</TableCell>
+                  <TableCell align="center">Image</TableCell>
+                  <TableCell align="center">Action</TableCell>
                 </TableRow>
               </TableHead>
               {data && (
@@ -168,17 +245,13 @@ const Admin = () => {
                       <TableCell component="th" scope="row">
                         {x + 1}
                       </TableCell>
-                      <TableCell align="right">{it.name}</TableCell>
-                      <TableCell align="right">{it.status}</TableCell>
-                      <TableCell align="right">{it.orderNo}</TableCell>
-                      <TableCell align="right">
-                        <img
-                          height="40px"
-                          width="60px"
-                          src={'http://localhost:7098/Images/' + it.photo}
-                        />
+                      <TableCell align="center">{it.name}</TableCell>
+                      <TableCell align="center">{it.status}</TableCell>
+                      <TableCell align="center">{it.orderNo}</TableCell>
+                      <TableCell align="center">
+                        <img height="40px" width="60px" src={`${url}/Images/` + it.photo} />
                       </TableCell>
-                      <TableCell align="right">
+                      <TableCell align="center">
                         <DeleteIcon
                           color="red"
                           style={{ color: 'red', cursor: 'pointer' }}
@@ -259,7 +332,7 @@ const Admin = () => {
             </FormControl>
           </Box>
           <Box>
-            <Button variant="contained" onClick={createCatogeries}>
+            <Button disabled={!name || !order} variant="contained" onClick={createCatogeries}>
               Submit
             </Button>
           </Box>

@@ -8,10 +8,27 @@ import { MyContext } from './MyContext';
 import { createTheme } from '@mui/material/styles';
 import typography from './theme/Typography';
 import { shadows } from './theme/Shadows';
+import { useAuth } from 'src/routes/AuthProvider';
+import { AuthProvider } from './routes/AuthProvider';
+import './App.css';
+import { url } from './constant';
 function App() {
-  const routing = useRoutes(Router);
+  const auth = useAuth();
+  console.log(auth.user);
+  const routing = useRoutes(Router(auth.user));
   // const theme = baselightTheme;
   const [themeColor, setTheme] = useState('#000000');
+  const checkLoggedIn = () => {
+    let token = JSON.parse(localStorage.getItem('user'));
+    let login = token ? token.type : null;
+    auth.login(login);
+  };
+  useEffect(() => {
+    console.log('useEffect called');
+    var currentLocation = window.location;
+    console.log(currentLocation.host);
+    checkLoggedIn();
+  }, []);
   const theme = useMemo(
     () =>
       createTheme({
@@ -83,7 +100,7 @@ function App() {
   console.log(theme.palette.primary.main);
 
   useEffect(() => {
-    axios.get('http://localhost:7098/api/getTheme').then((response) => {
+    axios.get(`${url}/api/getTheme`).then((response) => {
       if (response.data.length > 0) {
         console.log(response.data);
         setTheme(response.data[0].colur);
