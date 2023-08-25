@@ -29,6 +29,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import moment from 'moment/moment';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { url } from 'src/constant';
 const ServiceHistory = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -69,7 +70,7 @@ const ServiceHistory = () => {
     console.log(photo);
     axios
       .post(
-        '${url}/api/create-service',
+        `${url}/api/create-service`,
         {
           name: name,
           orderNo: order,
