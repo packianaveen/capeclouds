@@ -33,7 +33,7 @@ const SamplePage = () => {
     });
   };
   const style = {
-    position: 'absolute',
+    position: 'fixed',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
@@ -93,19 +93,27 @@ const SamplePage = () => {
         }}
       >
         {data.map((it, x) => (
-          <Card style={{ margin: '10px', cursor: 'pointer' }} onClick={() => hanldeService(x)}>
+          <Card
+            style={{ margin: '10px', cursor: 'pointer', width: '200px' }}
+            onClick={() => hanldeService(x)}
+          >
             <CardContent>
               <img
                 style={{ objectFit: 'contain' }}
                 height="80px"
-                width="200px"
+                width="100%"
                 src={`${url}/Images/` + it.photo}
               />
               <Typography
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  textAlign: 'center',
+                }}
                 variant="h6"
               >
-                <p>{it.name}</p>
+                {it.name}
               </Typography>
             </CardContent>
           </Card>
@@ -140,7 +148,7 @@ const SamplePage = () => {
                   .filter((item) => item.checked == true)
                   .map((it, x) => (
                     <Card
-                      style={{
+                      sx={{
                         margin: '10px',
                         cursor: 'pointer',
                         height: '120px',
@@ -163,7 +171,7 @@ const SamplePage = () => {
                             alignItems: 'center',
                             justifyContent: 'center',
                           }}
-                          variant="h6"
+                          variant="p"
                         >
                           <FormControlLabel
                             control={

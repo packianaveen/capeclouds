@@ -114,7 +114,7 @@ const Login2 = () => {
       />
       <section
         style={{
-          position: 'absolute',
+          position: 'fixed',
           top: 0,
           left: 0,
           width: '100%',
@@ -200,7 +200,6 @@ const Login2 = () => {
             </Card>
           </Grid>
         </Grid>
-        <div id="sign-in-button"></div>
       </Box>
     </PageContainer>
   );

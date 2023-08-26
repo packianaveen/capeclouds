@@ -62,7 +62,7 @@ const FrontEnd = () => {
     setNewAd({ ...newad, photo: e.target.files[0] });
   };
   const style = {
-    position: 'absolute',
+    position: 'fixed',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',

@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './routes/AuthProvider';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
   <Suspense>
     <BrowserRouter>

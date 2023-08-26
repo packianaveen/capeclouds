@@ -51,7 +51,7 @@ const Admin = () => {
   }, []);
 
   const style = {
-    position: 'absolute',
+    position: 'fixed',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
@@ -270,74 +270,74 @@ const Admin = () => {
             </Table>
           </TableContainer>
         </div>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style} component="form" encType="multipart/form-data">
+            <Box m={1}>
+              <FormControl fullWidth onChange={(e) => setName(e.target.value)}>
+                <InputLabel htmlFor="component-outlined">Name</InputLabel>
+                <OutlinedInput fullWidth id="component-outlined" defaultValue={name} label="Name" />
+              </FormControl>
+            </Box>
+            <Box m={1}>
+              <FormControl fullWidth onChange={(e) => setOrder(e.target.value)}>
+                <InputLabel htmlFor="component-outlined">Order Number</InputLabel>
+                <OutlinedInput
+                  fullWidth
+                  id="component-outlined"
+                  defaultValue={order}
+                  label="Order No"
+                />
+              </FormControl>
+            </Box>
+            <Box m={1}>
+              <FormControl fullWidth>
+                {photo.length == 0 ? (
+                  <Button variant="contained" component="label" onChange={handlePhoto}>
+                    Upload File
+                    <input
+                      type="file"
+                      //    value={newad.photo && newad.photo}
+                      accept="image/*"
+                      id="file"
+                      name="photo"
+                      hidden
+                    />
+                  </Button>
+                ) : (
+                  <Button variant="contained" component="label" onChange={handlePhoto}>
+                    ReUpload
+                    <input type="file" accept="image/*" id="file" name="photo" hidden />
+                  </Button>
+                )}
+              </FormControl>
+            </Box>
+            <Box m={1}>
+              <FormControl fullWidth>
+                <FormLabel id="demo-radio-buttons-group-label">Status</FormLabel>
+                <RadioGroup
+                  aria-labelledby="demo-radio-buttons-group-label"
+                  defaultValue={Status}
+                  onChange={(e) => Setstatus(e.target.value)}
+                  name="radio-buttons-group"
+                >
+                  <FormControlLabel value="Enable" control={<Radio />} label="Enable" />
+                  <FormControlLabel value="Disable" control={<Radio />} label="Disable" />
+                </RadioGroup>
+              </FormControl>
+            </Box>
+            <Box>
+              <Button disabled={!name || !order} variant="contained" onClick={createCatogeries}>
+                Submit
+              </Button>
+            </Box>
+          </Box>
+        </Modal>
       </DashboardCard>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style} component="form" encType="multipart/form-data">
-          <Box m={1}>
-            <FormControl fullWidth onChange={(e) => setName(e.target.value)}>
-              <InputLabel htmlFor="component-outlined">Name</InputLabel>
-              <OutlinedInput fullWidth id="component-outlined" defaultValue={name} label="Name" />
-            </FormControl>
-          </Box>
-          <Box m={1}>
-            <FormControl fullWidth onChange={(e) => setOrder(e.target.value)}>
-              <InputLabel htmlFor="component-outlined">Order Number</InputLabel>
-              <OutlinedInput
-                fullWidth
-                id="component-outlined"
-                defaultValue={order}
-                label="Order No"
-              />
-            </FormControl>
-          </Box>
-          <Box m={1}>
-            <FormControl fullWidth>
-              {photo.length == 0 ? (
-                <Button variant="contained" component="label" onChange={handlePhoto}>
-                  Upload File
-                  <input
-                    type="file"
-                    //    value={newad.photo && newad.photo}
-                    accept="image/*"
-                    id="file"
-                    name="photo"
-                    hidden
-                  />
-                </Button>
-              ) : (
-                <Button variant="contained" component="label" onChange={handlePhoto}>
-                  ReUpload
-                  <input type="file" accept="image/*" id="file" name="photo" hidden />
-                </Button>
-              )}
-            </FormControl>
-          </Box>
-          <Box m={1}>
-            <FormControl fullWidth>
-              <FormLabel id="demo-radio-buttons-group-label">Status</FormLabel>
-              <RadioGroup
-                aria-labelledby="demo-radio-buttons-group-label"
-                defaultValue={Status}
-                onChange={(e) => Setstatus(e.target.value)}
-                name="radio-buttons-group"
-              >
-                <FormControlLabel value="Enable" control={<Radio />} label="Enable" />
-                <FormControlLabel value="Disable" control={<Radio />} label="Disable" />
-              </RadioGroup>
-            </FormControl>
-          </Box>
-          <Box>
-            <Button disabled={!name || !order} variant="contained" onClick={createCatogeries}>
-              Submit
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
     </PageContainer>
   );
 };

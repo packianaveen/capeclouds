@@ -7,7 +7,7 @@ const Sidebar = (props) => {
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
   const theme = useTheme();
   const sidebarWidth = '270px';
-
+  console.log(props);
   if (lgUp) {
     return (
       <Box
@@ -78,13 +78,23 @@ const Sidebar = (props) => {
       {/* ------------------------------------------- */}
       {/* Logo */}
       {/* ------------------------------------------- */}
-      <Box px={2}>
+      <Box
+        px={2}
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignContent: 'center',
+          backgroundColor: theme.palette.primary.main,
+          color: theme.palette.info.contrastText,
+          minHeight: '70px',
+        }}
+      >
         <Logo />
       </Box>
       {/* ------------------------------------------- */}
       {/* Sidebar For Mobile */}
       {/* ------------------------------------------- */}
-      <SidebarItems />
+      <SidebarItems closeSidebar={props.onSidebarClose} />
       {/* <Upgrade /> */}
     </Drawer>
   );
