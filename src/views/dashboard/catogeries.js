@@ -93,17 +93,22 @@ const SamplePage = () => {
         }}
       >
         {data.map((it, x) => (
-          <Card
-            style={{ margin: '10px', cursor: 'pointer', width: '200px' }}
-            onClick={() => hanldeService(x)}
-          >
-            <CardContent>
-              <img
-                style={{ objectFit: 'contain' }}
-                height="80px"
-                width="100%"
-                src={`${url}/Images/` + it.photo}
-              />
+          <>
+            <div className="overdiv">
+              <div className="circle" onClick={() => hanldeService(x)}>
+                {/* <CardContent> */}
+                <img
+                  style={{ objectFit: 'contain' }}
+                  height="80%"
+                  width="100%"
+                  src={`${url}/Images/` + it.photo}
+                />
+              </div>
+              <div className="textover">
+                <p className="textall">{it.name}</p>
+              </div>
+            </div>
+            {/* <div>
               <Typography
                 style={{
                   display: 'flex',
@@ -115,8 +120,9 @@ const SamplePage = () => {
               >
                 {it.name}
               </Typography>
-            </CardContent>
-          </Card>
+              {/* </CardContent> */}
+            {/* </div> */}
+          </>
         ))}
       </Box>
       <Modal
@@ -209,9 +215,9 @@ const SamplePage = () => {
           </Box>
         </Box>
       </Modal>
-      <Box>
+      {/* <Box>
         <Blog />
-      </Box>
+      </Box> */}
     </PageContainer>
   );
 };

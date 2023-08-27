@@ -27,12 +27,56 @@ div::-webkit-scrollbar-thumb {
 }
 
 @media (min-width: 1200px) {
-  .css-1je17zp-MuiContainer-root {
+  .MuiContainer-root {
     max-width: 1140px;
+  }
+  .overdiv {
+    width: 80px;
+    margin: 28px;
+  }
+  .circle {
+    border: red;
+    height: 90px;
+    width: 90px;
+    line-height: 12px;
+    cursor: pointer;
+    background: gray;
+    border-radius: 107px;
+    text-align: center;
+  }
+  .textover {
+    width: 80px;
+  }
+  .textall {
+    font-size: 14px;
+    text-align: center;
+    font-weight: bold;
   }
 }
 @media (max-width: 992px) {
-  .css-1je17zp-MuiContainer-root {
+  .MuiContainer-root {
     max-width: 800px !important;
+  }
+  .overdiv {
+    width: 80px;
+  }
+  .circle {
+    border: red;
+    height: 60px;
+    width: 60px;
+
+    line-height: 12px;
+    cursor: pointer;
+    background: gray;
+    border-radius: 107px;
+    text-align: center;
+  }
+  .textover {
+    width: 60px;
+  }
+  .textall {
+    font-size: 10px;
+    text-align: center;
+    font-weight: bold;
   }
 }
