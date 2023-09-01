@@ -58,6 +58,10 @@ const Router = (auth) => {
           element: auth == '1' ? <Services /> : <Navigate to={'/auth/login'} replace />,
         },
         {
+          path: '/Admin',
+          element: auth == '1' ? <Admin /> : <Navigate to={'/auth/login'} replace />,
+        },
+        {
           path: '/servicerequest',
           element: auth == '1' ? <ServiceRequest /> : <Navigate to={'/auth/login'} replace />,
         },

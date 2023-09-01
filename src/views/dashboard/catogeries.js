@@ -90,39 +90,52 @@ const SamplePage = () => {
           bgcolor: 'background.paper',
           borderRadius: 1,
           flexWrap: 'wrap',
+          justifyContent: 'center',
         }}
       >
         {data.map((it, x) => (
-          <>
-            <div className="overdiv">
-              <div className="circle" onClick={() => hanldeService(x)}>
-                {/* <CardContent> */}
+          <div
+            style={{
+              margin: '10px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              flexDirection: 'column',
+            }}
+            onClick={() => hanldeService(x)}
+          >
+            <Card
+              sx={{
+                height: '80px',
+                width: '80px',
+                borderRadius: '107px',
+                backgroundColor: 'gray',
+                lineHeight: '10px',
+              }}
+            >
+              <CardContent>
                 <img
                   style={{ objectFit: 'contain' }}
-                  height="80%"
+                  height="100%"
                   width="100%"
                   src={`${url}/Images/` + it.photo}
                 />
-              </div>
-              <div className="textover">
-                <p className="textall">{it.name}</p>
-              </div>
+              </CardContent>
+            </Card>
+            <div
+              style={{
+                height: '80px',
+                width: '80px',
+                textAlign: 'center',
+                fontsize: '12px',
+                fontWeight: 'bolder',
+              }}
+            >
+              <p>{it.name}</p>
             </div>
-            {/* <div>
-              <Typography
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  textAlign: 'center',
-                }}
-                variant="h6"
-              >
-                {it.name}
-              </Typography>
-              {/* </CardContent> */}
-            {/* </div> */}
-          </>
+            {/* <p>{it.name}</p> */}
+          </div>
         ))}
       </Box>
       <Modal
@@ -215,9 +228,9 @@ const SamplePage = () => {
           </Box>
         </Box>
       </Modal>
-      {/* <Box>
+      <Box>
         <Blog />
-      </Box> */}
+      </Box>
     </PageContainer>
   );
 };
