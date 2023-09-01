@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menuitems, userMenu } from './MenuItems';
+import { Menuitems, NormaiAdmin, userMenu } from './MenuItems';
 import { useLocation } from 'react-router';
 import { Box, List } from '@mui/material';
 import NavItem from './NavItem';
@@ -10,7 +10,7 @@ const SidebarItems = (props) => {
   const { pathname } = useLocation();
   const pathDirect = pathname;
   const auth = useAuth();
-  const path = auth.user == 1 ? Menuitems : userMenu;
+  const path = auth.user == 1 ? Menuitems : auth.user == 2 ? userMenu : NormaiAdmin;
   console.log(props);
   return (
     <Box sx={{ px: 3 }}>

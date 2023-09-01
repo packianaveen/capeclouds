@@ -250,6 +250,7 @@ const Catogery = () => {
                     : data
                   ).map((it, x) => (
                     <TableRow
+                      style={{ background: x % 2 == 0 ? '#e8e8e8' : 'white' }}
                       key={it._id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >

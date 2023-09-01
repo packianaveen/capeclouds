@@ -40,6 +40,7 @@ const Servicerequestedadmin = () => {
   const [order, setOrder] = useState('');
   const [data, setData] = useState('');
   const [photo, setPhoto] = useState('');
+  const [temp, setTemp] = useState('');
   const [Status, Setstatus] = useState('Enable');
   useEffect(() => {
     axios
@@ -76,6 +77,15 @@ const Servicerequestedadmin = () => {
         currentIndex === x ? { ...it, status: event.target.value } : it,
       ),
     );
+  };
+
+  const getUser = (user) => {
+    let phone;
+    axios.get(`${url}/api/getuser/${user}`).then((response) => {
+      console.log(response.data.phone);
+      phone = response.data.phone;
+      return phone;
+    });
   };
   const createCatogeries = (e) => {
     console.log(photo);
@@ -161,6 +171,7 @@ const Servicerequestedadmin = () => {
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
+                  <TableCell align="center">Phone No</TableCell>
                   <TableCell align="center">Catagory</TableCell>
                   <TableCell align="center">Service</TableCell>
                   <TableCell align="center">Status</TableCell>
@@ -171,20 +182,16 @@ const Servicerequestedadmin = () => {
                 <TableBody>
                   {data.map((it, x) => (
                     <TableRow
+                      style={{ background: x % 2 == 0 ? '#e8e8e8' : 'white' }}
                       key={it._id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
                       <TableCell component="th" scope="row">
                         {x + 1}
                       </TableCell>
+                      <TableCell align="center">{/* {() => getUser(it.user)} */}</TableCell>
                       <TableCell align="center">{JSON.parse(it.catagery).name}</TableCell>
-                      <TableCell align="center">
-                        {JSON.parse(it.service)
-                          .filter((it) => it.req == true)
-                          .map((item) => (
-                            <p>{item.name}</p>
-                          ))}
-                      </TableCell>
+                      <TableCell align="center">{JSON.parse(it.service).name}</TableCell>
                       <TableCell align="center">
                         <p
                           style={{

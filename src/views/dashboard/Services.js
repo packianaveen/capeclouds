@@ -21,6 +21,7 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
+import { TableFooter } from '@mui/material';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
@@ -29,6 +30,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { url } from 'src/constant';
+import { TablePagination, tablePaginationClasses as classes } from '@mui/base/TablePagination';
+import { styled } from '@mui/system';
 const Admin = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -39,6 +42,53 @@ const Admin = () => {
   const [photo, setPhoto] = useState('');
   const [editid, setEditid] = useState('');
   const [Status, Setstatus] = useState('Enable');
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const CustomTablePagination = styled(TablePagination)`
+    & .${classes.toolbar} {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+
+      @media (min-width: 768px) {
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+
+    & .${classes.selectLabel} {
+      margin: 0;
+    }
+
+    & .${classes.displayedRows} {
+      margin: 0;
+
+      @media (min-width: 768px) {
+        margin-left: auto;
+      }
+    }
+
+    & .${classes.spacer} {
+      display: none;
+    }
+
+    & .${classes.actions} {
+      display: flex;
+      gap: 0.25rem;
+    }
+  `;
   useEffect(() => {
     axios
       .get(`${url}/api/get-service`)
@@ -237,8 +287,12 @@ const Admin = () => {
               </TableHead>
               {data && (
                 <TableBody>
-                  {data.map((it, x) => (
+                  {(rowsPerPage > 0
+                    ? data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    : data
+                  ).map((it, x) => (
                     <TableRow
+                      style={{ background: x % 2 == 0 ? '#e8e8e8' : 'white' }}
                       key={it._id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                     >
@@ -267,6 +321,29 @@ const Admin = () => {
                   ))}
                 </TableBody>
               )}
+              <TableFooter>
+                <TableRow>
+                  <CustomTablePagination
+                    style={{ padding: '20px' }}
+                    rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                    colSpan={3}
+                    count={data.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    slotProps={{
+                      select: {
+                        'aria-label': 'rows per page',
+                      },
+                      actions: {
+                        showFirstButton: true,
+                        showLastButton: true,
+                      },
+                    }}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </TableRow>
+              </TableFooter>
             </Table>
           </TableContainer>
         </div>

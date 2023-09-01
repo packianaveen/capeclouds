@@ -15,6 +15,7 @@ import {
   FilledInput,
 } from '@mui/material';
 import PageContainer from 'src/components/container/PageContainer';
+import MuiPhoneNumber from 'mui-phone-number';
 import DashboardCard from '../../components/shared/DashboardCard';
 import Modal from '@mui/material/Modal';
 import Table from '@mui/material/Table';
@@ -38,12 +39,14 @@ const Admin = () => {
   const [data, setData] = useState('');
   const [photo, setPhoto] = useState('');
   const [editid, setEditid] = useState('');
-  const [Status, Setstatus] = useState('Enable');
+  const [phone, setPhone] = useState('');
+  const [pin, setPin] = useState('');
+  const [password, setPassword] = useState('');
   useEffect(() => {
     axios
-      .get(`${url}/api/get-service`)
+      .get(`${url}/api/getusers`)
       .then((response) => {
-        setData(response.data);
+        setData(response.data.filter((it) => it.type == '3'));
       })
       .catch(function (error) {
         console.log(error);
@@ -65,105 +68,23 @@ const Admin = () => {
     console.log(e.target.files[0]);
     setPhoto(e.target.files[0]);
   };
-  const createCatogeries = (e) => {
-    console.log(photo);
-    if (editid) {
-      if (typeof photo == 'string') {
-        axios
-          .patch(`${url}/api/serviceedit/${editid}`, {
-            name: name,
-            orderNo: order,
-            status: Status,
-            photo: photo,
-          })
-          .then((response) => {
-            console.log((data.find((it) => it._id == editid).name = name));
-            data.find((it) => it._id == editid).status = Status;
-            data.find((it) => it._id == editid).orderNo = order;
-            // intialAd.find((it) => it._id == editid).photo = newad.photo;
-            // setInitialAd([...intialAd, response.data]);
-            setOpen(false);
-
-            toast.success('SucessFully Updated');
-          })
-          .catch((err) => {
-            toast.error('failed');
-            setOpen(false);
-          });
-      } else {
-        axios
-          .delete(`${url}/api/delete-service/${editid}`)
-          .then((response) => {
-            toast.success('SucessFully Updated');
-            const data1 = data.filter((it) => it._id !== editid);
-            axios
-              .post(
-                `${url}/api/create-service`,
-                {
-                  name: name,
-                  orderNo: order,
-                  status: Status,
-                  photo: photo,
-                },
-                {
-                  headers: {
-                    'Content-Type': 'multipart/form-data',
-                  },
-                },
-              )
-              .then((response) => {
-                console.log(response);
-                setData([...data1, response.data]);
-                setOpen(false);
-                setName('');
-                setOrder('');
-                setPhoto('');
-                Setstatus('');
-                toast.success('SucessFully Updated');
-              })
-              .catch((error) => {
-                toast.error('failed');
-                setOpen(false);
-                console.log(error);
-              });
-          })
-          .catch((error) => {
-            console.log(error);
-            toast.error('failed');
-          });
-      }
-    } else {
-      axios
-        .post(
-          `${url}/api/create-service`,
-          {
-            name: name,
-            orderNo: order,
-            status: Status,
-            photo: photo,
-          },
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          },
-        )
-        .then((response) => {
-          console.log(response);
-          setData([...data, response.data]);
-          setOpen(false);
-          setName('');
-          setOrder('');
-          setPhoto('');
-          Setstatus('');
-          toast.success('SucessFully Updated');
-        })
-        .catch((error) => {
-          toast.error('failed');
-          setOpen(false);
-          console.log(error);
-        });
-    }
+  const createAdmins = () => {
+    axios
+      .post(`${url}/api/userAd`, {
+        phone: phone,
+        pin: pin,
+        password: password,
+        type: '3',
+      })
+      .then((response) => {
+        console.log(response);
+        let roles = response.data;
+        toast.success('SucessFully Updated');
+      })
+      .catch((error) => {
+        toast.error('failed');
+        console.log(error);
+      });
   };
   const deleteCatogory = (id) => {
     console.log(id);
@@ -186,7 +107,7 @@ const Admin = () => {
       setName(response.data.name);
       setPhoto(response.data.photo);
       setOrder(response.data.orderNo);
-      Setstatus(response.data.status);
+      // Setstatus(response.data.status);
       setEditid(id);
 
       // setNewAd({ name: response.data.name, photo: response.data.photo, url: response.data.url });
@@ -228,10 +149,10 @@ const Admin = () => {
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
-                  <TableCell align="center">Name</TableCell>
-                  <TableCell align="center">Status</TableCell>
-                  <TableCell align="center">Order No</TableCell>
-                  <TableCell align="center">Image</TableCell>
+                  <TableCell align="center">Phone</TableCell>
+                  <TableCell align="center">Password</TableCell>
+                  <TableCell align="center">Pin</TableCell>
+
                   <TableCell align="center">Action</TableCell>
                 </TableRow>
               </TableHead>
@@ -245,12 +166,12 @@ const Admin = () => {
                       <TableCell component="th" scope="row">
                         {x + 1}
                       </TableCell>
-                      <TableCell align="center">{it.name}</TableCell>
-                      <TableCell align="center">{it.status}</TableCell>
-                      <TableCell align="center">{it.orderNo}</TableCell>
-                      <TableCell align="center">
+                      <TableCell align="center">{it.phone}</TableCell>
+                      <TableCell align="center">{it.pin}</TableCell>
+                      <TableCell align="center">{it.password}</TableCell>
+                      {/* <TableCell align="center">
                         <img height="40px" width="60px" src={`${url}/Images/` + it.photo} />
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell align="center">
                         <DeleteIcon
                           color="red"
@@ -278,23 +199,43 @@ const Admin = () => {
         >
           <Box sx={style} component="form" encType="multipart/form-data">
             <Box m={1}>
-              <FormControl fullWidth onChange={(e) => setName(e.target.value)}>
-                <InputLabel htmlFor="component-outlined">Name</InputLabel>
+              {/* <FormControl fullWidth onChange={(e) => setName(e.target.value)}>
+                <InputLabel htmlFor="component-outlined">Phone</InputLabel>
                 <OutlinedInput fullWidth id="component-outlined" defaultValue={name} label="Name" />
-              </FormControl>
+              </FormControl> */}
+              <MuiPhoneNumber
+                style={{ marginBottom: '10px' }}
+                fullWidth
+                variant="outlined"
+                defaultCountry={'in'}
+                onChange={(value) => {
+                  setPhone(value);
+                }}
+              />
             </Box>
             <Box m={1}>
-              <FormControl fullWidth onChange={(e) => setOrder(e.target.value)}>
-                <InputLabel htmlFor="component-outlined">Order Number</InputLabel>
+              <FormControl fullWidth onChange={(e) => setPin(e.target.value)}>
+                <InputLabel htmlFor="component-outlined">Pin Number</InputLabel>
                 <OutlinedInput
                   fullWidth
                   id="component-outlined"
-                  defaultValue={order}
+                  defaultValue={pin}
                   label="Order No"
                 />
               </FormControl>
             </Box>
             <Box m={1}>
+              <FormControl fullWidth onChange={(e) => setPassword(e.target.value)}>
+                <InputLabel htmlFor="component-outlined">Password</InputLabel>
+                <OutlinedInput
+                  fullWidth
+                  id="component-outlined"
+                  defaultValue={password}
+                  label="Order No"
+                />
+              </FormControl>
+            </Box>
+            {/* <Box m={1}>
               <FormControl fullWidth>
                 {photo.length == 0 ? (
                   <Button variant="contained" component="label" onChange={handlePhoto}>
@@ -315,8 +256,8 @@ const Admin = () => {
                   </Button>
                 )}
               </FormControl>
-            </Box>
-            <Box m={1}>
+            </Box> */}
+            {/* <Box m={1}>
               <FormControl fullWidth>
                 <FormLabel id="demo-radio-buttons-group-label">Status</FormLabel>
                 <RadioGroup
@@ -329,9 +270,9 @@ const Admin = () => {
                   <FormControlLabel value="Disable" control={<Radio />} label="Disable" />
                 </RadioGroup>
               </FormControl>
-            </Box>
-            <Box>
-              <Button disabled={!name || !order} variant="contained" onClick={createCatogeries}>
+            </Box> */}
+            <Box style={{ display: 'flex', justifyContent: 'center' }}>
+              <Button disabled={!phone || !password} variant="contained" onClick={createAdmins}>
                 Submit
               </Button>
             </Box>

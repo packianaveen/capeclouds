@@ -56,34 +56,47 @@ const Router = (auth) => {
         },
         {
           path: '/catogery',
-          element: auth == '1' ? <Catagory /> : <Navigate to={'/auth/login'} replace />,
+          element:
+            auth == '1' || auth == '3' ? <Catagory /> : <Navigate to={'/auth/login'} replace />,
         },
         {
           path: '/Services',
-          element: auth == '1' ? <Services /> : <Navigate to={'/auth/login'} replace />,
+          element:
+            auth == '1' || auth == '3' ? <Services /> : <Navigate to={'/auth/login'} replace />,
         },
         {
           path: '/Admin',
-          element: auth == '1' ? <Admin /> : <Navigate to={'/auth/login'} replace />,
+          element: auth == '1' || auth == '3' ? <Admin /> : <Navigate to={'/auth/login'} replace />,
         },
         {
           path: '/servicerequest',
-          element: auth == '1' ? <ServiceRequest /> : <Navigate to={'/auth/login'} replace />,
+          element:
+            auth == '1' || auth == '3' ? (
+              <ServiceRequest />
+            ) : (
+              <Navigate to={'/auth/login'} replace />
+            ),
         },
         {
           path: '/servicecenter',
-          element: auth == '1' ? <ServiceCenter /> : <Navigate to={'/auth/login'} replace />,
+          element:
+            auth == '1' || auth == '3' ? (
+              <ServiceCenter />
+            ) : (
+              <Navigate to={'/auth/login'} replace />
+            ),
         },
         {
           path: '/frontend',
-          element: auth == '1' ? <FrontEnd /> : <Navigate to={'/auth/login'} replace />,
+          element:
+            auth == '1' || auth == '3' ? <FrontEnd /> : <Navigate to={'/auth/login'} replace />,
         },
 
         { path: '/roles', exact: true, element: <Roles /> },
 
         {
           path: '/users',
-          element: auth == '1' ? <Users /> : <Navigate to={'/auth/login'} replace />,
+          element: auth == '1' || auth == '3' ? <Users /> : <Navigate to={'/auth/login'} replace />,
         },
 
         { path: '*', element: <Navigate to="/auth/404" /> },

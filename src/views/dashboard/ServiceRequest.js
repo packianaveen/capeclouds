@@ -87,7 +87,6 @@ const ServiceRequest = () => {
       url: newad.url,
       photo: newad.photo,
     };
-    // // formData.append('photo', newad.photo);
 
     // console.log(formData);
     axios
@@ -140,7 +139,6 @@ const ServiceRequest = () => {
                 <TableRow>
                   <TableCell>S.No</TableCell>
                   <TableCell align="right">Phone</TableCell>
-
                   <TableCell align="right">Service center</TableCell>
                   <TableCell align="right">Catogery</TableCell>
                   <TableCell align="right">Service</TableCell>
