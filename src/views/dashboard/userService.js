@@ -8,22 +8,23 @@ import axios from 'axios';
 import Modal from '@mui/material/Modal';
 import Swal from 'sweetalert2';
 import { url } from 'src/constant';
-
+import CustomTextField from '../../components/forms/theme-elements/CustomTextField';
 import Blog from './components/Blog';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 const SamplePage = () => {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const [cat, setCat] = useState('');
-  const [selectdata, setSelectdata] = useState(true);
   const navigate = useNavigate();
+  let { id } = useParams();
+  const [selectdata, setSelectdata] = useState('');
+
   useEffect(() => {
-    axios.get(`${url}/api/get-catogery`).then((response) => {
-      if (response.data.length > 0) {
-        console.log(response.data);
-        setData(response.data);
-      }
+    axios.get(`${url}/api/edit-catogery/${id}`).then((response) => {
+      console.log(JSON.parse(response.data.services));
+      setCat(response.data);
+      setData(JSON.parse(response.data.services).filter((it) => it.checked == true));
     });
   }, []);
   const showAlert = () => {
@@ -39,29 +40,27 @@ const SamplePage = () => {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 900,
-    height: '500px',
+    width: 350,
     bgcolor: 'background.paper',
-    border: '2px solid gray',
+    border: '2px solid',
     boxShadow: 24,
     p: 4,
   };
   const hanldeService = (x) => {
     console.log(data[x]);
     setSelectdata(data[x]);
-    console.log(data[x]._id);
-    navigate(`/userservice/${data[x]._id}`);
+    // navigate(`/userservice/${data[x]._id}`);
     // setCat(JSON.parse(data[x].services).map((it) => ({ ...it, req: false })));
-    // // setService(JSON.parse(data[x].services).map((it) => ({ ...it, req: false })));
-    // setOpen(true);
+    // setService(JSON.parse(data[x].services).map((it) => ({ ...it, req: false })));
+    setOpen(true);
   };
   const createRequest = (e) => {
     console.log(data);
     console.log(cat);
     axios
       .post(`${url}/api/createRequest`, {
-        data: JSON.stringify(selectdata),
-        service: JSON.stringify(cat),
+        data: JSON.stringify(cat),
+        service: JSON.stringify(selectdata),
         user: JSON.parse(localStorage.getItem('user'))._id,
       })
       .then((response) => {
@@ -142,6 +141,7 @@ const SamplePage = () => {
           </div>
         ))}
       </Box>
+
       <Modal
         open={open}
         onClose={() => setOpen(false)}
@@ -150,72 +150,30 @@ const SamplePage = () => {
       >
         <Box>
           <Box sx={style} component="form" encType="multipart/form-data">
-            {cat ? (
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  p: 1,
-                  m: 1,
-                  bgcolor: 'background.paper',
-                  borderRadius: 1,
-                  flexWrap: 'wrap',
-                  overflow: 'scroll',
-                  overflowX: 'hidden',
-                  height: '400px',
-                }}
-              >
-                {cat
-                  .filter((item) => item.checked == true)
-                  .map((it, x) => (
-                    <Card
-                      sx={{
-                        margin: '10px',
-                        cursor: 'pointer',
-                        height: '120px',
-                        width: '200px',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <CardContent>
-                        <img
-                          style={{ objectFit: 'fill' }}
-                          height="80px"
-                          width="100%"
-                          src={`${url}/Images/` + it.photo}
-                        />
-                        <Typography
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                          }}
-                          variant="p"
-                        >
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                key={it.name}
-                                isChecked={it.checked}
-                                onChange={() => updateCheckStatus(x)}
-                                label={it.name}
-                                index={x}
-                              />
-                            }
-                            label={it.name}
-                          />
-                        </Typography>
-                      </CardContent>
-                    </Card>
-                  ))}
-              </Box>
-            ) : (
-              ''
-            )}
+            <Box>
+              <CustomTextField
+                style={{ marginTop: '10px' }}
+                id="otp"
+                label="Catagoery"
+                value={cat.name}
+                variant="outlined"
+                fullWidth
+              />
+            </Box>
+            <Box>
+              <CustomTextField
+                style={{ marginTop: '10px' }}
+                id="otp"
+                label="Service"
+                // onChange={(e) => {
+                //   setPin(e.target.value);
+                // }}
+                value={selectdata.name}
+                variant="outlined"
+                fullWidth
+              />
+            </Box>
+
             <Box
               style={{
                 margin: '10px',
@@ -232,9 +190,6 @@ const SamplePage = () => {
           </Box>
         </Box>
       </Modal>
-      <Box>
-        <Blog />
-      </Box>
     </PageContainer>
   );
 };

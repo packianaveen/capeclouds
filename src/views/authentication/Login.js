@@ -8,7 +8,7 @@ import PageContainer from 'src/components/container/PageContainer';
 import Logo from 'src/layouts/full/shared/logo/Logo';
 import AuthLogin from './auth/AuthLogin';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
-
+import CustomTextField from '../../components/forms/theme-elements/CustomTextField';
 import { PhoneEnabled } from '@mui/icons-material';
 import bgvideo from 'src/assets/bg.mp4';
 import { ToastContainer, toast } from 'react-toastify';
@@ -24,6 +24,7 @@ const Login2 = () => {
   const [login, setLogin] = useState(false);
   const [reg, setReg] = useState(false);
   // const navigate = useNavigate();
+
   const auth = useAuth();
 
   const navigate = useNavigate();

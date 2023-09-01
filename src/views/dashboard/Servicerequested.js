@@ -36,13 +36,13 @@ const Servicerequested = () => {
   const handleClose = () => setOpen(false);
   const [name, setName] = useState('');
   const [order, setOrder] = useState('');
-  const [data, setData] = useState('');
+  const [data, setData] = useState([]);
   const [photo, setPhoto] = useState('');
   const [Status, Setstatus] = useState('Enable');
-
+  let id = JSON.parse(localStorage.getItem('user'))._id;
   useEffect(() => {
     axios
-      .get(`${url}/api/getRequestedservice`)
+      .get(`${url}/api/getrequestservice/${id}`)
       .then((response) => {
         console.log(response.data);
         setData(response.data);
@@ -168,11 +168,7 @@ const Servicerequested = () => {
                         {x + 1}
                       </TableCell>
                       <TableCell align="center">{JSON.parse(it.catagery).name}</TableCell>
-                      <TableCell align="center">
-                        {JSON.parse(it.service)
-                          .filter((it) => it.req == true)
-                          .map((item) => item.name)}
-                      </TableCell>
+                      <TableCell align="center">{JSON.parse(it.service).name}</TableCell>
                       <TableCell align="center">
                         <p
                           style={{

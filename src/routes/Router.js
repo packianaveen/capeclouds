@@ -17,6 +17,7 @@ const ServiceCenter = Loadable(lazy(() => import('../views/dashboard/ServiceCent
 const ServiceRequest = Loadable(lazy(() => import('../views/dashboard/Servicerequestedadmin')));
 const Servicerequested = Loadable(lazy(() => import('../views/dashboard/Servicerequested')));
 const Servicehistory = Loadable(lazy(() => import('../views/dashboard/ServiceHistory')));
+const ServicerUser = Loadable(lazy(() => import('../views/dashboard/userService')));
 const Users = Loadable(lazy(() => import('../views/dashboard/Users')));
 const Roles = Loadable(lazy(() => import('../views/dashboard/Roles')));
 const Icons = Loadable(lazy(() => import('../views/icons/Icons')));
@@ -44,6 +45,10 @@ const Router = (auth) => {
         {
           path: '/servicerequested',
           element: <Servicerequested />,
+        },
+        {
+          path: '/userservice/:id',
+          element: <ServicerUser />,
         },
         {
           path: '/servicehistory',
