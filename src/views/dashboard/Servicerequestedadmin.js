@@ -148,7 +148,7 @@ const Servicerequestedadmin = () => {
                   <TableCell align="center">Phone No</TableCell>
                   <TableCell align="center">Catagory</TableCell>
                   <TableCell align="center">Service</TableCell>
-                  <TableCell align="center">Status</TableCell>
+                  <TableCell align="left">Status</TableCell>
                   <TableCell align="center">Date</TableCell>
                 </TableRow>
               </TableHead>
@@ -178,11 +178,12 @@ const Servicerequestedadmin = () => {
                         <FormControl fullWidth>
                           {/* <InputLabel id="demo-simple-select-label">Age</InputLabel> */}
                           <Select
+                            autoWidth={true}
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             value={it.status}
                             // label="Status"
-                            style={{ height: '25px' }}
+                            style={{ height: '25px', width: '100px' }}
                             onChange={(e) => handleStatus(e, x)}
                           >
                             <MenuItem value="open">Open</MenuItem>

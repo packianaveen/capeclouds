@@ -56,6 +56,9 @@ function App() {
             dark: '#1682d4',
             contrastText: '#ffffff',
           },
+          text: {
+            disabled: '#000000',
+          },
           error: {
             main: '#FA896B',
             light: '#FDEDE8',

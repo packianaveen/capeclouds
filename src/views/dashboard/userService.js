@@ -29,8 +29,8 @@ const SamplePage = () => {
   }, []);
   const showAlert = () => {
     Swal.fire({
-      title: 'Success',
-      text: 'Our Repercentative contact you soon',
+      title: 'Service Requested Sucessfully',
+      text: 'GET A CALL FROM US SHORTLY',
       icon: 'success',
       confirmButtonText: 'OK',
     });
@@ -153,6 +153,9 @@ const SamplePage = () => {
       >
         <Box>
           <Box sx={style} component="form" encType="multipart/form-data">
+            <Box mb={2} style={{ fontWeight: 'bold' }}>
+              Service Request
+            </Box>
             <Box>
               <CustomTextField
                 style={{ marginTop: '10px' }}

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 
 // components
 import Profile from './Profile';
-import { IconBellRinging, IconMenu } from '@tabler/icons';
+import { IconBellRinging, IconMenu2 } from '@tabler/icons';
 
 const Header = (props) => {
   // const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
@@ -39,7 +39,7 @@ const Header = (props) => {
             color: 'white',
           }}
         >
-          <IconMenu width="20" height="20" />
+          <IconMenu2 width="20" height="20" />
         </IconButton>
 
         <IconButton

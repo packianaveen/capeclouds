@@ -89,6 +89,24 @@ const SamplePage = () => {
       description="this is Sample page"
       style={{ backgroundColor: '#fdf1f4' }}
     >
+      <Box m={1}>
+        <Box>
+          <Typography fontWeight="700" variant="h3" mb={1}>
+            Our Trending Services
+          </Typography>
+        </Box>
+        <div>
+          <div style={{ backgroundImage: `http://localhost:7098/Images/1692925982567-QWfIVD.jpg` }}>
+            {' '}
+            <img
+              height="auto"
+              width="100%"
+              src="http://localhost:7098/Images/1692925982567-QWfIVD.jpg"
+              style={{ borderRadius: '15px' }}
+            />
+          </div>
+        </div>
+      </Box>
       <Box
         sx={{
           display: 'flex',
@@ -119,7 +137,8 @@ const SamplePage = () => {
                 height: '80px',
                 width: '80px',
                 borderRadius: '107px',
-
+                boxShadow:
+                  'rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px',
                 lineHeight: '10px',
               }}
             >

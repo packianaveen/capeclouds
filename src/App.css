@@ -22,7 +22,12 @@ div::-webkit-scrollbar-thumb {
   background-color: darkgrey;
   outline: 1px solid slategrey;
 }
-
+div#swal2-html-container {
+  font-weight: bolder;
+}
+h2#swal2-title {
+  font-size: 18px;
+}
 .each-slide-effect > div {
   display: flex;
   align-items: center;

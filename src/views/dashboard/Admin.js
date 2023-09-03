@@ -174,13 +174,26 @@ const Admin = () => {
                       </TableCell> */}
                       <TableCell align="center">
                         <DeleteIcon
-                          color="red"
-                          style={{ color: 'red', cursor: 'pointer' }}
+                          style={{
+                            fontSize: '30px',
+                            color: 'white',
+                            cursor: 'pointer',
+                            margin: '2px',
+                            padding: '5px',
+                            background: '#ef6767',
+                          }}
                           onClick={() => deleteCatogory(it._id)}
                         />
 
                         <EditIcon
-                          style={{ color: 'green', cursor: 'pointer' }}
+                          style={{
+                            fontSize: '30px',
+                            color: 'white',
+                            cursor: 'pointer',
+                            margin: '2px',
+                            padding: '5px',
+                            background: '#34c38f',
+                          }}
                           onClick={() => editCatogory(it._id)}
                         />
                       </TableCell>

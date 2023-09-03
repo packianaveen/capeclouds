@@ -282,7 +282,29 @@ const Admin = () => {
                       <TableCell align="center">
                         <img height="40px" width="60px" src={`${url}/Images/` + it.photo} />
                       </TableCell>
-                      <TableCell align="center">{it.status}</TableCell>
+                      <TableCell align="center">
+                        <div
+                          style={{
+                            background: it.status == 'Enable' ? '#34c38f' : '#ef6767',
+                            padding: '2px',
+                            width: '100%',
+                            color: 'white',
+                            borderRadius: '5px',
+                          }}
+                        >
+                          <div
+                            style={{
+                              background: it.status == 'Enable' ? '#34c38f' : '#ef6767',
+                              padding: '2px',
+                              width: '100%',
+                              color: 'white',
+                              borderRadius: '5px',
+                            }}
+                          >
+                            {it.status}
+                          </div>
+                        </div>
+                      </TableCell>
                       <TableCell align="center">{it.pin}</TableCell>
                       <TableCell align="center">{it.phoneNo}</TableCell>
                       <TableCell align="center">
@@ -307,13 +329,26 @@ const Admin = () => {
                       </TableCell>
                       <TableCell align="center">
                         <DeleteIcon
-                          color="red"
-                          style={{ color: 'red', cursor: 'pointer' }}
+                          style={{
+                            fontSize: '30px',
+                            color: 'white',
+                            cursor: 'pointer',
+                            margin: '2px',
+                            padding: '5px',
+                            background: '#ef6767',
+                          }}
                           onClick={() => deleteCatogory(it._id)}
                         />
 
                         <EditIcon
-                          style={{ color: 'green', cursor: 'pointer' }}
+                          style={{
+                            fontSize: '30px',
+                            color: 'white',
+                            cursor: 'pointer',
+                            margin: '2px',
+                            padding: '5px',
+                            background: '#34c38f',
+                          }}
                           // onClick={() => editCatogory(it._id)}
                         />
                       </TableCell>
