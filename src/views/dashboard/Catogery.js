@@ -260,8 +260,18 @@ const Catogery = () => {
                       <TableCell width="20%" align="center">
                         {it.name}
                       </TableCell>
-                      <TableCell width="20%" align="center">
-                        {it.status}
+                      <TableCell width="10%" align="center">
+                        <div
+                          style={{
+                            background: it.status == 'Enable' ? '#34c38f' : '#ef6767',
+                            padding: '2px',
+                            width: '100%',
+                            color: 'white',
+                            borderRadius: '5px',
+                          }}
+                        >
+                          {it.status}
+                        </div>
                       </TableCell>
                       <TableCell width="20%" align="center">
                         {it.orderNo}
@@ -269,15 +279,28 @@ const Catogery = () => {
                       <TableCell width="20%" align="center">
                         <img height="40px" width="60px" src={`${url}/Images/` + it.photo} />
                       </TableCell>
-                      <TableCell align="right">
+                      <TableCell align="center">
                         <DeleteIcon
-                          color="red"
-                          style={{ color: 'red', cursor: 'pointer' }}
+                          style={{
+                            fontSize: '30px',
+                            color: 'white',
+                            cursor: 'pointer',
+                            margin: '2px',
+                            padding: '5px',
+                            background: '#ef6767',
+                          }}
                           onClick={() => deleteCatogory(it._id)}
                         />
 
                         <EditIcon
-                          style={{ color: 'green', cursor: 'pointer' }}
+                          style={{
+                            fontSize: '30px',
+                            color: 'white',
+                            cursor: 'pointer',
+                            margin: '2px',
+                            padding: '5px',
+                            background: '#34c38f',
+                          }}
                           onClick={() => editCatogory(it._id)}
                         />
                       </TableCell>
@@ -340,7 +363,7 @@ const Catogery = () => {
             <FormControl fullWidth>
               {photo.length == 0 ? (
                 <Button variant="contained" component="label" onChange={handlePhoto}>
-                  Upload File
+                  Upload Image
                   <input
                     type="file"
                     //    value={newad.photo && newad.photo}
@@ -352,7 +375,7 @@ const Catogery = () => {
                 </Button>
               ) : (
                 <Button variant="contained" component="label" onChange={handlePhoto}>
-                  ReUpload
+                  Re-Upload Image
                   <input type="file" accept="image/*" id="file" name="photo" hidden />
                 </Button>
               )}

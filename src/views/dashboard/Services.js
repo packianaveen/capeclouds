@@ -276,7 +276,7 @@ const Admin = () => {
           <TableContainer component={Paper}>
             <Table aria-label="simple table">
               <TableHead>
-                <TableRow>
+                <TableRow style={{ fontWeight: 'bold' }}>
                   <TableCell>ID</TableCell>
                   <TableCell align="center">Name</TableCell>
                   <TableCell align="center">Status</TableCell>
@@ -300,20 +300,55 @@ const Admin = () => {
                         {x + 1}
                       </TableCell>
                       <TableCell align="center">{it.name}</TableCell>
-                      <TableCell align="center">{it.status}</TableCell>
+                      <TableCell align="center" style={{ width: '10%' }}>
+                        <div
+                          style={{
+                            background: it.status == 'Enable' ? '#34c38f' : '#ef6767',
+                            padding: '2px',
+                            width: '100%',
+                            color: 'white',
+                            borderRadius: '5px',
+                          }}
+                        >
+                          <div
+                            style={{
+                              background: it.status == 'Enable' ? '#34c38f' : '#ef6767',
+                              padding: '2px',
+                              width: '100%',
+                              color: 'white',
+                              borderRadius: '5px',
+                            }}
+                          >
+                            {it.status}
+                          </div>
+                        </div>
+                      </TableCell>
                       <TableCell align="center">{it.orderNo}</TableCell>
                       <TableCell align="center">
                         <img height="40px" width="60px" src={`${url}/Images/` + it.photo} />
                       </TableCell>
                       <TableCell align="center">
                         <DeleteIcon
-                          color="red"
-                          style={{ color: 'red', cursor: 'pointer' }}
+                          style={{
+                            fontSize: '30px',
+                            color: 'white',
+                            cursor: 'pointer',
+                            margin: '2px',
+                            padding: '5px',
+                            background: '#ef6767',
+                          }}
                           onClick={() => deleteCatogory(it._id)}
                         />
 
                         <EditIcon
-                          style={{ color: 'green', cursor: 'pointer' }}
+                          style={{
+                            fontSize: '30px',
+                            color: 'white',
+                            cursor: 'pointer',
+                            margin: '2px',
+                            padding: '5px',
+                            background: '#34c38f',
+                          }}
                           onClick={() => editCatogory(it._id)}
                         />
                       </TableCell>
@@ -375,7 +410,7 @@ const Admin = () => {
               <FormControl fullWidth>
                 {photo.length == 0 ? (
                   <Button variant="contained" component="label" onChange={handlePhoto}>
-                    Upload File
+                    Upload Image
                     <input
                       type="file"
                       //    value={newad.photo && newad.photo}
@@ -387,7 +422,7 @@ const Admin = () => {
                   </Button>
                 ) : (
                   <Button variant="contained" component="label" onChange={handlePhoto}>
-                    ReUpload
+                    Re-Upload Image
                     <input type="file" accept="image/*" id="file" name="photo" hidden />
                   </Button>
                 )}

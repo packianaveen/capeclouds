@@ -84,27 +84,32 @@ const SamplePage = () => {
     // ]);
   };
   return (
-    <PageContainer title="Catogeries" description="this is Sample page">
+    <PageContainer
+      title="Catogeries"
+      description="this is Sample page"
+      style={{ backgroundColor: '#fdf1f4' }}
+    >
       <Box
         sx={{
           display: 'flex',
           flexDirection: 'row',
-          p: 1,
-          m: 1,
+          // p: 1,
+          // m: 1,
           bgcolor: 'background.paper',
           borderRadius: 1,
           flexWrap: 'wrap',
-          justifyContent: 'center',
+          justifyContent: 'space-between',
         }}
+        style={{ backgroundColor: '#fdf1f4' }}
       >
         {data.map((it, x) => (
           <div
             style={{
-              margin: '10px',
+              margin: '5px',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
+              justifyContent: 'space-between',
               flexDirection: 'column',
             }}
             onClick={() => hanldeService(x)}
@@ -114,7 +119,7 @@ const SamplePage = () => {
                 height: '80px',
                 width: '80px',
                 borderRadius: '107px',
-                backgroundColor: 'gray',
+
                 lineHeight: '10px',
               }}
             >
@@ -132,8 +137,6 @@ const SamplePage = () => {
                 height: '80px',
                 width: '80px',
                 textAlign: 'center',
-                fontsize: '12px',
-                fontWeight: 'bolder',
               }}
             >
               <p>{it.name}</p>

@@ -6,6 +6,12 @@ import {
   IconMoodHappy,
   IconTypography,
   IconUserPlus,
+  IconUserCheck,
+  IconCategory,
+  IconUsers,
+  IconColorFilter,
+  Icon24Hours,
+  IconBuildingEstate,
 } from '@tabler/icons';
 
 import { uniqueId } from 'lodash';
@@ -13,21 +19,21 @@ export const NormaiAdmin = [
   {
     id: uniqueId(),
     title: 'Catogery',
-    icon: IconTypography,
+    icon: IconCategory,
     href: '/catogery',
   },
 
   {
     id: uniqueId(),
     title: 'Services',
-    icon: IconCopy,
+    icon: Icon24Hours,
     href: '/Services',
   },
 
   {
     id: uniqueId(),
     title: 'Service Center',
-    icon: IconLogin,
+    icon: IconBuildingEstate,
     href: '/Servicecenter',
   },
 
@@ -40,13 +46,13 @@ export const NormaiAdmin = [
   {
     id: uniqueId(),
     title: 'Manage Users',
-    icon: IconAperture,
+    icon: IconUsers,
     href: '/users',
   },
   {
     id: uniqueId(),
     title: 'Manage Frontends',
-    icon: IconAperture,
+    icon: IconColorFilter,
     href: '/frontend',
   },
 ];
@@ -54,27 +60,27 @@ export const Menuitems = [
   {
     id: uniqueId(),
     title: 'Admin',
-    icon: IconTypography,
+    icon: IconUserCheck,
     href: '/admin',
   },
   {
     id: uniqueId(),
     title: 'Catogery',
-    icon: IconTypography,
+    icon: IconCategory,
     href: '/catogery',
   },
 
   {
     id: uniqueId(),
     title: 'Services',
-    icon: IconCopy,
+    icon: Icon24Hours,
     href: '/Services',
   },
 
   {
     id: uniqueId(),
     title: 'Service Center',
-    icon: IconLogin,
+    icon: IconBuildingEstate,
     href: '/Servicecenter',
   },
 
@@ -87,13 +93,13 @@ export const Menuitems = [
   {
     id: uniqueId(),
     title: 'Manage Users',
-    icon: IconAperture,
+    icon: IconUsers,
     href: '/users',
   },
   {
     id: uniqueId(),
     title: 'Manage Frontends',
-    icon: IconAperture,
+    icon: IconColorFilter,
     href: '/frontend',
   },
 ];

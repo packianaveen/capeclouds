@@ -256,8 +256,9 @@ const Admin = () => {
                   <TableCell align="center">Status</TableCell>
                   <TableCell align="center">Pin code</TableCell>
                   <TableCell align="center">Phone</TableCell>
-                  <TableCell align="center">QR Code</TableCell>
                   <TableCell align="center">Link</TableCell>
+                  <TableCell align="center">QR Code</TableCell>
+
                   <TableCell align="center">Action</TableCell>
                 </TableRow>
               </TableHead>
@@ -364,7 +365,7 @@ const Admin = () => {
             <FormControl fullWidth>
               {photo.length == 0 ? (
                 <Button variant="contained" component="label" onChange={handlePhoto}>
-                  Upload File
+                  Upload Image
                   <input
                     type="file"
                     //    value={newad.photo && newad.photo}
@@ -376,7 +377,7 @@ const Admin = () => {
                 </Button>
               ) : (
                 <Button variant="contained" component="label" onChange={handlePhoto}>
-                  ReUpload
+                  Re-Upload Image
                   <input type="file" accept="image/*" id="file" name="photo" hidden />
                 </Button>
               )}

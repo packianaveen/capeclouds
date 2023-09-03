@@ -181,7 +181,17 @@ const ServiceHistory = () => {
                             padding: '3px',
                           }}
                         >
-                          {it.status}
+                          <div
+                            style={{
+                              background: it.status == 'Enable' ? '#34c38f' : '#ef6767',
+                              padding: '2px',
+                              width: '100%',
+                              color: 'white',
+                              borderRadius: '5px',
+                            }}
+                          >
+                            {it.status}
+                          </div>
                         </p>
                       </TableCell>
                       <TableCell align="center">

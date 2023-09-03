@@ -32,6 +32,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import 'react-toastify/dist/ReactToastify.css';
 import { url } from 'src/constant';
+import { Phone } from '@mui/icons-material';
 const Servicerequestedadmin = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -41,6 +42,7 @@ const Servicerequestedadmin = () => {
   const [data, setData] = useState('');
   const [photo, setPhoto] = useState('');
   const [temp, setTemp] = useState('');
+  const [users, setUsers] = useState([]);
   const [Status, Setstatus] = useState('Enable');
   useEffect(() => {
     axios
@@ -48,6 +50,15 @@ const Servicerequestedadmin = () => {
       .then((response) => {
         console.log(response.data);
         setData(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    axios
+      .get(`${url}/api/getusers`)
+      .then((response) => {
+        console.log(response.data);
+        setUsers(response.data);
       })
       .catch(function (error) {
         console.log(error);
@@ -72,41 +83,17 @@ const Servicerequestedadmin = () => {
   const handleStatus = (event, x) => {
     console.log(event.target.value);
     console.log(data[x]);
-    setData(
-      data.map((it, currentIndex) =>
-        currentIndex === x ? { ...it, status: event.target.value } : it,
-      ),
+    const newData = data.map((it, currentIndex) =>
+      currentIndex === x ? { ...it, status: event.target.value } : it,
     );
-  };
+    setData(newData);
+    console.log(newData);
 
-  const getUser = (user) => {
-    let phone;
-    axios.get(`${url}/api/getuser/${user}`).then((response) => {
-      console.log(response.data.phone);
-      phone = response.data.phone;
-      return phone;
-    });
-  };
-  const createCatogeries = (e) => {
-    console.log(photo);
     axios
-      .post(
-        `${url}/api/create-service`,
-        {
-          name: name,
-          orderNo: order,
-          status: Status,
-          photo: photo,
-        },
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        },
-      )
+      .post(`${url}/api/updaterequest`, newData[x])
       .then((response) => {
         console.log(response);
-        setData([...data, response.data]);
+        // setData([...data, response.data]);
         setOpen(false);
         toast.success('SucessFully Updated');
       })
@@ -116,32 +103,19 @@ const Servicerequestedadmin = () => {
         console.log(error);
       });
   };
-  const deleteCatogory = (id) => {
-    console.log(id);
-    axios
-      .delete(`${url}/api/delete-service/${id}`)
-      .then((response) => {
-        toast.success('SucessFully Updated');
-        console.log('sucess');
-      })
-      .catch((error) => {
-        console.log(error);
-        toast.error('failed');
-      });
-  };
-  const editCatogory = (id) => {
-    axios.get(`${url}/api/edit-service/${id}`).then((response) => {
-      console.log(response.data);
-      setName(response.data.name);
-      setPhoto(response.data.photo);
-      setOrder(response.data.orderNo);
-      Setstatus(response.data.status);
-      // setNewAd({ name: response.data.name, photo: response.data.photo, url: response.data.url });
-      setOpen(true);
 
-      // setInitialAd(response.data);
-    });
+  const getUser = (id) => {
+    // axios.get(`${url}/api/getuser/${user}`).then((response) => {
+    //   console.log(response.data.phone);
+    //   phone = response.data.phone;
+    //   return phone;
+    // });
+    console.log(users);
+    const phone = users.find((it) => it._id == id)?.phone;
+    console.log(phone);
+    return phone;
   };
+
   return (
     <PageContainer title="Services Table">
       <ToastContainer
@@ -189,33 +163,34 @@ const Servicerequestedadmin = () => {
                       <TableCell component="th" scope="row">
                         {x + 1}
                       </TableCell>
-                      <TableCell align="center">{/* {() => getUser(it.user)} */}</TableCell>
+                      <TableCell align="center">{getUser(it.user)}</TableCell>
                       <TableCell align="center">{JSON.parse(it.catagery).name}</TableCell>
                       <TableCell align="center">{JSON.parse(it.service).name}</TableCell>
                       <TableCell align="center">
-                        <p
+                        {/* <p
                           style={{
                             // color: 'white',
                             // background: 'green',
                             borderRadius: '5px',
                             padding: '3px',
                           }}
-                        >
-                          <FormControl fullWidth>
-                            {/* <InputLabel id="demo-simple-select-label">Age</InputLabel> */}
-                            <Select
-                              labelId="demo-simple-select-label"
-                              id="demo-simple-select"
-                              value={it.status}
-                              // label="Status"
-                              onChange={(e) => handleStatus(e, x)}
-                            >
-                              <MenuItem value="open">Open</MenuItem>
-                              <MenuItem value="ongoing">Ongoing</MenuItem>
-                              <MenuItem value="Completed">Completed</MenuItem>
-                            </Select>
-                          </FormControl>
-                        </p>
+                        > */}
+                        <FormControl fullWidth>
+                          {/* <InputLabel id="demo-simple-select-label">Age</InputLabel> */}
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            value={it.status}
+                            // label="Status"
+                            style={{ height: '25px' }}
+                            onChange={(e) => handleStatus(e, x)}
+                          >
+                            <MenuItem value="open">Open</MenuItem>
+                            <MenuItem value="ongoing">Ongoing</MenuItem>
+                            <MenuItem value="close">Close</MenuItem>
+                          </Select>
+                        </FormControl>
+                        {/* </p> */}
                       </TableCell>
                       <TableCell align="center">
                         {moment(it.createdAt).format('DD/MM/YYYY')}

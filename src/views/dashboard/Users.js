@@ -35,6 +35,7 @@ const Users = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [intialAd, setInitialAd] = useState([]);
+  const [center, setCenter] = useState([]);
 
   const [newad, setNewAd] = useState({
     name: '',
@@ -52,10 +53,19 @@ const Users = () => {
   useEffect(() => {
     axios.get(`${url}/api/getusers`).then((response) => {
       if (response.data.length > 0) {
-        console.log(response.data);
-        setInitialAd(response.data);
+        // setCenter(response.data);
+        setInitialAd(response.data.filter((it) => it.type == '2'));
       }
     });
+    axios
+      .get(`${url}/api/getCenter`)
+      .then((response) => {
+        console.log(response.data);
+        setCenter(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }, []);
 
   const editElement = (id) => {
@@ -66,6 +76,16 @@ const Users = () => {
       console.log(newad.photo);
       // setInitialAd(response.data);
     });
+  };
+  const getCenter = (id) => {
+    // axios.get(`${url}/api/getuser/${user}`).then((response) => {
+    //   console.log(response.data.phone);
+    //   phone = response.data.phone;
+    //   return phone;
+    // });
+    console.log(center);
+    const phone = center.find((it) => it._id == id)?.name;
+    return phone;
   };
   const deleteElement = (id) => {
     axios
@@ -80,6 +100,7 @@ const Users = () => {
         toast.error('failed');
       });
   };
+
   const handleAd = (e) => {
     e.preventDefault();
     console.log(newad.photo);
@@ -172,7 +193,9 @@ const Users = () => {
                       </TableCell>
                       <TableCell align="center">{it.phone}</TableCell>
                       <TableCell align="center">{it.pin}</TableCell>
-                      <TableCell align="center">{it.admin ? it.admin : 'Default'}</TableCell>
+                      <TableCell align="center">
+                        {it.admin ? getCenter(it.admin) : 'Default'}
+                      </TableCell>
                       <TableCell align="center">
                         {' '}
                         {moment(it.createdAt).format('DD/MM/YYYY')}
@@ -227,7 +250,7 @@ const Users = () => {
               <FormControl fullWidth>
                 {newad.photo.length == 0 ? (
                   <Button variant="contained" component="label" onChange={handlePhoto}>
-                    Upload File
+                    Upload Image
                     <input
                       type="file"
                       //    value={newad.photo && newad.photo}
@@ -239,7 +262,7 @@ const Users = () => {
                   </Button>
                 ) : (
                   <Button variant="contained" component="label" onChange={handlePhoto}>
-                    ReUpload
+                    Re-Upload Image
                     <input type="file" accept="image/*" id="file" name="photo" hidden />
                   </Button>
                 )}

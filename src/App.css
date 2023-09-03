@@ -6,6 +6,18 @@ div::-webkit-scrollbar-track {
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
 }
 
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:regular,bold,italic&subset=latin,latin-ext');
+
+* {
+  font-family: 'Be Vietnam Pro', sans-serif !important;
+}
+
+.MuiTableRow-root {
+  font-weight: bold;
+}
+.mainwrapper .page-wrapper {
+  background-color: #fdf1f4;
+}
 div::-webkit-scrollbar-thumb {
   background-color: darkgrey;
   outline: 1px solid slategrey;

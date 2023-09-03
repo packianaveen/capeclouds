@@ -1,5 +1,6 @@
 import 'react-slideshow-image/dist/styles.css';
-import { Slide } from 'react-slideshow-image';
+import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a loader
+import { Carousel } from 'react-responsive-carousel';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { url } from 'src/constant';
@@ -35,7 +36,7 @@ const AdSlide = () => {
   ];
   return (
     <>
-      <Slide autoplay>
+      {/* <Slide autoplay>
         {adSlide.map((it) => (
           <div className="each-slide-effect">
             <div style={{ backgroundImage: `${url}/Images/` + it.photo }}>
@@ -59,7 +60,7 @@ const AdSlide = () => {
       </Box>
       <Box mt={2}>
         <Slide autoplay>
-          {newad.map((it) => (
+           {trand.map((it) => (
             <div className="each-slide-effect" style={{ height: '500px' }}>
               <div style={{ backgroundImage: `${url}/Images/` + it.photo }}>
                 {' '}
@@ -68,7 +69,29 @@ const AdSlide = () => {
             </div>
           ))}
         </Slide>
+      </Box> */}
+
+      <Box mt={2}>
+        {newad.map((it) => (
+          <div>
+            <div style={{ backgroundImage: `${url}/Images/` + it.photo }}>
+              {' '}
+              <img height="auto" width="100%" src={`${url}/Images/` + it.photo} />
+            </div>
+          </div>
+        ))}
       </Box>
+
+      {/* <Box>
+        <Carousel interval="500" autoPlay>
+          {trand.map((it) => (
+            <div>
+              <img height="auto" width="100%" src={`${url}/Images/` + it.photo} />
+              <p className="legend">Legend 1</p>
+            </div>
+          ))}
+        </Carousel>
+      </Box> */}
     </>
   );
 };

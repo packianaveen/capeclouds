@@ -355,7 +355,7 @@ const FrontEnd = () => {
             <FormControl fullWidth>
               {newad.photo.length == 0 ? (
                 <Button variant="contained" component="label" onChange={handlePhoto}>
-                  Upload File
+                  Upload Image
                   <input
                     type="file"
                     //    value={newad.photo && newad.photo}
@@ -367,7 +367,7 @@ const FrontEnd = () => {
                 </Button>
               ) : (
                 <Button variant="contained" component="label" onChange={handlePhoto}>
-                  ReUpload
+                  Re-Upload Image
                   <input type="file" accept="image/*" id="file" name="photo" hidden />
                 </Button>
               )}
