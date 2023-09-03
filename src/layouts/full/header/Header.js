@@ -28,7 +28,7 @@ const Header = (props) => {
     <AppBarStyled position="sticky" color="default">
       <ToolbarStyled>
         <IconButton
-          color="inherit"
+          color="White"
           aria-label="menu"
           onClick={props.toggleMobileSidebar}
           sx={{
@@ -36,6 +36,7 @@ const Header = (props) => {
               lg: 'none',
               xs: 'inline',
             },
+            color: 'white',
           }}
         >
           <IconMenu width="20" height="20" />

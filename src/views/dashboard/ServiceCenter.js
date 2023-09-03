@@ -38,6 +38,7 @@ import { TelegramShareButton, WhatsappShareButton } from 'react-share';
 import { url } from 'src/constant';
 import { TablePagination, tablePaginationClasses as classes } from '@mui/base/TablePagination';
 import { styled } from '@mui/system';
+import { localurl } from 'src/constant';
 const Admin = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -288,7 +289,7 @@ const Admin = () => {
                         <ContentCopyIcon
                           style={{ cursor: 'pointer' }}
                           onClick={() => {
-                            navigator.clipboard.writeText(link);
+                            navigator.clipboard.writeText(`${localurl}/auth/Register/id=${it._id}`);
                           }}
                         />
                       </TableCell>
