@@ -13,8 +13,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../routes/AuthProvider';
 import { url } from 'src/constant';
 const Register2 = () => {
-  let { phone } = useParams();
-  let { id } = useParams();
+  // let { phone } = useParams();
+  let id = useParams();
+  console.log(id.phone);
+  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [pin, setPin] = useState('');
   const auth = useAuth();
@@ -26,14 +28,14 @@ const Register2 = () => {
         phone: phone,
         pin: pin,
         password: password,
-        admin: id,
+        admin: id.phone,
         type: '2',
       })
       .then((response) => {
         console.log(response);
         let roles = response.data;
         toast.success('SucessFully Updated');
-        localStorage.setItem('user', JSON.stringify(response.data[0]));
+        localStorage.setItem('user', JSON.stringify(response.data));
         auth.login(roles.type);
         if (roles.type == 1) {
           navigate('/', { replace: true });
@@ -142,13 +144,12 @@ const Register2 = () => {
                   style={{ marginBottom: '10px' }}
                   fullWidth
                   variant="outlined"
-                  disabled
                   value={phone}
                   // disabled={login || reg}
                   defaultCountry={'in'}
-                  // onChange={(value) => {
-                  //   setPhone(value);
-                  // }}
+                  onChange={(value) => {
+                    setPhone(value);
+                  }}
                 />
               </Box>
               <Box>

@@ -1,16 +1,25 @@
 import 'react-slideshow-image/dist/styles.css';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; // requires a loader
-import { Carousel } from 'react-responsive-carousel';
+
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { url } from 'src/constant';
 import { Box } from '@mui/material';
 import { Navigate, useNavigate } from 'react-router';
+import { Carousel } from '3d-react-carousal';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/effect-coverflow';
+import 'swiper/css/pagination';
+
+// import required modules
+import { EffectCoverflow, Pagination } from 'swiper/modules';
 const AdSlide = () => {
   const [adSlide, setAdslide] = useState([]);
   const [trand, settrend] = useState([]);
   const [newad, setNewad] = useState([]);
   const navigate = useNavigate();
+
   useEffect(() => {
     axios.get(`${url}/api/getbottomAd`).then((response) => {
       if (response.data.length > 0) {
@@ -34,11 +43,14 @@ const AdSlide = () => {
   const handleClick = () => {
     navigate('/userservice/64f415b6a938a764b90770dd', { replace: true });
   };
-  const images = [
-    'https://images.unsplash.com/photo-1509721434272-b79147e0e708?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80',
-    'https://images.unsplash.com/photo-1506710507565-203b9f24669b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1536&q=80',
-    'https://images.unsplash.com/photo-1536987333706-fc9adfb10d91?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1500&q=80',
+  let slides = [
+    <img src="https://picsum.photos/800/300/?random" alt="1" height="300px" width="100%" />,
+    <img src="https://picsum.photos/800/301/?random" alt="2" height="300px" width="100%" />,
+    <img src="https://picsum.photos/800/302/?random" alt="3" height="300px" width="100%" />,
+    <img src="https://picsum.photos/800/303/?random" alt="4" height="300px" width="100%" />,
+    <img src="https://picsum.photos/800/304/?random" alt="5" height="300px" width="100%" />,
   ];
+
   return (
     <>
       {/* <Slide autoplay>
@@ -79,7 +91,7 @@ const AdSlide = () => {
       <Box mt={2}>
         {newad.map((it) => (
           <div>
-            <div style={{ backgroundImage: `${url}/Images/` + it.photo }} onClick={handleClick}>
+            <div onClick={handleClick}>
               {' '}
               <img
                 height="auto"
@@ -90,6 +102,30 @@ const AdSlide = () => {
             </div>
           </div>
         ))}
+      </Box>
+      <Box mt={2}>
+        <Swiper
+          effect={'coverflow'}
+          grabCursor={true}
+          centeredSlides={true}
+          slidesPerView={'auto'}
+          coverflowEffect={{
+            rotate: 50,
+            stretch: 0,
+            depth: 100,
+            modifier: 1,
+            slideShadows: true,
+          }}
+          pagination={true}
+          modules={[EffectCoverflow, Pagination]}
+          // className="mySwiper"
+        >
+          {trand.map((it) => (
+            <SwiperSlide>
+              <img height="200px" width="100%" src={`${url}/Images/` + it.photo} />
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </Box>
 
       {/* <Box>

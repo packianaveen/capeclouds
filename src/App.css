@@ -22,6 +22,20 @@ div::-webkit-scrollbar-thumb {
   background-color: darkgrey;
   outline: 1px solid slategrey;
 }
+.swiper-slide.swiper-slide-visible.swiper-slide-active {
+  width: 100% !important;
+}
+.swiper-pagination {
+  text-align: right !important;
+}
+.swiper-pagination-bullet {
+  width: 20px !important;
+  border-radius: 20px !important;
+}
+.swiper-pagination-bullet-active {
+  background-color: black !important;
+  opacity: 0.8 !important;
+}
 div#swal2-html-container {
   font-weight: bolder;
 }

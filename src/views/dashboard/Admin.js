@@ -15,6 +15,7 @@ import {
   FilledInput,
 } from '@mui/material';
 import PageContainer from 'src/components/container/PageContainer';
+import CustomTextField from '../../components/forms/theme-elements/CustomTextField';
 import MuiPhoneNumber from 'mui-phone-number';
 import DashboardCard from '../../components/shared/DashboardCard';
 import Modal from '@mui/material/Modal';
@@ -139,6 +140,12 @@ const Admin = () => {
           alignItems="flex-end"
           //   sx={boxDefault}
         >
+          <CustomTextField
+            style={{ marginRight: '10px' }}
+            label="Search"
+            // onChange={(e) => handleSearch(e)}
+            variant="outlined"
+          />
           <Button color="primary" variant="contained" size="large" onClick={handleOpen}>
             Add
           </Button>

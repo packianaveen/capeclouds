@@ -24,7 +24,7 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-
+import CustomTextField from '../../components/forms/theme-elements/CustomTextField';
 import { TableFooter } from '@mui/material';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -48,6 +48,7 @@ const Catogery = () => {
   const [data, setData] = useState('');
   const [photo, setPhoto] = useState('');
   const [Status, Setstatus] = useState('Enable');
+  const [editid, setEditid] = useState('');
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
@@ -146,33 +147,128 @@ const Catogery = () => {
   };
   const createCatogeries = (e) => {
     console.log(photo);
-    axios
-      .post(
-        `${url}/api/create-catogery`,
-        {
-          name: name,
-          orderNo: order,
-          status: Status,
-          photo: photo,
-          services: JSON.stringify(cat),
-        },
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
+    if (editid) {
+      if (typeof photo == 'string') {
+        axios
+          .patch(`${url}/api/serviceedit/${editid}`, {
+            name: name,
+            orderNo: order,
+            status: Status,
+            photo: photo,
+            services: JSON.stringify(cat),
+          })
+          .then((response) => {
+            console.log((data.find((it) => it._id == editid).name = name));
+            data.find((it) => it._id == editid).status = Status;
+            data.find((it) => it._id == editid).orderNo = order;
+            // intialAd.find((it) => it._id == editid).photo = newad.photo;
+            // setInitialAd([...intialAd, response.data]);
+            setOpen(false);
+
+            toast.success('SucessFully Updated');
+          })
+          .catch((err) => {
+            toast.error('failed');
+            setOpen(false);
+          });
+      } else {
+        axios
+          .delete(`${url}/api/delete-catogery/${editid}`)
+          .then((response) => {
+            toast.success('SucessFully Updated');
+            const data1 = data.filter((it) => it._id !== editid);
+            axios
+              .post(
+                `${url}/api/create-catogery`,
+                {
+                  name: name,
+                  orderNo: order,
+                  status: Status,
+                  photo: photo,
+                },
+                {
+                  headers: {
+                    'Content-Type': 'multipart/form-data',
+                  },
+                },
+              )
+              .then((response) => {
+                console.log(response);
+                setData([...data1, response.data]);
+                setOpen(false);
+                setName('');
+                setOrder('');
+                setPhoto('');
+                Setstatus('');
+                toast.success('SucessFully Updated');
+              })
+              .catch((error) => {
+                toast.error('failed');
+                setOpen(false);
+                console.log(error);
+              });
+          })
+          .catch((error) => {
+            console.log(error);
+            toast.error('failed');
+          });
+      }
+    } else {
+      axios
+        .post(
+          `${url}/api/create-catogery`,
+          {
+            name: name,
+            orderNo: order,
+            status: Status,
+            photo: photo,
+            services: JSON.stringify(cat),
           },
-        },
-      )
-      .then((response) => {
-        console.log(response);
-        setData([...data, response.data]);
-        setOpen(false);
-        toast.success('SucessFully Updated');
-      })
-      .catch((error) => {
-        toast.error('failed');
-        setOpen(false);
-        console.log(error);
-      });
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          },
+        )
+        .then((response) => {
+          console.log(response);
+          setData([...data, response.data]);
+          setOpen(false);
+          toast.success('SucessFully Updated');
+        })
+        .catch((error) => {
+          toast.error('failed');
+          setOpen(false);
+          console.log(error);
+        });
+    }
+    // axios
+    //   .post(
+    //     `${url}/api/create-catogery`,
+    //     {
+    //       name: name,
+    //       orderNo: order,
+    //       status: Status,
+    //       photo: photo,
+    //       services: JSON.stringify(cat),
+    //     },
+    //     {
+    //       headers: {
+    //         'Content-Type': 'multipart/form-data',
+    //       },
+    //     },
+    //   )
+    //   .then((response) => {
+    //     console.log(response);
+    //     setData([...data, response.data]);
+    //     setOpen(false);
+    //     toast.success('SucessFully Updated');
+    //   })
+    //   .catch((error) => {
+    //     toast.error('failed');
+    //     setOpen(false);
+    //     console.log(error);
+    //   });
   };
   const deleteCatogory = (id) => {
     console.log(id);
@@ -195,6 +291,7 @@ const Catogery = () => {
       setName(response.data.name);
       setPhoto(response.data.photo);
       setOrder(response.data.orderNo);
+      setEditid(id);
       Setstatus(response.data.status);
       console.log(cat);
       // setNewAd({ name: response.data.name, photo: response.data.photo, url: response.data.url });
@@ -226,6 +323,12 @@ const Catogery = () => {
           alignItems="flex-end"
           //   sx={boxDefault}
         >
+          <CustomTextField
+            style={{ marginRight: '10px' }}
+            label="Search"
+            // onChange={(e) => handleSearch(e)}
+            variant="outlined"
+          />
           <Button color="primary" variant="contained" size="large" onClick={handleOpen}>
             Add
           </Button>

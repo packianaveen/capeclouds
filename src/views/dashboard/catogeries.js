@@ -11,18 +11,30 @@ import { url } from 'src/constant';
 
 import Blog from './components/Blog';
 import { useNavigate } from 'react-router';
-
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/effect-fade';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import { EffectFade, Navigation, Pagination } from 'swiper/modules';
 const SamplePage = () => {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const [cat, setCat] = useState('');
   const [selectdata, setSelectdata] = useState(true);
+  const [adSlide, setAdslide] = useState([]);
   const navigate = useNavigate();
   useEffect(() => {
     axios.get(`${url}/api/get-catogery`).then((response) => {
       if (response.data.length > 0) {
         console.log(response.data);
         setData(response.data);
+      }
+    });
+    axios.get(`${url}/api/getbottomAd`).then((response) => {
+      if (response.data.length > 0) {
+        setAdslide(response.data);
+        console.log(response.data);
       }
     });
   }, []);
@@ -96,16 +108,39 @@ const SamplePage = () => {
           </Typography>
         </Box>
         <div>
+          <Swiper
+            spaceBetween={30}
+            effect={'fade'}
+            // navigation={true}
+            pagination={{
+              clickable: true,
+            }}
+            modules={[EffectFade, Navigation, Pagination]}
+            // className="mySwiper"
+          >
+            {adSlide.map((it) => (
+              <SwiperSlide style={{ width: '100% !important' }}>
+                <img
+                  height="200px"
+                  width="100%"
+                  src={`${url}/Images/` + it.photo}
+                  style={{ borderRadius: '15px' }}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+        {/* <div>
           <div style={{ backgroundImage: `http://localhost:7098/Images/1692925982567-QWfIVD.jpg` }}>
             {' '}
             <img
-              height="auto"
+              height="120px"
               width="100%"
               src="http://localhost:7098/Images/1692925982567-QWfIVD.jpg"
               style={{ borderRadius: '15px' }}
             />
           </div>
-        </div>
+        </div> */}
       </Box>
       <Box
         sx={{

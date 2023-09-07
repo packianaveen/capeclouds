@@ -17,6 +17,7 @@ import {
 import PageContainer from 'src/components/container/PageContainer';
 import DashboardCard from '../../components/shared/DashboardCard';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import CustomTextField from '../../components/forms/theme-elements/CustomTextField';
 import Modal from '@mui/material/Modal';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -53,7 +54,7 @@ const Admin = () => {
   const [cat, setCat] = useState([]);
   const [Status, Setstatus] = useState('Enable');
   const [qrOpen, setQrOpen] = useState(false);
-
+  const [editid, setEditid] = useState('');
   const [link, setLink] = useState('');
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -114,6 +115,7 @@ const Admin = () => {
     axios
       .get(`${url}/api/getCenter`)
       .then((response) => {
+        console.log(response.data);
         setData(response.data);
       })
       .catch(function (error) {
@@ -150,35 +152,133 @@ const Admin = () => {
   };
   const createServiceCenter = (e) => {
     console.log(photo);
-    axios
-      .post(
-        `${url}/api/addCenter`,
-        {
-          name: name,
-          phoneNo: phone,
-          status: Status,
-          address: address,
-          services: JSON.stringify(cat),
-          photo: photo,
-          pin: pin,
-        },
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
+    if (editid) {
+      if (typeof photo == 'string') {
+        axios
+          .patch(`${url}/api/centerEdit/${editid}`, {
+            name: name,
+            phoneNo: phone,
+            status: Status,
+            address: address,
+            services: JSON.stringify(cat),
+            photo: photo,
+            pin: pin,
+          })
+          .then((response) => {
+            console.log((data.find((it) => it._id == editid).name = name));
+            data.find((it) => it._id == editid).status = Status;
+            // data.find((it) => it._id == editid).orderNo = order;
+            // intialAd.find((it) => it._id == editid).photo = newad.photo;
+            // setInitialAd([...intialAd, response.data]);
+            setOpen(false);
+
+            toast.success('SucessFully Updated');
+          })
+          .catch((err) => {
+            toast.error('failed');
+            setOpen(false);
+          });
+      } else {
+        axios
+          .delete(`${url}/api/deleteCenter/${editid}`)
+          .then((response) => {
+            toast.success('SucessFully Updated');
+            const data1 = data.filter((it) => it._id !== editid);
+            axios
+              .post(
+                `${url}/api/addCenter`,
+                {
+                  name: name,
+                  phoneNo: phone,
+                  status: Status,
+                  address: address,
+                  services: JSON.stringify(cat),
+                  photo: photo,
+                  pin: pin,
+                },
+                {
+                  headers: {
+                    'Content-Type': 'multipart/form-data',
+                  },
+                },
+              )
+              .then((response) => {
+                console.log(response);
+                setData([...data, response.data]);
+                setOpen(false);
+                toast.success('SucessFully Updated');
+              })
+              .catch((error) => {
+                toast.error('failed');
+                setOpen(false);
+                console.log(error);
+              });
+          })
+          .catch((error) => {
+            console.log(error);
+            toast.error('failed');
+          });
+      }
+    } else {
+      axios
+        .post(
+          `${url}/api/addCenter`,
+          {
+            name: name,
+            phoneNo: phone,
+            status: Status,
+            address: address,
+            services: JSON.stringify(cat),
+            photo: photo,
+            pin: pin,
           },
-        },
-      )
-      .then((response) => {
-        console.log(response);
-        setData([...data, response.data]);
-        setOpen(false);
-        toast.success('SucessFully Updated');
-      })
-      .catch((error) => {
-        toast.error('failed');
-        setOpen(false);
-        console.log(error);
-      });
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          },
+        )
+        .then((response) => {
+          console.log(response);
+          setData([...data, response.data]);
+          setOpen(false);
+          toast.success('SucessFully Updated');
+        })
+        .catch((error) => {
+          toast.error('failed');
+          setOpen(false);
+          console.log(error);
+        });
+    }
+    // axios
+    //   .post(
+    //     `${url}/api/addCenter`,
+    //     {
+    //       name: name,
+    //       phoneNo: phone,
+    //       status: Status,
+    //       address: address,
+    //       services: JSON.stringify(cat),
+    //       photo: photo,
+    //       pin: pin,
+    //     },
+    //     {
+    //       headers: {
+    //         'Content-Type': 'multipart/form-data',
+    //       },
+    //     },
+    //   )
+    //   .then((response) => {
+    //     console.log(response);
+    //     setData([...data, response.data]);
+    //     setOpen(false);
+    //     toast.success('SucessFully Updated');
+    //   })
+    //   .catch((error) => {
+    //     toast.error('failed');
+    //     setOpen(false);
+    //     console.log(error);
+    //   });
   };
   const downloadQR = () => {
     const qrCodeURL = document
@@ -206,19 +306,21 @@ const Admin = () => {
         toast.error('failed');
       });
   };
-  // const editCatogory = (id) => {
-  //   axios.get(`${url}/api/edit-catogery/${id}`).then((response) => {
-  //     console.log(response.data);
-  //     setName(response.data.name);
-  //     setPhoto(response.data.photo);
-  //     setOrder(response.data.orderNo);
-  //     Setstatus(response.data.status);
-  //     // setNewAd({ name: response.data.name, photo: response.data.photo, url: response.data.url });
-  //     setOpen(true);
+  const editCatogory = (id) => {
+    axios.get(`${url}/api/editCenter/${id}`).then((response) => {
+      console.log(response.data);
+      setName(response.data.name);
+      setAddress(response.data.address);
+      setPhone(response.data.phone);
+      setPin(response.data.pin);
+      setPhoto(response.data.photo);
+      setEditid(id);
+      // setNewAd({ name: response.data.name, photo: response.data.photo, url: response.data.url });
+      setOpen(true);
 
-  //     // setInitialAd(response.data);
-  //   });
-  // };
+      // setInitialAd(response.data);
+    });
+  };
   return (
     <PageContainer title="Services Table">
       <ToastContainer
@@ -242,6 +344,12 @@ const Admin = () => {
           alignItems="flex-end"
           //   sx={boxDefault}
         >
+          <CustomTextField
+            style={{ marginRight: '10px' }}
+            label="Search"
+            // onChange={(e) => handleSearch(e)}
+            variant="outlined"
+          />
           <Button color="primary" variant="contained" size="large" onClick={handleOpen}>
             Add
           </Button>
@@ -311,7 +419,7 @@ const Admin = () => {
                         <ContentCopyIcon
                           style={{ cursor: 'pointer' }}
                           onClick={() => {
-                            navigator.clipboard.writeText(`${localurl}/auth/Register/id=${it._id}`);
+                            navigator.clipboard.writeText(`${localurl}/auth/Register/${it._id}`);
                           }}
                         />
                       </TableCell>
@@ -349,7 +457,7 @@ const Admin = () => {
                             padding: '5px',
                             background: '#34c38f',
                           }}
-                          // onClick={() => editCatogory(it._id)}
+                          onClick={() => editCatogory(it._id)}
                         />
                       </TableCell>
                     </TableRow>

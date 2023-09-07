@@ -29,6 +29,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { url } from 'src/constant';
+import CustomTextField from '../../components/forms/theme-elements/CustomTextField';
 const ServiceRequest = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -128,6 +129,12 @@ const ServiceRequest = () => {
           alignItems="flex-end"
           //   sx={boxDefault}
         >
+          <CustomTextField
+            style={{ marginRight: '10px' }}
+            label="Search"
+            // onChange={(e) => handleSearch(e)}
+            variant="outlined"
+          />
           {/* <Button color="primary" variant="contained" size="large" onClick={handleOpen}>
             Add
           </Button> */}

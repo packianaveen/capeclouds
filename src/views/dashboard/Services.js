@@ -31,6 +31,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { url } from 'src/constant';
 import { TablePagination, tablePaginationClasses as classes } from '@mui/base/TablePagination';
+import CustomTextField from '../../components/forms/theme-elements/CustomTextField';
 import { styled } from '@mui/system';
 const Admin = () => {
   const [open, setOpen] = React.useState(false);
@@ -114,6 +115,19 @@ const Admin = () => {
   const handlePhoto = (e) => {
     console.log(e.target.files[0]);
     setPhoto(e.target.files[0]);
+  };
+
+  const handleSearch = (e) => {
+    console.log(e.target.value);
+    function filterByValue(array, string) {
+      return array.filter((o) => {
+        delete o.__v;
+        Object.keys(o).some((k) => o[k].toLowerCase().includes(string.toLowerCase()));
+      });
+    }
+    const items = filterByValue(data, e.target.value);
+    console.log(items);
+    // setData(items);
   };
   const createCatogeries = (e) => {
     console.log(photo);
@@ -260,18 +274,62 @@ const Admin = () => {
       />
 
       <DashboardCard title="Services Table">
-        <Box
+        {/* <Box
           m={1}
           //margin
-          display="flex"
-          justifyContent="flex-end"
-          alignItems="flex-end"
+
           //   sx={boxDefault}
         >
-          <Button color="primary" variant="contained" size="large" onClick={handleOpen}>
+          <Button
+            color="primary"
+            variant="contained"
+            size="large"
+            onClick={handleOpen}
+            display="flex"
+            justifyContent="flex-end"
+            alignItems="flex-end"
+          >
             Add
           </Button>
         </Box>
+        <Box
+          m={1}
+          //margin
+
+          //   sx={boxDefault}
+        >
+          <CustomTextField
+            display="flex"
+            justifyContent="flex-start"
+            alignItems="flex-start"
+            size="large"
+            // id="otp"
+            // type="password"
+            // label="password"
+            onChange={(e) => handleSearch(e)}
+            // value={password}
+            // variant="outlined"
+            // fullWidth
+          />
+        </Box> */}
+        <Box
+          m={1}
+          // sx={{ width: '80%' }}
+          display="flex"
+          justifyContent="flex-end"
+          alignItems="flex-end"
+        >
+          <CustomTextField
+            style={{ marginRight: '10px' }}
+            label="Search"
+            onChange={(e) => handleSearch(e)}
+            variant="outlined"
+          />
+          <Button ml={1} color="primary" variant="contained" size="large" onClick={handleOpen}>
+            Add
+          </Button>
+        </Box>
+
         <div style={{ height: 'auto', width: '100%' }}>
           <TableContainer component={Paper}>
             <Table aria-label="simple table">

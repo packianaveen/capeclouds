@@ -16,6 +16,8 @@ import {
 } from '@mui/material';
 import PageContainer from 'src/components/container/PageContainer';
 import DashboardCard from '../../components/shared/DashboardCard';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import Modal from '@mui/material/Modal';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -30,6 +32,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { url } from 'src/constant';
 import moment from 'moment';
+import CustomTextField from '../../components/forms/theme-elements/CustomTextField';
 const Users = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -162,6 +165,12 @@ const Users = () => {
           alignItems="flex-end"
           //   sx={boxDefault}
         >
+          <CustomTextField
+            style={{ marginRight: '10px' }}
+            label="Search"
+            // onChange={(e) => handleSearch(e)}
+            variant="outlined"
+          />
           {/* <Button color="primary" variant="contained" size="large" onClick={handleOpen}>
             Add
           </Button> */}
@@ -194,7 +203,33 @@ const Users = () => {
                       <TableCell align="center">{it.phone}</TableCell>
                       <TableCell align="center">{it.pin}</TableCell>
                       <TableCell align="center">
-                        {it.admin ? getCenter(it.admin) : 'Default'}
+                        {it.admin ? (
+                          getCenter(it.admin)
+                        ) : (
+                          <FormControl fullWidth>
+                            {/* <InputLabel id="demo-simple-select-label">Age</InputLabel> */}
+                            <Select
+                              autoWidth={true}
+                              labelId="demo-simple-select-label"
+                              id="demo-simple-select"
+                              value="Default"
+                              // label="Status"
+                              style={{
+                                // height: '25px',
+                                // width: '100px',
+                                display: 'flex',
+                                alignContent: 'center',
+                                justifyContentL: 'center',
+                              }}
+                              // onChange={(e) => handleStatus(e, x)}
+                            >
+                              <MenuItem value="Default">Default</MenuItem>
+                              {center.map((it) => {
+                                <MenuItem value={it._id}>{it.name}</MenuItem>;
+                              })}
+                            </Select>
+                          </FormControl>
+                        )}
                       </TableCell>
                       <TableCell align="center">
                         {' '}
