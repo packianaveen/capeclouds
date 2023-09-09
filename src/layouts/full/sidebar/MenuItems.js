@@ -90,6 +90,13 @@ export const Menuitems = [
     icon: IconMoodHappy,
     href: '/servicerequest',
   },
+
+  {
+    id: uniqueId(),
+    title: 'Smart Services',
+    icon: IconMoodHappy,
+    href: '/smartservices',
+  },
   {
     id: uniqueId(),
     title: 'Manage Users',

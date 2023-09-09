@@ -19,7 +19,7 @@ import { url } from 'src/constant';
 import Modal from '@mui/material/Modal';
 import { replace } from 'lodash';
 const Option = () => {
-  const [phone, setPhone] = useState('');
+  // const [phone, setPhone] = useState('');
   const [pin, setPin] = useState('');
   const [password, setPassword] = useState('');
   const [login, setLogin] = useState(false);
@@ -27,8 +27,8 @@ const Option = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  let phoneno = useParams();
-  console.log(phoneno);
+  let { phone, id } = useParams();
+  console.log(phone, id);
   // const navigate = useNavigate();
   const auth = useAuth();
 
@@ -182,7 +182,7 @@ const Option = () => {
                   variant="contained"
                   fullWidth
                   onClick={() => {
-                    navigate(`/auth/register/${phoneno.phone}/64e010106e8dff51db94b01c`);
+                    navigate(`/auth/register/${phone}/${id}`);
                   }}
                 >
                   Manual Registration

@@ -132,6 +132,29 @@ const Users = () => {
         setOpen(false);
       });
   };
+  const handleStatus = (event, x) => {
+    console.log(event.target.value);
+    console.log(intialAd[x]);
+    const newData = intialAd.map((it, currentIndex) =>
+      currentIndex === x ? { ...it, admin: event.target.value } : it,
+    );
+    setInitialAd(newData);
+    console.log(newData);
+
+    // axios
+    //   .post(`${url}/api/updaterequest`, newData[x])
+    //   .then((response) => {
+    //     console.log(response);
+    //     // setData([...data, response.data]);
+    //     setOpen(false);
+    //     toast.success('SucessFully Updated');
+    //   })
+    //   .catch((error) => {
+    //     toast.error('failed');
+    //     setOpen(false);
+    //     console.log(error);
+    //   });
+  };
   const style = {
     position: 'fixed',
     top: '50%',
@@ -143,6 +166,7 @@ const Users = () => {
     boxShadow: 24,
     p: 4,
   };
+  console.log(center);
   return (
     <Box mt={4}>
       <DashboardCard title="Users">
@@ -203,7 +227,7 @@ const Users = () => {
                       <TableCell align="center">{it.phone}</TableCell>
                       <TableCell align="center">{it.pin}</TableCell>
                       <TableCell align="center">
-                        {it.admin ? (
+                        {it.admin != 'undefined' ? (
                           getCenter(it.admin)
                         ) : (
                           <FormControl fullWidth>
@@ -221,11 +245,16 @@ const Users = () => {
                                 alignContent: 'center',
                                 justifyContentL: 'center',
                               }}
-                              // onChange={(e) => handleStatus(e, x)}
+                              onChange={(e) => handleStatus(e, x)}
                             >
                               <MenuItem value="Default">Default</MenuItem>
-                              {center.map((it) => {
-                                <MenuItem value={it._id}>{it.name}</MenuItem>;
+                              {/* <MenuItem value="Default">Default</MenuItem> */}
+                              {center.map((it, x) => {
+                                return (
+                                  <MenuItem key={x} value={it._id}>
+                                    {it.name}
+                                  </MenuItem>
+                                );
                               })}
                             </Select>
                           </FormControl>

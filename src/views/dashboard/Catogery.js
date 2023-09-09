@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
 import { styled } from '@mui/system';
 import {
@@ -38,6 +38,7 @@ import FormGroup from '@mui/material/FormGroup';
 import { check } from 'prettier';
 import { url } from 'src/constant';
 import { TablePagination, tablePaginationClasses as classes } from '@mui/base/TablePagination';
+import { useTableSearch } from './components/useTableSearch';
 const Catogery = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -45,12 +46,17 @@ const Catogery = () => {
   const [name, setName] = useState('');
   const [order, setOrder] = useState('');
   const [cat, setCat] = useState([]);
-  const [data, setData] = useState('');
+  const [data, setData] = useState([]);
   const [photo, setPhoto] = useState('');
   const [Status, Setstatus] = useState('Enable');
   const [editid, setEditid] = useState('');
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const [searchVal, setSearchVal] = useState(null);
+  // const { filteredData, loading } = useTableSearch({
+  //   searchVal,
+  //   retrieve: data,
+  // });
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
   const handleChangePage = (event, newPage) => {
@@ -61,7 +67,33 @@ const Catogery = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+  const filteredData = useMemo(() => {
+    if (!searchVal) return data;
 
+    if (data.length > 0) {
+      const attributes = Object.keys(data[0]);
+
+      const list = [];
+
+      for (const current of data) {
+        for (const attribute of attributes) {
+          if (attribute === 'key') {
+            continue;
+          }
+          const value = current[attribute];
+          if (value && value.toLowerCase() === searchVal.toLowerCase()) {
+            const found = data.find((row) => row.key === current.key);
+            if (found) {
+              list.push(found);
+            }
+          }
+        }
+      }
+      return list;
+    }
+
+    return [];
+  }, [searchVal, data]);
   const CustomTablePagination = styled(TablePagination)`
     & .${classes.toolbar} {
       display: flex;
@@ -326,7 +358,7 @@ const Catogery = () => {
           <CustomTextField
             style={{ marginRight: '10px' }}
             label="Search"
-            // onChange={(e) => handleSearch(e)}
+            onChange={(e) => setSearchVal(e.target.value)}
             variant="outlined"
           />
           <Button color="primary" variant="contained" size="large" onClick={handleOpen}>
@@ -349,8 +381,8 @@ const Catogery = () => {
               {data && (
                 <TableBody>
                   {(rowsPerPage > 0
-                    ? data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    : data
+                    ? filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    : filteredData
                   ).map((it, x) => (
                     <TableRow
                       style={{ background: x % 2 == 0 ? '#e8e8e8' : 'white' }}
@@ -483,7 +515,7 @@ const Catogery = () => {
                 </Button>
               )}
             </FormControl>
-            <Box mt={2}>
+            <Box mt={2} sx={{ height: '150px', overflowY: 'scroll' }}>
               <InputLabel htmlFor="component-outlined">Select Services</InputLabel>
 
               <FormGroup mt={2}>
@@ -527,9 +559,17 @@ const Catogery = () => {
               </RadioGroup>
             </FormControl>
           </Box>
-          <Box>
+          {/* <Box>
             <Button variant="contained" onClick={createCatogeries}>
               Submit
+            </Button>
+          </Box> */}
+          <Box style={{ display: 'flex', justifyContent: 'space-around' }}>
+            <Button variant="contained" mr={2} onClick={createCatogeries}>
+              Submit
+            </Button>
+            <Button ml={1} variant="contained" color="error" onClick={handleClose}>
+              Close
             </Button>
           </Box>
         </Box>

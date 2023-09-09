@@ -37,12 +37,15 @@ import EditIcon from '@mui/icons-material/Edit';
 import BottomSide from './components/BottomSide';
 import Tranding from './components/Tranding';
 import { url } from 'src/constant';
+import Checkbox from '@mui/material/Checkbox';
+import FormGroup from '@mui/material/FormGroup';
 const FrontEnd = () => {
   const { themeColor, setTheme } = useContext(MyContext);
   const [color1, setColor] = React.useState('#ffffff');
   const [open, setOpen] = useState(false);
   const [intialAd, setInitialAd] = useState([]);
   const [editid, setEditid] = useState('');
+  const [cat, setCat] = useState([]);
   const [newad, setNewAd] = useState({
     name: '',
     url: '',
@@ -86,7 +89,31 @@ const FrontEnd = () => {
         setInitialAd(response.data);
       }
     });
+    axios
+      .get(`${url}/api/get-service`)
+      .then((response) => {
+        setCat(response.data.map((it) => ({ ...it, checked: false })));
+        console.log(response.data);
+        console.log(response.data.map((it) => ({ ...it, checked: false })));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }, []);
+  const updateCheckStatus = (index) => {
+    setCat(
+      cat.map((it, currentIndex) =>
+        currentIndex === index ? { ...it, checked: !it.checked } : it,
+      ),
+    );
+
+    // or
+    // setCat([
+    //   ...cat.slice(0, index),
+    //   { ...cat[index], checked: !cat[index].checked },
+    //   ...cat.slice(index + 1),
+    // ]);
+  };
   const submitTheme = () => {
     axios
       .post(`${url}/api/updatetheme/${color1._id}`, { color: color1 })
@@ -94,11 +121,16 @@ const FrontEnd = () => {
   };
   const editElement = (id) => {
     axios.get(`${url}/api/editAd/${id}`).then((response) => {
-      console.log(response.data.photo);
-      setNewAd({ name: response.data.name, photo: response.data.photo, url: response.data.url });
+      console.log(JSON.parse(response.data.services));
+      setNewAd({
+        name: response.data.name,
+        photo: response.data.photo,
+        services: response.data.services,
+      });
+      setCat(JSON.parse(response.data.services));
       setOpen(true);
       setEditid(id);
-      console.log(newad.photo);
+      console.log(cat);
       // setInitialAd(response.data);
     });
   };
@@ -121,7 +153,7 @@ const FrontEnd = () => {
 
     const ad = {
       name: newad.name,
-      url: newad.url,
+      services: cat,
       photo: newad.photo,
     };
     console.log(ad.photo);
@@ -184,7 +216,7 @@ const FrontEnd = () => {
     } else {
       const ad = {
         name: newad.name,
-        url: newad.url,
+        services: JSON.stringify(cat),
         photo: newad.photo,
       };
       console.log(ad.photo);
@@ -232,6 +264,7 @@ const FrontEnd = () => {
     //     setOpen(false);
     //   });
   };
+  console.log(cat);
   return (
     <PageContainer title="Front End" description="this is Sample page">
       <ToastContainer
@@ -293,7 +326,7 @@ const FrontEnd = () => {
                         {x + 1}
                       </TableCell>
                       <TableCell align="right">{it.name}</TableCell>
-                      <TableCell align="right">{it.url}</TableCell>
+                      {/* <TableCell align="right">{it.url}</TableCell> */}
                       <TableCell align="right">
                         <img height="40px" width="60px" src={`${url}/Images/` + it.photo} />
                       </TableCell>
@@ -339,7 +372,7 @@ const FrontEnd = () => {
               />
             </FormControl>
           </Box>
-          <Box m={1}>
+          {/* <Box m={1}>
             <FormControl fullWidth onChange={(e) => onchange(e)}>
               <InputLabel htmlFor="component-outlined">URL</InputLabel>
               <OutlinedInput
@@ -350,7 +383,7 @@ const FrontEnd = () => {
                 label="Name"
               />
             </FormControl>
-          </Box>
+          </Box> */}
           <Box m={1}>
             <FormControl fullWidth>
               {newad.photo.length == 0 ? (
@@ -372,6 +405,35 @@ const FrontEnd = () => {
                 </Button>
               )}
             </FormControl>
+          </Box>
+          <Box mt={2}>
+            <InputLabel htmlFor="component-outlined">Select Services</InputLabel>
+
+            <FormGroup mt={2} sx={{ height: '200px', overflowY: 'scroll' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row !important',
+                  MaxHeight: '100px',
+                  flexWrap: 'wrap',
+                }}
+              >
+                {cat.map((it, index) => (
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        key={it.name}
+                        isChecked={it.checked}
+                        onChange={() => updateCheckStatus(index)}
+                        label={it.name}
+                        index={index}
+                      />
+                    }
+                    label={it.name}
+                  />
+                ))}
+              </Box>
+            </FormGroup>
           </Box>
 
           <Box m={1}>

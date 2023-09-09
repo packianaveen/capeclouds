@@ -40,8 +40,8 @@ const AdSlide = () => {
       }
     });
   }, []);
-  const handleClick = () => {
-    navigate('/userservice/64f415b6a938a764b90770dd', { replace: true });
+  const handleClick = (id) => {
+    navigate(`/agroservices/${id}`);
   };
   let slides = [
     <img src="https://picsum.photos/800/300/?random" alt="1" height="300px" width="100%" />,
@@ -91,7 +91,7 @@ const AdSlide = () => {
       <Box mt={2}>
         {newad.map((it) => (
           <div>
-            <div onClick={handleClick}>
+            <div onClick={() => handleClick(it._id)}>
               {' '}
               <img
                 height="auto"

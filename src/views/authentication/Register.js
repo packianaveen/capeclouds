@@ -13,10 +13,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../routes/AuthProvider';
 import { url } from 'src/constant';
 const Register2 = () => {
-  // let { phone } = useParams();
-  let id = useParams();
-  console.log(id.phone);
-  const [phone, setPhone] = useState('');
+  let par = useParams();
+  console.log(par);
+  // let id = useParams();
+
+  const [phone, setPhone] = useState(par.phone);
   const [password, setPassword] = useState('');
   const [pin, setPin] = useState('');
   const auth = useAuth();
@@ -28,7 +29,7 @@ const Register2 = () => {
         phone: phone,
         pin: pin,
         password: password,
-        admin: id.phone,
+        admin: par.id,
         type: '2',
       })
       .then((response) => {
@@ -145,7 +146,7 @@ const Register2 = () => {
                   fullWidth
                   variant="outlined"
                   value={phone}
-                  // disabled={login || reg}
+                  disabled
                   defaultCountry={'in'}
                   onChange={(value) => {
                     setPhone(value);

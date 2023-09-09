@@ -12,7 +12,7 @@ import CustomTextField from '../../components/forms/theme-elements/CustomTextFie
 import Blog from './components/Blog';
 import { useNavigate, useParams } from 'react-router';
 
-const SamplePage = () => {
+const Agroservices = () => {
   const [data, setData] = useState([]);
   const [open, setOpen] = useState(false);
   const [cat, setCat] = useState('');
@@ -21,7 +21,7 @@ const SamplePage = () => {
   const [selectdata, setSelectdata] = useState('');
 
   useEffect(() => {
-    axios.get(`${url}/api/edit-catogery/${id}`).then((response) => {
+    axios.get(`${url}/api/editAd/${id}`).then((response) => {
       console.log(JSON.parse(response.data.services));
       setCat(response.data);
       setData(JSON.parse(response.data.services).filter((it) => it.checked == true));
@@ -62,7 +62,7 @@ const SamplePage = () => {
         data: JSON.stringify(cat),
         service: JSON.stringify(selectdata),
         user: JSON.parse(localStorage.getItem('user'))._id,
-        type: '1',
+        type: '2',
       })
       .then((response) => {
         console.log(response);
@@ -201,4 +201,4 @@ const SamplePage = () => {
   );
 };
 
-export default SamplePage;
+export default Agroservices;

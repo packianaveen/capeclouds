@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Grid, Box, Card, Stack, Typography } from '@mui/material';
 import axios from 'axios';
 // components
@@ -23,10 +23,11 @@ const Login2 = () => {
   const [password, setPassword] = useState('');
   const [login, setLogin] = useState(false);
   const [reg, setReg] = useState(false);
+  const [type, setType] = useState('password');
   // const navigate = useNavigate();
-
+  let { id } = useParams();
   const auth = useAuth();
-
+  console.log(id);
   const navigate = useNavigate();
   const location = useLocation();
   const from = location.state?.from?.pathname || '/';
@@ -46,11 +47,19 @@ const Login2 = () => {
       if (response.data.length > 0) {
         setLogin(true);
       } else {
-        navigate(`/auth/option/${phone}`, { replace: true });
+        navigate(`/auth/register/${phone}/${id}`, { replace: true });
         // setLogin(false);
         // setReg(true);
       }
     });
+  };
+  const handleToggle = () => {
+    console.log(type);
+    if (type === 'password') {
+      setType('text');
+    } else {
+      setType('password');
+    }
   };
   const submitAccLogin = () => {
     axios
@@ -163,6 +172,8 @@ const Login2 = () => {
                 <Logo />
               </Box>
               <AuthLogin
+                type={type}
+                handleToggle={handleToggle}
                 phone={phone}
                 setPhone={setPhone}
                 login={login}

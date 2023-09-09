@@ -2,6 +2,8 @@ import React, { lazy } from 'react';
 import { Navigate } from 'react-router-dom';
 import Loadable from '../layouts/full/shared/loadable/Loadable';
 import useAuth from './useAuth';
+import Agroservices from 'src/views/dashboard/agroServices';
+import SmartServiceAdmin from 'src/views/dashboard/SmartserviceAdmin';
 
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
@@ -43,12 +45,20 @@ const Router = (auth) => {
           element: <Catagories />,
         },
         {
+          path: '/smartservices',
+          element: <SmartServiceAdmin />,
+        },
+        {
           path: '/servicerequested',
           element: <Servicerequested />,
         },
         {
           path: '/userservice/:id',
           element: <ServicerUser />,
+        },
+        {
+          path: '/agroservices/:id',
+          element: <Agroservices />,
         },
         {
           path: '/servicehistory',
@@ -118,8 +128,8 @@ const Router = (auth) => {
       children: [
         { path: '404', element: <Error /> },
         { path: '/auth/register/:phone?/:id?', element: <Register /> },
-        { path: '/auth/option/:phone', element: <Option /> },
-        { path: '/auth/login', element: <Login /> },
+        { path: '/auth/option/:phone/:id?', element: <Option /> },
+        { path: '/auth/login/:id?', element: <Login /> },
         { path: '*', element: <Navigate to="/auth/404" /> },
       ],
     },

@@ -44,6 +44,7 @@ const Admin = () => {
   const [editid, setEditid] = useState('');
   const [Status, Setstatus] = useState('Enable');
   const [page, setPage] = React.useState(0);
+  const [searchVal, setSearchVal] = useState(null);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
@@ -322,7 +323,7 @@ const Admin = () => {
           <CustomTextField
             style={{ marginRight: '10px' }}
             label="Search"
-            onChange={(e) => handleSearch(e)}
+            onChange={(e) => setSearchVal(e.target.value)}
             variant="outlined"
           />
           <Button ml={1} color="primary" variant="contained" size="large" onClick={handleOpen}>
@@ -335,8 +336,10 @@ const Admin = () => {
             <Table aria-label="simple table">
               <TableHead>
                 <TableRow style={{ fontWeight: 'bold' }}>
-                  <TableCell>ID</TableCell>
-                  <TableCell align="center">Name</TableCell>
+                  <TableCell width="10%">ID</TableCell>
+                  <TableCell align="center" width="20%">
+                    Name
+                  </TableCell>
                   <TableCell align="center">Status</TableCell>
                   <TableCell align="center">Order No</TableCell>
                   <TableCell align="center">Image</TableCell>
@@ -500,9 +503,17 @@ const Admin = () => {
                 </RadioGroup>
               </FormControl>
             </Box>
-            <Box>
+            {/* <Box>
               <Button disabled={!name || !order} variant="contained" onClick={createCatogeries}>
                 Submit
+              </Button>
+            </Box> */}
+            <Box style={{ display: 'flex', justifyContent: 'space-around' }}>
+              <Button variant="contained" mr={2} onClick={createCatogeries}>
+                Submit
+              </Button>
+              <Button ml={1} variant="contained" color="error" onClick={handleClose}>
+                Close
               </Button>
             </Box>
           </Box>

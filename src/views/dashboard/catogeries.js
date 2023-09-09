@@ -279,12 +279,20 @@ const SamplePage = () => {
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
+                justifyContent: 'space-around',
               }}
             >
               <Button variant="contained" onClick={createRequest}>
                 Request Service
               </Button>
+              {/* <Button
+                variant="contained"
+                onClick={() => {
+                  setOpen(false);
+                }}
+              >
+                Close
+              </Button> */}
             </Box>
           </Box>
         </Box>

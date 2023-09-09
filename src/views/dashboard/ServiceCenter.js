@@ -361,10 +361,11 @@ const Admin = () => {
                 <TableRow>
                   <TableCell>ID</TableCell>
                   <TableCell align="center">Name</TableCell>
+                  <TableCell align="center">Phone</TableCell>
+                  <TableCell align="center">Pin code</TableCell>
                   <TableCell align="center">Image</TableCell>
                   <TableCell align="center">Status</TableCell>
-                  <TableCell align="center">Pin code</TableCell>
-                  <TableCell align="center">Phone</TableCell>
+
                   <TableCell align="center">Link</TableCell>
                   <TableCell align="center">QR Code</TableCell>
 
@@ -386,6 +387,8 @@ const Admin = () => {
                         {x + 1}
                       </TableCell>
                       <TableCell align="center">{it.name}</TableCell>
+                      <TableCell align="center">{it.phoneNo}</TableCell>
+                      <TableCell align="center">{it.pin}</TableCell>
 
                       <TableCell align="center">
                         <img height="40px" width="60px" src={`${url}/Images/` + it.photo} />
@@ -413,13 +416,12 @@ const Admin = () => {
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell align="center">{it.pin}</TableCell>
-                      <TableCell align="center">{it.phoneNo}</TableCell>
+
                       <TableCell align="center">
                         <ContentCopyIcon
                           style={{ cursor: 'pointer' }}
                           onClick={() => {
-                            navigator.clipboard.writeText(`${localurl}/auth/Register/${it._id}`);
+                            navigator.clipboard.writeText(`${localurl}/auth/login/${it._id}`);
                           }}
                         />
                       </TableCell>

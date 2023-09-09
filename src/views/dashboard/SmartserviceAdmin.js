@@ -33,7 +33,7 @@ import MenuItem from '@mui/material/MenuItem';
 import 'react-toastify/dist/ReactToastify.css';
 import { url } from 'src/constant';
 import { Phone } from '@mui/icons-material';
-const Servicerequestedadmin = () => {
+const SmartServiceAdmin = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -49,7 +49,7 @@ const Servicerequestedadmin = () => {
       .get(`${url}/api/getRequestedservice`)
       .then((response) => {
         console.log(response.data);
-        setData(response.data.filter((it) => it.type == '1'));
+        setData(response.data.filter((it) => it.type == '2'));
       })
       .catch(function (error) {
         console.log(error);
@@ -148,7 +148,7 @@ const Servicerequestedadmin = () => {
                   <TableCell align="center">Phone No</TableCell>
                   <TableCell align="center">Catagory</TableCell>
                   <TableCell align="center">Service</TableCell>
-                  <TableCell align="center">Status</TableCell>
+                  <TableCell align="left">Status</TableCell>
                   <TableCell align="center">Date</TableCell>
                 </TableRow>
               </TableHead>
@@ -167,27 +167,6 @@ const Servicerequestedadmin = () => {
                       <TableCell align="center">{JSON.parse(it.catagery).name}</TableCell>
                       <TableCell align="center">{JSON.parse(it.service).name}</TableCell>
                       <TableCell align="center">
-                        <div
-                          style={{
-                            background: it.status == 'Enable' ? '#34c38f' : '#ef6767',
-                            padding: '2px',
-                            width: '100%',
-                            color: 'white',
-                            borderRadius: '5px',
-                          }}
-                        >
-                          <div
-                            style={{
-                              background: it.status == 'Enable' ? '#34c38f' : '#ef6767',
-                              padding: '2px',
-                              width: '100%',
-                              color: 'white',
-                              borderRadius: '5px',
-                            }}
-                          >
-                            {it.status}
-                          </div>
-                        </div>
                         {/* <p
                           style={{
                             // color: 'white',
@@ -196,8 +175,8 @@ const Servicerequestedadmin = () => {
                             padding: '3px',
                           }}
                         > */}
-                        {/* <FormControl fullWidth>
-                        
+                        <FormControl fullWidth>
+                          {/* <InputLabel id="demo-simple-select-label">Age</InputLabel> */}
                           <Select
                             autoWidth={true}
                             labelId="demo-simple-select-label"
@@ -211,7 +190,7 @@ const Servicerequestedadmin = () => {
                             <MenuItem value="ongoing">Ongoing</MenuItem>
                             <MenuItem value="close">Close</MenuItem>
                           </Select>
-                        </FormControl> */}
+                        </FormControl>
                         {/* </p> */}
                       </TableCell>
                       <TableCell align="center">
@@ -229,4 +208,4 @@ const Servicerequestedadmin = () => {
   );
 };
 
-export default Servicerequestedadmin;
+export default SmartServiceAdmin;

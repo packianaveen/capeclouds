@@ -9,7 +9,8 @@ import {
   Checkbox,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
-
+import { IconEye, IconEyeOff } from '@tabler/icons';
+import { InputAdornment, IconButton } from '@mui/material';
 import CustomTextField from '../../../components/forms/theme-elements/CustomTextField';
 import MuiPhoneNumber from 'mui-phone-number';
 
@@ -26,6 +27,8 @@ const AuthLogin = ({
   submitLogin,
   submitAccLogin,
   submitRegister,
+  handleToggle,
+  type,
   reg,
 }) => (
   <>
@@ -50,17 +53,51 @@ const AuthLogin = ({
       />
 
       {login || reg ? (
-        <CustomTextField
-          id="otp"
-          type="password"
-          label="password"
-          onChange={(e) => {
-            setPassword(e.target.value);
-          }}
-          value={password}
-          variant="outlined"
-          fullWidth
-        />
+        <>
+          <CustomTextField
+            id="otp"
+            type={type}
+            label="Password"
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+            value={password}
+            variant="outlined"
+            fullWidth
+            InputProps={{
+              // <-- This is where the toggle button is added.
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton aria-label="toggle password visibility" onClick={handleToggle}>
+                    {type == 'password' ? <IconEyeOff /> : <IconEye />}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+          {/* <span style={{ display: 'flex', justifyContent: 'flex-end' }} onClick={handleToggle}>
+            {type == 'password' ? (
+              <IconEyeOff
+                onClick={() => {
+                  console.log('hai');
+                }}
+                // style={{
+                //   display: 'flex',
+                //   marginTop: '-35px',
+                //   marginRight: '-124px',
+                // }}
+              />
+            ) : (
+              <IconEye
+                style={{
+                  display: 'flex',
+                  marginTop: '-35px',
+                  marginRight: '-124px',
+                }}
+              />
+            )}
+          </span> */}
+        </>
       ) : (
         ''
       )}
