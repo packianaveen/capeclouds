@@ -39,6 +39,7 @@ import Tranding from './components/Tranding';
 import { url } from 'src/constant';
 import Checkbox from '@mui/material/Checkbox';
 import FormGroup from '@mui/material/FormGroup';
+import Tranding2 from './components/Trending2';
 const FrontEnd = () => {
   const { themeColor, setTheme } = useContext(MyContext);
   const [color1, setColor] = React.useState('#ffffff');
@@ -445,6 +446,7 @@ const FrontEnd = () => {
       </Modal>
       <BottomSide />
       <Tranding />
+      <Tranding2 />
     </PageContainer>
   );
 };

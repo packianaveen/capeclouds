@@ -101,9 +101,9 @@ const SamplePage = () => {
       description="this is Sample page"
       style={{ backgroundColor: '#fdf1f4' }}
     >
-      <Box m={1}>
+      <Box>
         <Box>
-          <Typography fontWeight="700" variant="h3" mb={1}>
+          <Typography fontWeight="700" variant="h3" mb={2}>
             Our Trending Services
           </Typography>
         </Box>
@@ -111,6 +111,7 @@ const SamplePage = () => {
           <Swiper
             spaceBetween={30}
             effect={'fade'}
+            // height={200}
             // navigation={true}
             pagination={{
               clickable: true,
@@ -121,7 +122,7 @@ const SamplePage = () => {
             {adSlide.map((it) => (
               <SwiperSlide style={{ width: '100% !important' }}>
                 <img
-                  height="200px"
+                  height="120px"
                   width="100%"
                   src={`${url}/Images/` + it.photo}
                   style={{ borderRadius: '15px' }}
@@ -147,7 +148,7 @@ const SamplePage = () => {
           display: 'flex',
           flexDirection: 'row',
           // p: 1,
-          // m: 1,
+          m: 1,
           bgcolor: 'background.paper',
           borderRadius: 1,
           flexWrap: 'wrap',
@@ -193,7 +194,7 @@ const SamplePage = () => {
                 textAlign: 'center',
               }}
             >
-              <p>{it.name}</p>
+              <p style={{ fontSize: '13px', color: '#233443', fontWeight: 'bold' }}>{it.name}</p>
             </div>
             {/* <p>{it.name}</p> */}
           </div>

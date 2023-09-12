@@ -12,7 +12,7 @@ export default function FooterPage() {
       component="footer"
       sx={{
         backgroundColor: (theme) => theme.palette.primary.main,
-        p: 6,
+        p: 2,
         color: 'white',
       }}
     >

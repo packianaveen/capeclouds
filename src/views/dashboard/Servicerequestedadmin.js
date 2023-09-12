@@ -170,7 +170,8 @@ const Servicerequestedadmin = () => {
                   <TableCell align="center">Catagory</TableCell>
                   <TableCell align="center">Service</TableCell>
                   <TableCell align="center">Status</TableCell>
-                  <TableCell align="center">Date</TableCell>
+                  <TableCell align="center">Open Date</TableCell>
+                  <TableCell align="center">Close Date</TableCell>
                   <TableCell align="center">Edit</TableCell>
                   {/* <TableCell align="center">Action</TableCell> */}
                 </TableRow>
@@ -236,6 +237,9 @@ const Servicerequestedadmin = () => {
                           </Select>
                         </FormControl> */}
                         {/* </p> */}
+                      </TableCell>
+                      <TableCell align="center">
+                        {moment(it.createdAt).format('DD/MM/YYYY')}
                       </TableCell>
                       <TableCell align="center">
                         {moment(it.createdAt).format('DD/MM/YYYY')}

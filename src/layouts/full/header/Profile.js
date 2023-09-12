@@ -75,7 +75,7 @@ const Profile = () => {
           },
         }}
       >
-        <MenuItem>
+        <MenuItem onClick={() => navigate('/profile')}>
           <ListItemIcon>
             <IconUser width={20} />
           </ListItemIcon>

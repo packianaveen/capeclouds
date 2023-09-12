@@ -24,6 +24,7 @@ const ProfileUpdate = () => {
   const [name, setName] = useState('');
   const [city, setCity] = useState('');
   const [address, setAddress] = useState('');
+  const [type, setType] = useState('');
   const [photo, setPhoto] = useState('');
   const handlePhoto = (e) => {
     console.log(e.target.files[0]);
@@ -31,6 +32,7 @@ const ProfileUpdate = () => {
   };
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'));
+    setType(user.type);
     console.log(user.phone);
     setPhone(user.phone);
   }, []);
@@ -38,6 +40,7 @@ const ProfileUpdate = () => {
     <PageContainer title="Profile Page">
       <DashboardCard title="Profile Page">
         <Box>
+          <Typography>Personal Details</Typography>
           <Box
             sx={{
               display: 'flex',
@@ -136,6 +139,110 @@ const ProfileUpdate = () => {
             </FormControl>
           </Box>
         </Box>
+        {type == '1' ? (
+          <Box>
+            <Typography>Company Details</Typography>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                p: 1,
+                m: 1,
+                bgcolor: 'background.paper',
+                borderRadius: 1,
+              }}
+            >
+              <CustomTextField
+                id="otp"
+                type="text"
+                label="Company Name"
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+                value={name}
+                variant="outlined"
+                fullWidth
+              />
+              <CustomTextField
+                id="otp"
+                type="text"
+                label="Name"
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
+                value={name}
+                variant="outlined"
+                fullWidth
+              />
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                p: 1,
+                m: 1,
+                bgcolor: 'background.paper',
+                borderRadius: 1,
+              }}
+            >
+              <CustomTextField
+                id="city"
+                type="text"
+                label="City"
+                onChange={(e) => {
+                  setCity(e.target.value);
+                }}
+                value={city}
+                variant="outlined"
+                fullWidth
+              />
+              <CustomTextField
+                id="otp"
+                type="address"
+                label="Place"
+                onChange={(e) => {
+                  setAddress(e.target.value);
+                }}
+                value={address}
+                variant="outlined"
+                fullWidth
+              />
+            </Box>
+            {/* <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                p: 1,
+                m: 1,
+                bgcolor: 'background.paper',
+                borderRadius: 1,
+              }}
+            >
+              <FormControl fullWidth>
+                {photo.length == 0 ? (
+                  <Button variant="contained" component="label" onChange={handlePhoto}>
+                    Upload Image
+                    <input
+                      type="file"
+                      //    value={newad.photo && newad.photo}
+                      accept="image/*"
+                      id="file"
+                      name="photo"
+                      hidden
+                    />
+                  </Button>
+                ) : (
+                  <Button variant="contained" component="label" onChange={handlePhoto}>
+                    Re-Upload Image
+                    <input type="file" accept="image/*" id="file" name="photo" hidden />
+                  </Button>
+                )}
+              </FormControl>
+            </Box> */}
+          </Box>
+        ) : (
+          ''
+        )}
       </DashboardCard>
     </PageContainer>
   );
