@@ -25,6 +25,7 @@
     "lodash": "^4.17.21",
     "material-react-toastify": "^2.0.1",
     "material-ui-phone-number": "^3.0.0",
+    "mdb-react-ui-kit": "^6.3.0",
     "mdbreact": "^5.2.0",
     "moment": "^2.29.4",
     "mui-color-input": "^2.0.0",

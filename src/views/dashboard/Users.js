@@ -278,68 +278,6 @@ const Users = () => {
             </Table>
           </TableContainer>
         </div>
-        <Modal
-          open={open}
-          onClose={() => setOpen(false)}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box sx={style} component="form" encType="multipart/form-data">
-            <Box m={1}>
-              <FormControl fullWidth onChange={(e) => onchange(e)}>
-                <InputLabel htmlFor="component-outlined">Name</InputLabel>
-                <OutlinedInput
-                  fullWidth
-                  id="component-outlined"
-                  name="name"
-                  defaultValue={newad.name}
-                  label="Name"
-                  required
-                />
-              </FormControl>
-            </Box>
-            <Box m={1}>
-              <FormControl fullWidth onChange={(e) => onchange(e)}>
-                <InputLabel htmlFor="component-outlined">URL</InputLabel>
-                <OutlinedInput
-                  fullWidth
-                  id="component-outlined"
-                  defaultValue={newad.url}
-                  name="url"
-                  label="Name"
-                />
-              </FormControl>
-            </Box>
-            <Box m={1}>
-              <FormControl fullWidth>
-                {newad.photo.length == 0 ? (
-                  <Button variant="contained" component="label" onChange={handlePhoto}>
-                    Upload Image
-                    <input
-                      type="file"
-                      //    value={newad.photo && newad.photo}
-                      accept="image/*"
-                      id="file"
-                      name="photo"
-                      hidden
-                    />
-                  </Button>
-                ) : (
-                  <Button variant="contained" component="label" onChange={handlePhoto}>
-                    Re-Upload Image
-                    <input type="file" accept="image/*" id="file" name="photo" hidden />
-                  </Button>
-                )}
-              </FormControl>
-            </Box>
-
-            <Box m={1}>
-              <Button fullWidth variant="contained" onClick={handleAd}>
-                Submit
-              </Button>
-            </Box>
-          </Box>
-        </Modal>
       </DashboardCard>
     </Box>
   );

@@ -153,7 +153,7 @@ const FrontEnd = () => {
 
     const ad = {
       name: newad.name,
-      services: cat,
+      services: JSON.stringify(cat),
       photo: newad.photo,
     };
     console.log(ad.photo);

@@ -135,6 +135,8 @@ const Admin = () => {
     border: '2px solid',
     boxShadow: 24,
     p: 4,
+    height: '500px',
+    overflowY: 'scroll',
   };
 
   const handlePhoto = (e) => {
@@ -569,9 +571,9 @@ const Admin = () => {
                 sx={{
                   display: 'flex',
                   flexDirection: 'row !important',
-                  MaxHeight: '500px',
+                  MaxHeight: '200px',
                   flexWrap: 'wrap',
-                  overflow: 'scroll',
+                  overflowY: 'scroll',
                 }}
               >
                 {cat.map((it, index) => (
@@ -605,9 +607,13 @@ const Admin = () => {
               </RadioGroup>
             </FormControl>
           </Box>
-          <Box>
-            <Button variant="contained" onClick={createServiceCenter}>
+
+          <Box style={{ display: 'flex', justifyContent: 'space-around' }}>
+            <Button variant="contained" mr={2} onClick={createServiceCenter}>
               Submit
+            </Button>
+            <Button ml={1} variant="contained" color="error" onClick={handleClose}>
+              Close
             </Button>
           </Box>
         </Box>

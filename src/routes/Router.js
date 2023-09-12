@@ -4,6 +4,8 @@ import Loadable from '../layouts/full/shared/loadable/Loadable';
 import useAuth from './useAuth';
 import Agroservices from 'src/views/dashboard/agroServices';
 import SmartServiceAdmin from 'src/views/dashboard/SmartserviceAdmin';
+import Profile from 'src/layouts/full/header/Profile';
+import ProfileUpdate from 'src/views/dashboard/Profile';
 
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
@@ -43,6 +45,10 @@ const Router = (auth) => {
         {
           path: '/catogeries',
           element: <Catagories />,
+        },
+        {
+          path: '/profile',
+          element: <ProfileUpdate />,
         },
         {
           path: '/smartservices',

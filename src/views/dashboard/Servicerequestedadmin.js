@@ -38,12 +38,15 @@ const Servicerequestedadmin = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [name, setName] = useState('');
-  const [order, setOrder] = useState('');
+  const [phone, setPhone] = useState('');
   const [data, setData] = useState('');
-  const [photo, setPhoto] = useState('');
-  const [temp, setTemp] = useState('');
+  const [center, setCenter] = useState('');
+  const [catagery, setCatagery] = useState('');
   const [users, setUsers] = useState([]);
-  const [Status, Setstatus] = useState('Enable');
+  const [service, setService] = useState('');
+  const [status, setStatus] = useState('');
+  const [openDate, setOpenDate] = useState('');
+  const [editid, setEditid] = useState('');
   useEffect(() => {
     axios
       .get(`${url}/api/getRequestedservice`)
@@ -64,7 +67,18 @@ const Servicerequestedadmin = () => {
         console.log(error);
       });
   }, []);
-
+  const editService = (x) => {
+    console.log(data[x]);
+    console.log(getAdmin(data[x].user));
+    setCatagery(JSON.parse(data[x].catagery));
+    setService(JSON.parse(data[x].service));
+    setStatus(data[x].status);
+    setPhone(getUser(data[x].user));
+    setCenter(getAdmin(data[x].user));
+    setOpenDate(data[x].createdAt);
+    setEditid(data[x]._id);
+    setOpen(true);
+  };
   const style = {
     position: 'fixed',
     top: '50%',
@@ -78,13 +92,12 @@ const Servicerequestedadmin = () => {
   };
   const handlePhoto = (e) => {
     console.log(e.target.files[0]);
-    setPhoto(e.target.files[0]);
   };
   const handleStatus = (event, x) => {
     console.log(event.target.value);
     console.log(data[x]);
     const newData = data.map((it, currentIndex) =>
-      currentIndex === x ? { ...it, status: event.target.value } : it,
+      it._id === x ? { ...it, status: event.target.value } : it,
     );
     setData(newData);
     console.log(newData);
@@ -105,17 +118,24 @@ const Servicerequestedadmin = () => {
   };
 
   const getUser = (id) => {
-    // axios.get(`${url}/api/getuser/${user}`).then((response) => {
-    //   console.log(response.data.phone);
-    //   phone = response.data.phone;
-    //   return phone;
-    // });
     console.log(users);
     const phone = users.find((it) => it._id == id)?.phone;
     console.log(phone);
     return phone;
   };
-
+  const getAdmin = (id) => {
+    const admin = users.find((it) => it._id == id)?.admin;
+    console.log(admin);
+    if (admin === 'undefined') {
+      return 'Default';
+    } else {
+      axios.get(`${url}/api/editCenter/${admin}`).then((response) => {
+        console.log(response.data.name);
+        const data = response.data.name;
+        return data;
+      });
+    }
+  };
   return (
     <PageContainer title="Services Table">
       <ToastContainer
@@ -146,10 +166,13 @@ const Servicerequestedadmin = () => {
                 <TableRow>
                   <TableCell>ID</TableCell>
                   <TableCell align="center">Phone No</TableCell>
+                  <TableCell align="center">Service center</TableCell>
                   <TableCell align="center">Catagory</TableCell>
                   <TableCell align="center">Service</TableCell>
                   <TableCell align="center">Status</TableCell>
                   <TableCell align="center">Date</TableCell>
+                  <TableCell align="center">Edit</TableCell>
+                  {/* <TableCell align="center">Action</TableCell> */}
                 </TableRow>
               </TableHead>
               {data && (
@@ -164,6 +187,7 @@ const Servicerequestedadmin = () => {
                         {x + 1}
                       </TableCell>
                       <TableCell align="center">{getUser(it.user)}</TableCell>
+                      <TableCell align="center">{getAdmin(it.user)}</TableCell>
                       <TableCell align="center">{JSON.parse(it.catagery).name}</TableCell>
                       <TableCell align="center">{JSON.parse(it.service).name}</TableCell>
                       <TableCell align="center">
@@ -197,7 +221,6 @@ const Servicerequestedadmin = () => {
                           }}
                         > */}
                         {/* <FormControl fullWidth>
-                        
                           <Select
                             autoWidth={true}
                             labelId="demo-simple-select-label"
@@ -217,6 +240,31 @@ const Servicerequestedadmin = () => {
                       <TableCell align="center">
                         {moment(it.createdAt).format('DD/MM/YYYY')}
                       </TableCell>
+                      <TableCell align="center">
+                        {/* <DeleteIcon
+                          style={{
+                            fontSize: '30px',
+                            color: 'white',
+                            cursor: 'pointer',
+                            margin: '2px',
+                            padding: '5px',
+                            background: '#ef6767',
+                          }}
+                          // onClick={() => deleteCatogory(it._id)}
+                        /> */}
+
+                        <EditIcon
+                          style={{
+                            fontSize: '30px',
+                            color: 'white',
+                            cursor: 'pointer',
+                            margin: '2px',
+                            padding: '5px',
+                            background: '#34c38f',
+                          }}
+                          onClick={() => editService(x)}
+                        />
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -225,6 +273,115 @@ const Servicerequestedadmin = () => {
           </TableContainer>
         </div>
       </DashboardCard>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style} component="form" encType="multipart/form-data">
+          <Box m={2}>
+            <FormControl fullWidth>
+              <InputLabel htmlFor="component-outlined">Phone</InputLabel>
+              <OutlinedInput
+                fullWidth
+                id="component-outlined"
+                disabled
+                defaultValue={phone}
+                label="Name"
+              />
+            </FormControl>
+          </Box>
+          <Box m={2}>
+            <FormControl fullWidth>
+              <InputLabel htmlFor="component-outlined">Catagory</InputLabel>
+              <OutlinedInput
+                fullWidth
+                id="component-outlined"
+                disabled
+                defaultValue={catagery.name}
+                label="Name"
+              />
+            </FormControl>
+          </Box>
+          <Box m={2}>
+            <FormControl fullWidth>
+              <InputLabel htmlFor="component-outlined">Service</InputLabel>
+              <OutlinedInput
+                fullWidth
+                id="component-outlined"
+                disabled
+                defaultValue={service.name}
+                label="Name"
+              />
+            </FormControl>
+          </Box>
+          <Box m={2}>
+            <FormControl fullWidth>
+              <InputLabel htmlFor="component-outlined">Service Center</InputLabel>
+              <OutlinedInput
+                fullWidth
+                id="component-outlined"
+                disabled
+                defaultValue={center}
+                label="Name"
+              />
+            </FormControl>
+          </Box>
+          <Box m={2}>
+            {/* <FormControl fullWidth>
+              <InputLabel htmlFor="component-outlined">Status</InputLabel>
+              <OutlinedInput
+                fullWidth
+                id="component-outlined"
+                disabled
+                defaultValue={status}
+                label="Name"
+              />
+            </FormControl> */}
+            <FormControl fullWidth>
+              <Select
+                autoWidth={true}
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={status}
+                label="Status"
+                // style={{ height: '25px', width: '100px' }}
+                onChange={(e) => handleStatus(e, editid)}
+              >
+                <MenuItem value="open">Open</MenuItem>
+                <MenuItem value="ongoing">Ongoing</MenuItem>
+                <MenuItem value="close">Close</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+          {/* <Box m={2}>
+            <FormControl fullWidth>
+              <InputLabel htmlFor="component-outlined">Created Date</InputLabel>
+              <OutlinedInput
+                fullWidth
+                id="component-outlined"
+                disabled
+                defaultValue={moment(openDate).format('DD/MM/YYYY')}
+                label="Name"
+              />
+            </FormControl>
+          </Box> */}
+
+          <Box style={{ display: 'flex', justifyContent: 'space-around' }}>
+            <Button
+              variant="contained"
+              mr={2}
+              // onClick={createServiceCenter}
+            >
+              Submit
+            </Button>
+            <Button ml={1} variant="contained" color="error" onClick={handleClose}>
+              Close
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
     </PageContainer>
   );
 };

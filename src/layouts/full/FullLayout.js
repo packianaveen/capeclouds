@@ -4,6 +4,7 @@ import { Outlet } from 'react-router-dom';
 
 import Header from './header/Header';
 import Sidebar from './sidebar/Sidebar';
+import FooterPage from './header/Footer';
 
 const MainWrapper = styled('div')(() => ({
   display: 'flex',
@@ -65,6 +66,7 @@ const FullLayout = () => {
           {/* End Page */}
           {/* ------------------------------------------- */}
         </Container>
+        <FooterPage />
       </PageWrapper>
     </MainWrapper>
   );

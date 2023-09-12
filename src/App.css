@@ -42,6 +42,10 @@ div#swal2-html-container {
 h2#swal2-title {
   font-size: 18px;
 }
+.MuiInputBase-input-MuiOutlinedInput-input.Mui-disabled {
+  opacity: 1;
+  -webkit-text-fill-color: #000000 !important;
+}
 .each-slide-effect > div {
   display: flex;
   align-items: center;
