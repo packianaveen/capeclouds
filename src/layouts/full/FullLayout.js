@@ -68,9 +68,9 @@ const FullLayout = () => {
             {/* End Page */}
             {/* ------------------------------------------- */}
           </Container>
-          <Footer />
         </PageWrapper>
       </MainWrapper>
+      <Footer />
     </>
   );
 };

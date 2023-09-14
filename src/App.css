@@ -26,10 +26,11 @@ div::-webkit-scrollbar-thumb {
   outline: 1px solid slategrey;
 }
 .footer {
-  position: fixed;
+  /* position: fixed;
   bottom: 0;
   width: 100%;
-  height: auto;
+  height: auto; */
+  margin-left: 220px;
   background-color: #663399;
 }
 .swiper-slide.swiper-slide-visible.swiper-slide-active {
@@ -101,6 +102,15 @@ h2#swal2-title {
 @media (max-width: 992px) {
   .MuiContainer-root {
     max-width: 800px !important;
+  }
+  .mainwrapper {
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .footer {
+    margin-left: 0px;
   }
   .overdiv {
     width: 80px;
