@@ -5,6 +5,7 @@ import { Outlet } from 'react-router-dom';
 import Header from './header/Header';
 import Sidebar from './sidebar/Sidebar';
 import FooterPage from './header/Footer';
+import Footer from './header/Footer';
 
 const MainWrapper = styled('div')(() => ({
   display: 'flex',
@@ -27,48 +28,50 @@ const FullLayout = () => {
   // const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
 
   return (
-    <MainWrapper className="mainwrapper">
-      {/* ------------------------------------------- */}
-      {/* Sidebar */}
-      {/* ------------------------------------------- */}
-      <Sidebar
-        isSidebarOpen={isSidebarOpen}
-        isMobileSidebarOpen={isMobileSidebarOpen}
-        onSidebarClose={() => setMobileSidebarOpen(false)}
-      />
-      {/* ------------------------------------------- */}
-      {/* Main Wrapper */}
-      {/* ------------------------------------------- */}
-      <PageWrapper className="page-wrapper">
+    <>
+      <MainWrapper className="mainwrapper">
         {/* ------------------------------------------- */}
-        {/* Header */}
+        {/* Sidebar */}
         {/* ------------------------------------------- */}
-        <Header
-          toggleSidebar={() => setSidebarOpen(!isSidebarOpen)}
-          toggleMobileSidebar={() => setMobileSidebarOpen(true)}
+        <Sidebar
+          isSidebarOpen={isSidebarOpen}
+          isMobileSidebarOpen={isMobileSidebarOpen}
+          onSidebarClose={() => setMobileSidebarOpen(false)}
         />
         {/* ------------------------------------------- */}
-        {/* PageContent */}
+        {/* Main Wrapper */}
         {/* ------------------------------------------- */}
-        <Container
-          sx={{
-            paddingTop: '20px',
-            maxWidth: '1200px',
-          }}
-        >
+        <PageWrapper className="page-wrapper">
           {/* ------------------------------------------- */}
-          {/* Page Route */}
+          {/* Header */}
           {/* ------------------------------------------- */}
-          <Box sx={{ minHeight: 'calc(100vh - 170px)' }}>
-            <Outlet />
-          </Box>
+          <Header
+            toggleSidebar={() => setSidebarOpen(!isSidebarOpen)}
+            toggleMobileSidebar={() => setMobileSidebarOpen(true)}
+          />
           {/* ------------------------------------------- */}
-          {/* End Page */}
+          {/* PageContent */}
           {/* ------------------------------------------- */}
-        </Container>
-        <FooterPage />
-      </PageWrapper>
-    </MainWrapper>
+          <Container
+            sx={{
+              paddingTop: '20px',
+              maxWidth: '1200px',
+            }}
+          >
+            {/* ------------------------------------------- */}
+            {/* Page Route */}
+            {/* ------------------------------------------- */}
+            <Box sx={{ minHeight: 'calc(100vh - 170px)' }}>
+              <Outlet />
+            </Box>
+            {/* ------------------------------------------- */}
+            {/* End Page */}
+            {/* ------------------------------------------- */}
+          </Container>
+          <Footer />
+        </PageWrapper>
+      </MainWrapper>
+    </>
   );
 };
 

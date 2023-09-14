@@ -358,10 +358,6 @@ const Admin = () => {
         >
           <Box sx={style} component="form" encType="multipart/form-data">
             <Box m={1}>
-              {/* <FormControl fullWidth onChange={(e) => setName(e.target.value)}>
-                <InputLabel htmlFor="component-outlined">Phone</InputLabel>
-                <OutlinedInput fullWidth id="component-outlined" defaultValue={name} label="Name" />
-              </FormControl> */}
               <MuiPhoneNumber
                 style={{ marginBottom: '10px' }}
                 fullWidth
@@ -395,28 +391,7 @@ const Admin = () => {
                 />
               </FormControl>
             </Box>
-            {/* <Box m={1}>
-              <FormControl fullWidth>
-                {photo.length == 0 ? (
-                  <Button variant="contained" component="label" onChange={handlePhoto}>
-                    Upload Image
-                    <input
-                      type="file"
-                      //    value={newad.photo && newad.photo}
-                      accept="image/*"
-                      id="file"
-                      name="photo"
-                      hidden
-                    />
-                  </Button>
-                ) : (
-                  <Button variant="contained" component="label" onChange={handlePhoto}>
-                    Re-Upload Image
-                    <input type="file" accept="image/*" id="file" name="photo" hidden />
-                  </Button>
-                )}
-              </FormControl>
-            </Box> */}
+
             <Box m={1}>
               <FormControl fullWidth>
                 <FormLabel id="demo-radio-buttons-group-label">Status</FormLabel>

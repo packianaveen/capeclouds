@@ -18,9 +18,19 @@ div::-webkit-scrollbar-track {
 .mainwrapper .page-wrapper {
   background-color: #fdf1f4;
 }
+.page-wrapper {
+  background-color: #fdf1f4;
+}
 div::-webkit-scrollbar-thumb {
   background-color: darkgrey;
   outline: 1px solid slategrey;
+}
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  background-color: #663399;
 }
 .swiper-slide.swiper-slide-visible.swiper-slide-active {
   width: 100% !important;
