@@ -47,6 +47,8 @@ const Servicerequestedadmin = () => {
   const [status, setStatus] = useState('');
   const [openDate, setOpenDate] = useState('');
   const [editid, setEditid] = useState('');
+  const [drop, setDrop] = useState('');
+  const [centerArr, setCenterArr] = useState([]);
   useEffect(() => {
     axios
       .get(`${url}/api/getRequestedservice`)
@@ -69,12 +71,12 @@ const Servicerequestedadmin = () => {
   }, []);
   const editService = (x) => {
     console.log(data[x]);
-    console.log(getAdmin(data[x].user));
+    // console.log(getAdmin(data[x].user));
     setCatagery(JSON.parse(data[x].catagery));
     setService(JSON.parse(data[x].service));
     setStatus(data[x].status);
     setPhone(getUser(data[x].user));
-    setCenter(getAdmin(data[x].user));
+    // setCenter(getAdmin(data[x].user));
     setOpenDate(data[x].createdAt);
     setEditid(data[x]._id);
     setOpen(true);
@@ -93,17 +95,17 @@ const Servicerequestedadmin = () => {
   const handlePhoto = (e) => {
     console.log(e.target.files[0]);
   };
-  const handleStatus = (event, x) => {
-    console.log(event.target.value);
-    console.log(data[x]);
+  const editSserviceStatus = () => {
     const newData = data.map((it, currentIndex) =>
-      it._id === x ? { ...it, status: event.target.value } : it,
+      it._id === editid ? { ...it, status: drop } : it,
     );
     setData(newData);
-    console.log(newData);
-
+    console.log(newData.find((it) => it._id == editid));
     axios
-      .post(`${url}/api/updaterequest`, newData[x])
+      .post(
+        `${url}/api/updaterequest`,
+        newData.find((it) => it._id == editid),
+      )
       .then((response) => {
         console.log(response);
         // setData([...data, response.data]);
@@ -116,26 +118,56 @@ const Servicerequestedadmin = () => {
         console.log(error);
       });
   };
+  const handleStatus = (event, x) => {
+    console.log(event.target.value);
+    setDrop(event.target.value);
+    setStatus(event.target.value);
+    // console.log(data[x]);
+    // const newData = data.map((it, currentIndex) =>
+    //   it._id === x ? { ...it, status: event.target.value } : it,
+    // );
+    // setData(newData);
+    // console.log(newData);
+
+    // axios
+    //   .post(`${url}/api/updaterequest`, newData[x])
+    //   .then((response) => {
+    //     console.log(response);
+    //     // setData([...data, response.data]);
+    //     setOpen(false);
+    //     toast.success('SucessFully Updated');
+    //   })
+    //   .catch((error) => {
+    //     toast.error('failed');
+    //     setOpen(false);
+    //     console.log(error);
+    //   });
+  };
 
   const getUser = (id) => {
-    console.log(users);
-    const phone = users.find((it) => it._id == id)?.phone;
-    console.log(phone);
-    return phone;
+    console.log(data);
+    // const phone = users.find((it) => it._id == id)?.phone;
+    // console.log(phone);
+    // return phone;
   };
-  const getAdmin = (id) => {
-    const admin = users.find((it) => it._id == id)?.admin;
-    console.log(admin);
-    if (admin === 'undefined') {
-      return 'Default';
-    } else {
-      axios.get(`${url}/api/editCenter/${admin}`).then((response) => {
-        console.log(response.data.name);
-        const data = response.data.name;
-        return data;
-      });
-    }
-  };
+  // const getAdmin = (id) => {
+  //   const admin = users.find((it) => it._id == id)?.admin;
+  //   console.log(admin);
+  //   const data = [];
+  //   // if (admin === 'undefined') {
+  //   //   return 'Default';
+  //   // } else {
+  //   axios
+  //     .get(`${url}/api/editCenter/${admin}`)
+  //     .then((response) => {
+  //       data.push(response.data.name);
+  //     })
+  //     .catch((error) => {
+  //       data.push('Default');
+  //     });
+  //   console.log(data);
+  //   // }
+  // };
   return (
     <PageContainer title="Services Table">
       <ToastContainer
@@ -187,8 +219,8 @@ const Servicerequestedadmin = () => {
                       <TableCell component="th" scope="row">
                         {x + 1}
                       </TableCell>
-                      <TableCell align="center">{getUser(it.user)}</TableCell>
-                      <TableCell align="center">{getAdmin(it.user)}</TableCell>
+                      <TableCell align="center">{JSON.parse(it.user).phone}</TableCell>
+                      <TableCell align="center">{JSON.parse(it.user).phone}</TableCell>
                       <TableCell align="center">{JSON.parse(it.catagery).name}</TableCell>
                       <TableCell align="center">{JSON.parse(it.service).name}</TableCell>
                       <TableCell align="center">
@@ -373,11 +405,7 @@ const Servicerequestedadmin = () => {
           </Box> */}
 
           <Box style={{ display: 'flex', justifyContent: 'space-around' }}>
-            <Button
-              variant="contained"
-              mr={2}
-              // onClick={createServiceCenter}
-            >
+            <Button variant="contained" mr={2} onClick={editSserviceStatus}>
               Submit
             </Button>
             <Button ml={1} variant="contained" color="error" onClick={handleClose}>

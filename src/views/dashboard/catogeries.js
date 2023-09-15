@@ -74,7 +74,7 @@ const SamplePage = () => {
       .post(`${url}/api/createRequest`, {
         data: JSON.stringify(selectdata),
         service: JSON.stringify(cat),
-        user: JSON.parse(localStorage.getItem('user'))._id,
+        user: localStorage.getItem('user'),
       })
       .then((response) => {
         console.log(response);

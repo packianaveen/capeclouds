@@ -126,7 +126,7 @@ const Servicerequestedadmin = () => {
   const getAdmin = (id) => {
     const admin = users.find((it) => it._id == id)?.admin;
     console.log(admin);
-    if (admin === 'undefined') {
+    if (admin == 'undefined') {
       return 'Default';
     } else {
       axios.get(`${url}/api/editCenter/${admin}`).then((response) => {

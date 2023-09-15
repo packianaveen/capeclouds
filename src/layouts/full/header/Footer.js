@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 // components
 import Profile from './Profile';
 import { IconBellRinging, IconMenu2 } from '@tabler/icons';
-import { Facebook, Instagram, Twitter } from '@mui/icons-material';
+import { Facebook, Instagram, Twitter, YouTube } from '@mui/icons-material';
 import Link from '@mui/material/Link';
 
 const Footer = (props) => {
@@ -16,8 +16,8 @@ const Footer = (props) => {
     return (
       <Box
         sx={{
-          p: 1,
-          m: 1,
+          padding: '4px',
+          margin: '3px',
           // bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#101010' : 'grey.100'),
           color: 'white',
           // width: '100%',
@@ -67,21 +67,23 @@ const Footer = (props) => {
           flexWrap: 'wrap',
         }}
       >
-        {' '}
-        <Item>Copyright © 2023 Cape clouds - All rights reserved</Item>
-        <Item>Call Center (24X7) : 155 257</Item>
-        <Item>Terms and conditions</Item>
         <Item>
-          <Link href="https://www.facebook.com/" color="inherit">
+          <Link href="https://www.facebook.com/" color="inherit" sx={{ pl: 2, pr: 2 }}>
             <Facebook />
           </Link>
-          <Link href="https://www.instagram.com/" color="inherit" sx={{ pl: 1, pr: 1 }}>
+          <Link href="https://www.instagram.com/" color="inherit" sx={{ pl: 2, pr: 2 }}>
             <Instagram />
           </Link>
-          <Link href="https://www.twitter.com/" color="inherit">
+          <Link href="https://www.twitter.com/" color="inherit" sx={{ pl: 2, pr: 2 }}>
             <Twitter />
           </Link>
+          <Link href="https://www.twitter.com/" color="inherit" sx={{ pl: 2, pr: 2 }}>
+            <YouTube />
+          </Link>
         </Item>
+        <Item>Call Center (24X7) : 155 257</Item>{' '}
+        <Item>Copyright © 2023 Cape clouds - All rights reserved</Item>
+        <Item>Terms and conditions</Item>
       </Box>
     </div>
   );

@@ -61,7 +61,7 @@ const Agroservices = () => {
       .post(`${url}/api/createRequest`, {
         data: JSON.stringify(cat),
         service: JSON.stringify(selectdata),
-        user: JSON.parse(localStorage.getItem('user'))._id,
+        user: localStorage.getItem('user'),
         type: '2',
       })
       .then((response) => {
