@@ -30,9 +30,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { TableFooter } from '@mui/material';
 import { url } from 'src/constant';
 import moment from 'moment';
 import CustomTextField from '../../components/forms/theme-elements/CustomTextField';
+import { TablePagination, tablePaginationClasses as classes } from '@mui/base/TablePagination';
+import { styled } from '@mui/system';
 const Users = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -49,7 +52,53 @@ const Users = () => {
     console.log(e.target.files[0]);
     setNewAd({ ...newad, photo: e.target.files[0] });
   };
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - intialAd.length) : 0;
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const CustomTablePagination = styled(TablePagination)`
+    & .${classes.toolbar} {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+
+      @media (min-width: 768px) {
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+
+    & .${classes.selectLabel} {
+      margin: 0;
+    }
+
+    & .${classes.displayedRows} {
+      margin: 0;
+
+      @media (min-width: 768px) {
+        margin-left: auto;
+      }
+    }
+
+    & .${classes.spacer} {
+      display: none;
+    }
+
+    & .${classes.actions} {
+      display: flex;
+      gap: 0.25rem;
+    }
+  `;
   const onchange = (e) => {
     setNewAd({ ...newad, [e.target.name]: e.target.value });
   };
@@ -141,19 +190,19 @@ const Users = () => {
     setInitialAd(newData);
     console.log(newData);
 
-    // axios
-    //   .post(`${url}/api/updaterequest`, newData[x])
-    //   .then((response) => {
-    //     console.log(response);
-    //     // setData([...data, response.data]);
-    //     setOpen(false);
-    //     toast.success('SucessFully Updated');
-    //   })
-    //   .catch((error) => {
-    //     toast.error('failed');
-    //     setOpen(false);
-    //     console.log(error);
-    //   });
+    axios
+      .post(`${url}/api/updateUser`, newData[x])
+      .then((response) => {
+        console.log(response);
+        // setData([...data, response.data]);
+        setOpen(false);
+        toast.success('SucessFully Updated');
+      })
+      .catch((error) => {
+        toast.error('failed');
+        setOpen(false);
+        console.log(error);
+      });
   };
   const style = {
     position: 'fixed',
@@ -216,7 +265,10 @@ const Users = () => {
               </TableHead>
               {intialAd && (
                 <TableBody>
-                  {intialAd.map((it, x) => (
+                  {(rowsPerPage > 0
+                    ? intialAd.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    : intialAd
+                  ).map((it, x) => (
                     <TableRow
                       key={it._id}
                       sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -275,6 +327,29 @@ const Users = () => {
                   ))}
                 </TableBody>
               )}
+              <TableFooter>
+                <TableRow>
+                  <CustomTablePagination
+                    style={{ padding: '20px' }}
+                    rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                    colSpan={3}
+                    count={intialAd.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    slotProps={{
+                      select: {
+                        'aria-label': 'rows per page',
+                      },
+                      actions: {
+                        showFirstButton: true,
+                        showLastButton: true,
+                      },
+                    }}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </TableRow>
+              </TableFooter>
             </Table>
           </TableContainer>
         </div>

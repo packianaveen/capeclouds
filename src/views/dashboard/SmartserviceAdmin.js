@@ -32,7 +32,10 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import 'react-toastify/dist/ReactToastify.css';
 import { url } from 'src/constant';
+import { TableFooter } from '@mui/material';
 import { Phone } from '@mui/icons-material';
+import { TablePagination, tablePaginationClasses as classes } from '@mui/base/TablePagination';
+import { styled } from '@mui/system';
 const Servicerequestedadmin = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -47,34 +50,102 @@ const Servicerequestedadmin = () => {
   const [status, setStatus] = useState('');
   const [openDate, setOpenDate] = useState('');
   const [editid, setEditid] = useState('');
+  const [drop, setDrop] = useState('');
+  const [centerArr, setCenterArr] = useState([]);
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const CustomTablePagination = styled(TablePagination)`
+    & .${classes.toolbar} {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+
+      @media (min-width: 768px) {
+        flex-direction: row;
+        align-items: center;
+      }
+    }
+
+    & .${classes.selectLabel} {
+      margin: 0;
+    }
+
+    & .${classes.displayedRows} {
+      margin: 0;
+
+      @media (min-width: 768px) {
+        margin-left: auto;
+      }
+    }
+
+    & .${classes.spacer} {
+      display: none;
+    }
+
+    & .${classes.actions} {
+      display: flex;
+      gap: 0.25rem;
+    }
+  `;
   useEffect(() => {
-    axios
-      .get(`${url}/api/getRequestedservice`)
-      .then((response) => {
-        console.log(response.data);
-        setData(response.data.filter((it) => it.type == '2'));
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
     axios
       .get(`${url}/api/getusers`)
       .then((response) => {
         console.log(response.data);
         setUsers(response.data);
+        axios
+          .get(`${url}/api/getRequestedservice`)
+          .then((res) => {
+            let out = [];
+            console.log(
+              res.data
+                .filter((it) => it.type == '2')
+                .map((item, x) => {
+                  item.adminName = 'Default';
+                  let admin = JSON.parse(item.user).admin;
+                  axios
+                    .get(`${url}/api/editCenter/${admin}`)
+                    .then((re) => {
+                      out[x] = re.data.name;
+                      console.log(out);
+                      setCenterArr(out);
+                      return out;
+                    })
+                    .catch((error) => {
+                      // data.push('Default');
+                    });
+                }),
+            );
+            setData(res.data.filter((it) => it.type == '2'));
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
       })
       .catch(function (error) {
         console.log(error);
       });
   }, []);
   const editService = (x) => {
-    console.log(data[x]);
-    console.log(getAdmin(data[x].user));
+    console.log(x);
+    // console.log(getAdmin(data[x].user));
     setCatagery(JSON.parse(data[x].catagery));
     setService(JSON.parse(data[x].service));
     setStatus(data[x].status);
     setPhone(getUser(data[x].user));
-    setCenter(getAdmin(data[x].user));
+    setCenter(typeof centerArr[x] == 'string' ? centerArr[x] : 'Default');
     setOpenDate(data[x].createdAt);
     setEditid(data[x]._id);
     setOpen(true);
@@ -93,17 +164,17 @@ const Servicerequestedadmin = () => {
   const handlePhoto = (e) => {
     console.log(e.target.files[0]);
   };
-  const handleStatus = (event, x) => {
-    console.log(event.target.value);
-    console.log(data[x]);
+  const editSserviceStatus = () => {
     const newData = data.map((it, currentIndex) =>
-      it._id === x ? { ...it, status: event.target.value } : it,
+      it._id === editid ? { ...it, status: drop } : it,
     );
     setData(newData);
-    console.log(newData);
-
+    console.log(newData.find((it) => it._id == editid));
     axios
-      .post(`${url}/api/updaterequest`, newData[x])
+      .post(
+        `${url}/api/updaterequest`,
+        newData.find((it) => it._id == editid),
+      )
       .then((response) => {
         console.log(response);
         // setData([...data, response.data]);
@@ -116,26 +187,57 @@ const Servicerequestedadmin = () => {
         console.log(error);
       });
   };
+  const handleStatus = (event, x) => {
+    console.log(event.target.value);
+    setDrop(event.target.value);
+    setStatus(event.target.value);
+    // console.log(data[x]);
+    // const newData = data.map((it, currentIndex) =>
+    //   it._id === x ? { ...it, status: event.target.value } : it,
+    // );
+    // setData(newData);
+    // console.log(newData);
+
+    // axios
+    //   .post(`${url}/api/updaterequest`, newData[x])
+    //   .then((response) => {
+    //     console.log(response);
+    //     // setData([...data, response.data]);
+    //     setOpen(false);
+    //     toast.success('SucessFully Updated');
+    //   })
+    //   .catch((error) => {
+    //     toast.error('failed');
+    //     setOpen(false);
+    //     console.log(error);
+    //   });
+  };
 
   const getUser = (id) => {
-    console.log(users);
-    const phone = users.find((it) => it._id == id)?.phone;
-    console.log(phone);
-    return phone;
+    console.log(data);
+    // const phone = users.find((it) => it._id == id)?.phone;
+    // console.log(phone);
+    // return phone;
   };
-  const getAdmin = (id) => {
-    const admin = users.find((it) => it._id == id)?.admin;
-    console.log(admin);
-    if (admin == 'undefined') {
-      return 'Default';
-    } else {
-      axios.get(`${url}/api/editCenter/${admin}`).then((response) => {
-        console.log(response.data.name);
-        const data = response.data.name;
-        return data;
-      });
-    }
-  };
+  // const getAdmin = (id) => {
+  //   const admin = users.find((it) => it._id == id)?.admin;
+  //   console.log(admin);
+  //   const data = [];
+  //   // if (admin === 'undefined') {
+  //   //   return 'Default';
+  //   // } else {
+  //   axios
+  //     .get(`${url}/api/editCenter/${admin}`)
+  //     .then((response) => {
+  //       data.push(response.data.name);
+  //     })
+  //     .catch((error) => {
+  //       data.push('Default');
+  //     });
+  //   console.log(data);
+  //   // }
+  // };
+  console.log(centerArr);
   return (
     <PageContainer title="Services Table">
       <ToastContainer
@@ -170,14 +272,18 @@ const Servicerequestedadmin = () => {
                   <TableCell align="center">Catagory</TableCell>
                   <TableCell align="center">Service</TableCell>
                   <TableCell align="center">Status</TableCell>
-                  <TableCell align="center">Date</TableCell>
+                  <TableCell align="center">Open Date</TableCell>
+                  <TableCell align="center">Close Date</TableCell>
                   <TableCell align="center">Edit</TableCell>
                   {/* <TableCell align="center">Action</TableCell> */}
                 </TableRow>
               </TableHead>
               {data && (
                 <TableBody>
-                  {data.map((it, x) => (
+                  {(rowsPerPage > 0
+                    ? data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    : data
+                  ).map((it, x) => (
                     <TableRow
                       style={{ background: x % 2 == 0 ? '#e8e8e8' : 'white' }}
                       key={it._id}
@@ -186,8 +292,10 @@ const Servicerequestedadmin = () => {
                       <TableCell component="th" scope="row">
                         {x + 1}
                       </TableCell>
-                      <TableCell align="center">{getUser(it.user)}</TableCell>
-                      <TableCell align="center">{getAdmin(it.user)}</TableCell>
+                      <TableCell align="center">{JSON.parse(it.user).phone}</TableCell>
+                      <TableCell align="center">
+                        {typeof centerArr[x] == 'string' ? centerArr[x] : 'Default'}
+                      </TableCell>
                       <TableCell align="center">{JSON.parse(it.catagery).name}</TableCell>
                       <TableCell align="center">{JSON.parse(it.service).name}</TableCell>
                       <TableCell align="center">
@@ -241,6 +349,9 @@ const Servicerequestedadmin = () => {
                         {moment(it.createdAt).format('DD/MM/YYYY')}
                       </TableCell>
                       <TableCell align="center">
+                        {moment(it.createdAt).format('DD/MM/YYYY')}
+                      </TableCell>
+                      <TableCell align="center">
                         {/* <DeleteIcon
                           style={{
                             fontSize: '30px',
@@ -269,6 +380,29 @@ const Servicerequestedadmin = () => {
                   ))}
                 </TableBody>
               )}
+              <TableFooter>
+                <TableRow>
+                  <CustomTablePagination
+                    style={{ padding: '20px' }}
+                    rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+                    colSpan={3}
+                    count={data.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    slotProps={{
+                      select: {
+                        'aria-label': 'rows per page',
+                      },
+                      actions: {
+                        showFirstButton: true,
+                        showLastButton: true,
+                      },
+                    }}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                  />
+                </TableRow>
+              </TableFooter>
             </Table>
           </TableContainer>
         </div>
@@ -369,11 +503,7 @@ const Servicerequestedadmin = () => {
           </Box> */}
 
           <Box style={{ display: 'flex', justifyContent: 'space-around' }}>
-            <Button
-              variant="contained"
-              mr={2}
-              // onClick={createServiceCenter}
-            >
+            <Button variant="contained" mr={2} onClick={editSserviceStatus}>
               Submit
             </Button>
             <Button ml={1} variant="contained" color="error" onClick={handleClose}>

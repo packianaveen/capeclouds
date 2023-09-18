@@ -41,10 +41,21 @@ import { TablePagination, tablePaginationClasses as classes } from '@mui/base/Ta
 import { useTableSearch } from './components/useTableSearch';
 const Catogery = () => {
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleOpen = () => {
+    setOpen(true);
+    setCat(defaultCat);
+  };
+  const handleClose = () => {
+    setOpen(false);
+    setOpen(false);
+    setName('');
+    setOrder('');
+    setPhoto('');
+    Setstatus('Enable');
+  };
   const [name, setName] = useState('');
   const [order, setOrder] = useState('');
+  const [defaultCat, setDefaultCat] = useState([]);
   const [cat, setCat] = useState([]);
   const [data, setData] = useState([]);
   const [photo, setPhoto] = useState('');
@@ -132,9 +143,7 @@ const Catogery = () => {
     axios
       .get(`${url}/api/get-service`)
       .then((response) => {
-        setCat(response.data.map((it) => ({ ...it, checked: false })));
-        console.log(response.data);
-        console.log(response.data.map((it) => ({ ...it, checked: false })));
+        setDefaultCat(response.data.map((it) => ({ ...it, checked: false })));
       })
       .catch(function (error) {
         console.log(error);
@@ -319,18 +328,27 @@ const Catogery = () => {
   const editCatogory = (id) => {
     axios.get(`${url}/api/edit-catogery/${id}`).then((response) => {
       console.log(JSON.parse(response.data.services));
-      setCat(JSON.parse(response.data.services));
+      var reduced = defaultCat.filter(
+        (aitem) =>
+          !JSON.parse(response.data.services).find((bitem) => aitem['_id'] === bitem['_id']),
+      );
+
+      setCat(reduced.concat(JSON.parse(response.data.services)));
       setName(response.data.name);
       setPhoto(response.data.photo);
       setOrder(response.data.orderNo);
       setEditid(id);
       Setstatus(response.data.status);
-      console.log(cat);
       // setNewAd({ name: response.data.name, photo: response.data.photo, url: response.data.url });
       setOpen(true);
 
       // setInitialAd(response.data);
     });
+  };
+  console.log(cat);
+  const allCheck = () => {
+    console.log(cat.map((it) => ({ ...it, checked: true })));
+    setCat(cat.map((it) => ({ ...it, checked: true })));
   };
   return (
     <PageContainer title="Categories">
@@ -517,7 +535,29 @@ const Catogery = () => {
             </FormControl>
             <Box mt={2} sx={{ height: '150px', overflowY: 'scroll' }}>
               <InputLabel htmlFor="component-outlined">Select Services</InputLabel>
+              <FormGroup mt={2}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row !important',
+                    MaxHeight: '100px',
+                    flexWrap: 'wrap',
+                  }}
+                >
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        // key={it.name}
+                        isChecked={false}
+                        onChange={allCheck}
 
+                        // index={index}
+                      />
+                    }
+                    label="Select All"
+                  />
+                </Box>
+              </FormGroup>
               <FormGroup mt={2}>
                 <Box
                   sx={{
@@ -528,18 +568,22 @@ const Catogery = () => {
                   }}
                 >
                   {cat.map((it, index) => (
-                    <FormControlLabel
-                      control={
-                        <Checkbox
-                          key={it.name}
-                          isChecked={it.checked}
-                          onChange={() => updateCheckStatus(index)}
-                          label={it.name}
-                          index={index}
-                        />
-                      }
-                      label={it.name}
-                    />
+                    <>
+                      <FormControlLabel
+                        key={it._id}
+                        control={
+                          <Checkbox
+                            key={it._id}
+                            isChecked={it.checked}
+                            onChange={() => updateCheckStatus(index)}
+                            label={it.name}
+                            index={index}
+                          />
+                        }
+                        label={it.name}
+                      />
+                      {/* <p>{it.checked.toString()}</p> */}
+                    </>
                   ))}
                 </Box>
               </FormGroup>
