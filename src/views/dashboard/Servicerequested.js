@@ -42,10 +42,10 @@ const Servicerequested = () => {
   let id = JSON.parse(localStorage.getItem('user'))._id;
   useEffect(() => {
     axios
-      .get(`${url}/api/getrequestservice/${id}`)
+      .get(`${url}/api/getRequestedservice`)
       .then((response) => {
-        console.log(response.data);
-        setData(response.data);
+        console.log(response.data.filter((it) => JSON.parse(it.user)._id == id));
+        setData(response.data.filter((it) => JSON.parse(it.user)._id == id));
       })
       .catch(function (error) {
         console.log(error);
