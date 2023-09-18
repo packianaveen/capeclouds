@@ -349,7 +349,7 @@ const Servicerequestedadmin = () => {
                         {moment(it.createdAt).format('DD/MM/YYYY')}
                       </TableCell>
                       <TableCell align="center">
-                        {moment(it.createdAt).format('DD/MM/YYYY')}
+                        {it.status == 'close' ? moment(it.closeDate).format('DD/MM/YYYY') : ''}
                       </TableCell>
                       <TableCell align="center">
                         {/* <DeleteIcon

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
 import {
   Button,
@@ -42,6 +42,7 @@ const Users = () => {
   const handleClose = () => setOpen(false);
   const [intialAd, setInitialAd] = useState([]);
   const [center, setCenter] = useState([]);
+  const [searchVal, setSearchVal] = useState('');
 
   const [newad, setNewAd] = useState({
     name: '',
@@ -64,7 +65,22 @@ const Users = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+  const filteredData = useMemo(() => {
+    if (searchVal === '') {
+      return intialAd;
+    }
+    const filterBySearch = intialAd.filter((item) => {
+      if (
+        item.phone.toLowerCase().includes(searchVal.toLowerCase()) ||
+        item.pin.toLowerCase().includes(searchVal.toLowerCase())
+      ) {
+        return item;
+      }
+    });
+    return filterBySearch;
 
+    return [];
+  }, [searchVal, intialAd]);
   const CustomTablePagination = styled(TablePagination)`
     & .${classes.toolbar} {
       display: flex;
@@ -241,7 +257,7 @@ const Users = () => {
           <CustomTextField
             style={{ marginRight: '10px' }}
             label="Search"
-            // onChange={(e) => handleSearch(e)}
+            onChange={(e) => setSearchVal(e.target.value)}
             variant="outlined"
           />
           {/* <Button color="primary" variant="contained" size="large" onClick={handleOpen}>
@@ -266,8 +282,8 @@ const Users = () => {
               {intialAd && (
                 <TableBody>
                   {(rowsPerPage > 0
-                    ? intialAd.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    : intialAd
+                    ? filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    : filteredData
                   ).map((it, x) => (
                     <TableRow
                       key={it._id}

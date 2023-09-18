@@ -14,6 +14,7 @@ import {
   FormHelperText,
   OutlinedInput,
   FilledInput,
+  MenuItem,
 } from '@mui/material';
 import SimpleBar from 'simplebar-react';
 import { MDBDataTableV5 } from 'mdbreact';
@@ -63,7 +64,8 @@ const Catogery = () => {
   const [editid, setEditid] = useState('');
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const [searchVal, setSearchVal] = useState(null);
+  const [searchVal, setSearchVal] = useState('');
+  const [isChecked, setIsChecked] = React.useState();
   // const { filteredData, loading } = useTableSearch({
   //   searchVal,
   //   retrieve: data,
@@ -79,29 +81,44 @@ const Catogery = () => {
     setPage(0);
   };
   const filteredData = useMemo(() => {
-    if (!searchVal) return data;
+    // if (!searchVal) return data;
 
-    if (data.length > 0) {
-      const attributes = Object.keys(data[0]);
+    // if (data.length > 0) {
+    //   const attributes = ['name'];
 
-      const list = [];
+    //   console.log(attributes);
 
-      for (const current of data) {
-        for (const attribute of attributes) {
-          if (attribute === 'key') {
-            continue;
-          }
-          const value = current[attribute];
-          if (value && value.toLowerCase() === searchVal.toLowerCase()) {
-            const found = data.find((row) => row.key === current.key);
-            if (found) {
-              list.push(found);
-            }
-          }
-        }
-      }
-      return list;
+    // const list = [];
+
+    // for (const current of data) {
+    //   for (const attribute of attributes) {
+    //     if (attribute === 'key') {
+    //       continue;
+    //     }
+    //     const value = current[attribute];
+    //     console.log(value);
+    //     if (value && value.toLowerCase() === searchVal.toLowerCase()) {
+    //       const found = data.find((row) => row.key === current.key);
+    //       if (found) {
+    //         console.log(found);
+    //         list.push(found);
+    //       }
+    //     }
+    //   }
+    // }
+    // return list;
+    if (searchVal === '') {
+      return data;
     }
+    const filterBySearch = data.filter((item) => {
+      if (
+        item.name.toLowerCase().includes(searchVal.toLowerCase()) ||
+        item.orderNo.toLowerCase().includes(searchVal.toLowerCase())
+      ) {
+        return item;
+      }
+    });
+    return filterBySearch;
 
     return [];
   }, [searchVal, data]);
@@ -163,7 +180,7 @@ const Catogery = () => {
         currentIndex === index ? { ...it, checked: !it.checked } : it,
       ),
     );
-
+    console.log(cat);
     // or
     // setCat([
     //   ...cat.slice(0, index),
@@ -226,6 +243,7 @@ const Catogery = () => {
                   orderNo: order,
                   status: Status,
                   photo: photo,
+                  services: JSON.stringify(cat),
                 },
                 {
                   headers: {
@@ -567,20 +585,20 @@ const Catogery = () => {
                     flexWrap: 'wrap',
                   }}
                 >
-                  {cat.map((it, index) => (
+                  {cat.map((item, index) => (
                     <>
                       <FormControlLabel
-                        key={it._id}
+                        key={item._id}
                         control={
                           <Checkbox
-                            key={it._id}
-                            isChecked={it.checked}
+                            key={item._id}
+                            checked={item.checked}
                             onChange={() => updateCheckStatus(index)}
-                            label={it.name}
+                            label={item.name}
                             index={index}
                           />
                         }
-                        label={it.name}
+                        label={item.name}
                       />
                       {/* <p>{it.checked.toString()}</p> */}
                     </>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
 import {
   Button,
@@ -39,12 +39,12 @@ const Admin = () => {
   const handleClose = () => setOpen(false);
   const [name, setName] = useState('');
   const [order, setOrder] = useState('');
-  const [data, setData] = useState('');
+  const [data, setData] = useState([]);
   const [photo, setPhoto] = useState('');
   const [editid, setEditid] = useState('');
   const [Status, Setstatus] = useState('Enable');
   const [page, setPage] = React.useState(0);
-  const [searchVal, setSearchVal] = useState(null);
+  const [searchVal, setSearchVal] = useState('');
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
@@ -253,13 +253,25 @@ const Admin = () => {
       setOrder(response.data.orderNo);
       Setstatus(response.data.status);
       setEditid(id);
-
-      // setNewAd({ name: response.data.name, photo: response.data.photo, url: response.data.url });
       setOpen(true);
-
-      // setInitialAd(response.data);
     });
   };
+  const filteredData = useMemo(() => {
+    if (searchVal === '') {
+      return data;
+    }
+    const filterBySearch = data.filter((item) => {
+      if (
+        item.name.toLowerCase().includes(searchVal.toLowerCase()) ||
+        item.orderNo.toLowerCase().includes(searchVal.toLowerCase())
+      ) {
+        return item;
+      }
+    });
+    return filterBySearch;
+
+    return [];
+  }, [searchVal, data]);
   return (
     <PageContainer title="Services Table">
       <ToastContainer
@@ -349,8 +361,8 @@ const Admin = () => {
               {data && (
                 <TableBody>
                   {(rowsPerPage > 0
-                    ? data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    : data
+                    ? filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    : filteredData
                   ).map((it, x) => (
                     <TableRow
                       style={{ background: x % 2 == 0 ? '#e8e8e8' : 'white' }}

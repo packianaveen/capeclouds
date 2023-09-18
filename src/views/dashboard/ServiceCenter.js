@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import axios from 'axios';
 import {
   Button,
@@ -42,7 +42,10 @@ import { styled } from '@mui/system';
 import { localurl } from 'src/constant';
 const Admin = () => {
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    setOpen(true);
+    setCat(defaultCat);
+  };
   const handleClose = () => setOpen(false);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
@@ -57,6 +60,8 @@ const Admin = () => {
   const [editid, setEditid] = useState('');
   const [link, setLink] = useState('');
   const [page, setPage] = React.useState(0);
+  const [defaultCat, setDefaultCat] = useState([]);
+  const [searchVal, setSearchVal] = useState('');
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
@@ -68,7 +73,23 @@ const Admin = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+  const filteredData = useMemo(() => {
+    if (searchVal === '') {
+      return data;
+    }
+    const filterBySearch = data.filter((item) => {
+      if (
+        item.name.toLowerCase().includes(searchVal.toLowerCase()) ||
+        item.phoneNo.toLowerCase().includes(searchVal.toLowerCase()) ||
+        item.pin.toLowerCase().includes(searchVal.toLowerCase())
+      ) {
+        return item;
+      }
+    });
+    return filterBySearch;
 
+    return [];
+  }, [searchVal, data]);
   const CustomTablePagination = styled(TablePagination)`
     & .${classes.toolbar} {
       display: flex;
@@ -107,7 +128,7 @@ const Admin = () => {
     axios
       .get(`${url}/api/get-catogery`)
       .then((response) => {
-        setCat(response.data);
+        setDefaultCat(response.data.map((it) => ({ ...it, checked: false })));
       })
       .catch(function (error) {
         console.log(error);
@@ -308,8 +329,18 @@ const Admin = () => {
         toast.error('failed');
       });
   };
+  const allCheck = () => {
+    console.log(cat.map((it) => ({ ...it, checked: true })));
+    setCat(cat.map((it) => ({ ...it, checked: true })));
+  };
   const editCatogory = (id) => {
     axios.get(`${url}/api/editCenter/${id}`).then((response) => {
+      console.log(JSON.parse(response.data.services));
+      var reduced = defaultCat.filter(
+        (aitem) =>
+          !JSON.parse(response.data.services).find((bitem) => aitem['_id'] === bitem['_id']),
+      );
+      setCat(reduced.concat(JSON.parse(response.data.services)));
       console.log(response.data);
       setName(response.data.name);
       setAddress(response.data.address);
@@ -349,7 +380,7 @@ const Admin = () => {
           <CustomTextField
             style={{ marginRight: '10px' }}
             label="Search"
-            // onChange={(e) => handleSearch(e)}
+            onChange={(e) => setSearchVal(e.target.value)}
             variant="outlined"
           />
           <Button color="primary" variant="contained" size="large" onClick={handleOpen}>
@@ -377,8 +408,8 @@ const Admin = () => {
               {data && (
                 <TableBody>
                   {(rowsPerPage > 0
-                    ? data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    : data
+                    ? filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    : filteredData
                   ).map((it, x) => (
                     <TableRow
                       style={{ background: x % 2 == 0 ? '#e8e8e8' : 'white' }}
@@ -571,23 +602,46 @@ const Admin = () => {
                 sx={{
                   display: 'flex',
                   flexDirection: 'row !important',
+                  MaxHeight: '100px',
+                  flexWrap: 'wrap',
+                }}
+              >
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      // key={it.name}
+                      isChecked={false}
+                      onChange={allCheck}
+
+                      // index={index}
+                    />
+                  }
+                  label="Select All"
+                />
+              </Box>
+            </FormGroup>
+            <FormGroup mt={2}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row !important',
                   MaxHeight: '200px',
                   flexWrap: 'wrap',
                   overflowY: 'scroll',
                 }}
               >
-                {cat.map((it, index) => (
+                {cat.map((item, index) => (
                   <FormControlLabel
                     control={
                       <Checkbox
-                        key={it.name}
-                        isChecked={it.checked}
+                        key={item.name}
+                        checked={item.checked}
                         onChange={() => updateCheckStatus(index)}
-                        label={it.name}
+                        label={item.name}
                         index={index}
                       />
                     }
-                    label={it.name}
+                    label={item.name}
                   />
                 ))}
               </Box>
