@@ -7,13 +7,14 @@ import { url } from 'src/constant';
 import { Box } from '@mui/material';
 import { Navigate, useNavigate } from 'react-router';
 import { Carousel } from '3d-react-carousal';
+
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import 'swiper/css/effect-coverflow';
 import 'swiper/css/pagination';
+import 'swiper/css/navigation';
 
 // import required modules
-import { EffectCoverflow, Pagination } from 'swiper/modules';
+import { EffectCoverflow, Pagination, Autoplay, Navigation } from 'swiper/modules';
 const AdSlide = () => {
   const [adSlide, setAdslide] = useState([]);
   const [trand, settrend] = useState([]);
@@ -43,13 +44,6 @@ const AdSlide = () => {
   const handleClick = (id) => {
     navigate(`/agroservices/${id}`);
   };
-  let slides = [
-    <img src="https://picsum.photos/800/300/?random" alt="1" height="300px" width="100%" />,
-    <img src="https://picsum.photos/800/301/?random" alt="2" height="300px" width="100%" />,
-    <img src="https://picsum.photos/800/302/?random" alt="3" height="300px" width="100%" />,
-    <img src="https://picsum.photos/800/303/?random" alt="4" height="300px" width="100%" />,
-    <img src="https://picsum.photos/800/304/?random" alt="5" height="300px" width="100%" />,
-  ];
 
   return (
     <>
@@ -105,19 +99,17 @@ const AdSlide = () => {
       </Box>
       <Box mt={2}>
         <Swiper
-          effect={'coverflow'}
-          grabCursor={true}
+          spaceBetween={30}
           centeredSlides={true}
-          slidesPerView={'auto'}
-          coverflowEffect={{
-            rotate: 50,
-            stretch: 0,
-            depth: 100,
-            modifier: 1,
-            slideShadows: true,
+          autoplay={{
+            delay: 2500,
+            disableOnInteraction: false,
           }}
-          pagination={true}
-          modules={[EffectCoverflow, Pagination]}
+          pagination={{
+            clickable: true,
+          }}
+          navigation={true}
+          modules={[Autoplay, Pagination, Navigation]}
           // className="mySwiper"
         >
           {trand.map((it) => (

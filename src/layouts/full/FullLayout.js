@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { styled, Container, Box } from '@mui/material';
+import { styled, Container, Box, Typography } from '@mui/material';
 import { Outlet } from 'react-router-dom';
-
+import logo from '../../assets/icon-256x256.png';
 import Header from './header/Header';
 import Sidebar from './sidebar/Sidebar';
 import FooterPage from './header/Footer';
@@ -30,6 +30,39 @@ const FullLayout = () => {
   return (
     <>
       <MainWrapper className="mainwrapper">
+        <Box
+          sx={{
+            background: '#663399',
+          }}
+          className="topbar"
+        >
+          <Box
+            sx={{
+              // textAlign: 'center',
+              height: '64px',
+              display: 'flex',
+              backgroundImage: `url('https://online.tirupatibalaji.ap.gov.in/misc/images/v4/TTD_MainBanner_Sky_Afternoon_N.png')`,
+              borderBottomRightRadius: '30px',
+              borderBottomLeftRadius: '30px',
+              backgroundPosition: 'center center',
+              backgroundSize: 'cover',
+            }}
+          >
+            <img src={logo} style={{ margin: '10px' }} />
+            <p
+              style={{
+                display: 'flex',
+                alignContent: 'center',
+                justifyContent: 'center',
+                marginTop: '20px',
+                fontSize: '20px',
+                fontWeight: 'bold',
+              }}
+            >
+              Cape Clouds
+            </p>
+          </Box>
+        </Box>
         {/* ------------------------------------------- */}
         {/* Sidebar */}
         {/* ------------------------------------------- */}

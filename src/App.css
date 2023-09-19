@@ -98,6 +98,9 @@ h2#swal2-title {
     text-align: center;
     font-weight: bold;
   }
+  .topbar {
+    display: none;
+  }
 }
 @media (max-width: 992px) {
   .MuiContainer-root {

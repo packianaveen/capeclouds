@@ -102,11 +102,11 @@ const SamplePage = () => {
       style={{ backgroundColor: '#fdf1f4' }}
     >
       <Box>
-        <Box>
+        {/* <Box>
           <Typography fontWeight="700" variant="h3" mb={2}>
             Our Trending Services
           </Typography>
-        </Box>
+        </Box> */}
         <div>
           <Swiper
             spaceBetween={30}

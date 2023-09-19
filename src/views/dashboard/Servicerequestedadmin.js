@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import CustomTextField from '../../components/forms/theme-elements/CustomTextField';
 import {
   Button,
   Typography,
@@ -138,6 +141,12 @@ const Servicerequestedadmin = () => {
         console.log(error);
       });
   }, []);
+  const handlereport = () => {
+    const doc = new jsPDF();
+    doc.autoTable({ html: '#my-table' });
+    doc.save('table.pdf');
+  };
+
   const editService = (x) => {
     console.log(x);
     // console.log(getAdmin(data[x].user));
@@ -260,10 +269,20 @@ const Servicerequestedadmin = () => {
           justifyContent="flex-end"
           alignItems="flex-end"
           //   sx={boxDefault}
-        ></Box>
+        >
+          <CustomTextField
+            style={{ marginRight: '10px' }}
+            label="Search"
+            // onChange={(e) => setSearchVal(e.target.value)}
+            variant="outlined"
+          />
+          <Button color="primary" variant="contained" size="large" onClick={handlereport}>
+            Report
+          </Button>
+        </Box>
         <div style={{ height: 'auto', width: '100%' }}>
           <TableContainer component={Paper}>
-            <Table aria-label="simple table">
+            <Table aria-label="simple table" id="my-table">
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
@@ -402,6 +421,9 @@ const Servicerequestedadmin = () => {
                     onRowsPerPageChange={handleChangeRowsPerPage}
                   />
                 </TableRow>
+                {/* <Box>
+                  <Button onClick={handlereport}>Report</Button>
+                </Box> */}
               </TableFooter>
             </Table>
           </TableContainer>
