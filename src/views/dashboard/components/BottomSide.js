@@ -123,7 +123,7 @@ const BottomSide = () => {
             console.log(data);
             // setInitialAd(data);
             axios
-              .post(`${url}/api/bottomadd`, ad, {
+              .post(`${url}/api/bottomadd1`, ad, {
                 headers: {
                   'Content-Type': 'multipart/form-data',
                 },
@@ -156,7 +156,7 @@ const BottomSide = () => {
       };
       console.log(ad.photo);
       axios
-        .post(`${url}/api/bottomadd`, ad, {
+        .post(`${url}/api/bottomadd1`, ad, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
