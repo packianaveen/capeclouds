@@ -271,7 +271,7 @@ const BottomSide = () => {
                 />
               </FormControl>
             </Box>
-            <Box m={1}>
+            {/* <Box m={1}>
               <FormControl fullWidth onChange={(e) => onchange(e)}>
                 <InputLabel htmlFor="component-outlined">URL</InputLabel>
                 <OutlinedInput
@@ -282,7 +282,7 @@ const BottomSide = () => {
                   label="Name"
                 />
               </FormControl>
-            </Box>
+            </Box> */}
             <Box m={1}>
               <FormControl fullWidth>
                 {newad.photo.length == 0 ? (
