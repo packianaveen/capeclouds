@@ -23,6 +23,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { MuiColorInput } from 'mui-color-input';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
+import CustomTextField from '../../components/forms/theme-elements/CustomTextField';
 import 'react-toastify/dist/ReactToastify.css';
 import 'material-react-toastify/dist/ReactToastify.css';
 import Table from '@mui/material/Table';
@@ -48,6 +49,7 @@ const FrontEnd = () => {
   const [editid, setEditid] = useState('');
   const [cat, setCat] = useState([]);
   const [defaultCat, setDefaultCat] = useState([]);
+  const [topText, setToptext] = useState('Cape Clouds');
   const [newad, setNewAd] = useState({
     name: '',
     url: '',
@@ -82,6 +84,7 @@ const FrontEnd = () => {
       if (response.data.length > 0) {
         console.log(response.data);
         setColor(response.data[0]);
+        setToptext(response.data[0].topText);
       }
     });
     axios.get(`${url}/api/getAd`).then((response) => {
@@ -119,7 +122,7 @@ const FrontEnd = () => {
   };
   const submitTheme = () => {
     axios
-      .post(`${url}/api/updatetheme/${color1._id}`, { color: color1 })
+      .post(`${url}/api/updatetheme/${color1._id}`, { color: color1, topText: topText })
       .then((res) => setTheme(res.data.colur));
   };
   const editElement = (id) => {
@@ -290,6 +293,18 @@ const FrontEnd = () => {
         <DashboardCard title="Theme">
           <Box>
             <MuiColorInput value={color1.colur} onChange={handleChange} format="hex" />
+          </Box>
+          <Box mt={2}>
+            <CustomTextField
+              style={{ marginTop: '10px' }}
+              id="otp"
+              label="Top Text"
+              onChange={(e) => {
+                setToptext(e.target.value);
+              }}
+              value={topText}
+              variant="outlined"
+            />
           </Box>
           <Box mt={2}>
             <Button variant="contained" onClick={submitTheme}>

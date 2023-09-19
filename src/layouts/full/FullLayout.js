@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled, Container, Box, Typography } from '@mui/material';
 import { Outlet } from 'react-router-dom';
 import logo from '../../assets/icon-256x256.png';
@@ -6,6 +6,8 @@ import Header from './header/Header';
 import Sidebar from './sidebar/Sidebar';
 import FooterPage from './header/Footer';
 import Footer from './header/Footer';
+import { url } from 'src/constant';
+import axios from 'axios';
 
 const MainWrapper = styled('div')(() => ({
   display: 'flex',
@@ -25,8 +27,15 @@ const PageWrapper = styled('div')(() => ({
 const FullLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [topText, setToptext] = useState('');
   // const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
-
+  useEffect(() => {
+    axios.get(`${url}/api/getTheme`).then((response) => {
+      if (response.data.length > 0) {
+        setToptext(response.data[0].topText);
+      }
+    });
+  }, []);
   return (
     <>
       <MainWrapper className="mainwrapper">
@@ -59,7 +68,7 @@ const FullLayout = () => {
                 fontWeight: 'bolder',
               }}
             >
-              Cape Clouds
+              {topText}
             </p>
           </Box>
         </Box>
