@@ -266,6 +266,10 @@ const FrontEnd = () => {
     //   });
   };
   console.log(cat);
+  const allCheck = () => {
+    console.log(cat.map((it) => ({ ...it, checked: true })));
+    setCat(cat.map((it) => ({ ...it, checked: true })));
+  };
   return (
     <PageContainer title="Front End" description="this is Sample page">
       <ToastContainer
@@ -407,10 +411,9 @@ const FrontEnd = () => {
               )}
             </FormControl>
           </Box>
-          <Box mt={2}>
+          <Box mt={2} sx={{ height: '150px', overflowY: 'scroll' }}>
             <InputLabel htmlFor="component-outlined">Select Services</InputLabel>
-
-            <FormGroup mt={2} sx={{ height: '200px', overflowY: 'scroll' }}>
+            <FormGroup mt={2}>
               <Box
                 sx={{
                   display: 'flex',
@@ -419,19 +422,46 @@ const FrontEnd = () => {
                   flexWrap: 'wrap',
                 }}
               >
-                {cat.map((it, index) => (
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        key={it.name}
-                        isChecked={it.checked}
-                        onChange={() => updateCheckStatus(index)}
-                        label={it.name}
-                        index={index}
-                      />
-                    }
-                    label={it.name}
-                  />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      // key={it.name}
+                      isChecked={false}
+                      onChange={allCheck}
+
+                      // index={index}
+                    />
+                  }
+                  label="Select All"
+                />
+              </Box>
+            </FormGroup>
+            <FormGroup mt={2}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row !important',
+                  MaxHeight: '100px',
+                  flexWrap: 'wrap',
+                }}
+              >
+                {cat.map((item, index) => (
+                  <>
+                    <FormControlLabel
+                      key={item._id}
+                      control={
+                        <Checkbox
+                          key={item._id}
+                          checked={item.checked}
+                          onChange={() => updateCheckStatus(index)}
+                          label={item.name}
+                          index={index}
+                        />
+                      }
+                      label={item.name}
+                    />
+                    {/* <p>{it.checked.toString()}</p> */}
+                  </>
                 ))}
               </Box>
             </FormGroup>

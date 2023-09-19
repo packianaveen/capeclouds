@@ -18,6 +18,8 @@ import PageContainer from 'src/components/container/PageContainer';
 import DashboardCard from '../../../components/shared/DashboardCard';
 import Modal from '@mui/material/Modal';
 import Table from '@mui/material/Table';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -29,40 +31,65 @@ import EditIcon from '@mui/icons-material/Edit';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { url } from 'src/constant';
-const Tranding2 = () => {
+import Catogery from '../Catogery';
+const Tranding = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [intialAd, setInitialAd] = useState([]);
   const [editid, setEditid] = useState();
-
+  const [services, setServices] = useState([]);
+  const [catogeries, setCatogeries] = useState([]);
+  const [service, setService] = useState('');
+  const [catogery, setCatogery] = useState('');
   const [newad, setNewAd] = useState({
     name: '',
-    url: '',
+    service: '',
+    catogery: '',
     photo: '',
   });
   const handlePhoto = (e) => {
     console.log(e.target.files[0]);
     setNewAd({ ...newad, photo: e.target.files[0] });
   };
-
+  const handleCatogeries = (event, x) => {
+    console.log(event.target.value);
+    setCatogery(catogeries.find((it) => it._id == event.target.value));
+  };
+  const handleServices = (event) => {
+    console.log(event.target.value);
+    setService(services.find((it) => it._id == event.target.value));
+  };
   const onchange = (e) => {
     setNewAd({ ...newad, [e.target.name]: e.target.value });
   };
   useEffect(() => {
-    axios.get(`${url}/api/gettrendAd`).then((response) => {
+    axios.get(`${url}/api/gettrendAd1`).then((response) => {
       if (response.data.length > 0) {
         console.log(response.data);
         setInitialAd(response.data);
       }
     });
+    axios.get(`${url}/api/get-catogery`).then((response) => {
+      if (response.data.length > 0) {
+        console.log(response.data);
+        setCatogeries(response.data);
+      }
+    });
+    axios.get(`${url}/api/get-service`).then((response) => {
+      if (response.data.length > 0) {
+        console.log(response.data);
+        setServices(response.data);
+      }
+    });
   }, []);
 
   const editElement = (id) => {
-    axios.get(`${url}/api/edittrendAd/${id}`).then((response) => {
-      console.log(response.data.photo);
+    axios.get(`${url}/api/edittrendAd1/${id}`).then((response) => {
       setNewAd({ name: response.data.name, photo: response.data.photo, url: response.data.url });
       setOpen(true);
+      setCatogery(JSON.parse(response.data.catogery));
+      setService(JSON.parse(response.data.service));
       setEditid(id);
       console.log(newad.photo);
       // setInitialAd(response.data);
@@ -70,7 +97,7 @@ const Tranding2 = () => {
   };
   const deleteElement = (id) => {
     axios
-      .delete(`${url}/api/deletetrendAd/${id}`)
+      .delete(`${url}/api/deletetrendAd1/${id}`)
       .then((response) => {
         console.log(response);
         const data = intialAd.filter((it) => it._id !== response.data._id);
@@ -83,10 +110,11 @@ const Tranding2 = () => {
   };
   const handleAd = (e) => {
     e.preventDefault();
-    console.log(newad.photo);
+    console.log(catogery);
     const ad = {
       name: newad.name,
-      url: newad.url,
+      service: JSON.stringify(service),
+      catogery: JSON.stringify(catogery),
       photo: newad.photo,
     };
     // // formData.append('photo', newad.photo);
@@ -94,13 +122,15 @@ const Tranding2 = () => {
       console.log(typeof ad.photo);
       if (typeof ad.photo == 'string') {
         axios
-          .patch(`${url}/api/trendedit/${editid}`, ad)
+          .patch(`${url}/api/trendedit1/${editid}`, ad)
           .then((response) => {
             console.log((intialAd.find((it) => it._id == editid).name = newad.name));
             intialAd.find((it) => it._id == editid).url = newad.url;
             // intialAd.find((it) => it._id == editid).photo = newad.photo;
             // setInitialAd([...intialAd, response.data]);
             setOpen(false);
+            setCatogery('');
+            setService('');
             setNewAd({
               name: '',
               url: '',
@@ -114,14 +144,14 @@ const Tranding2 = () => {
           });
       } else {
         axios
-          .delete(`${url}/api/deletetrendAd/${editid}`)
+          .delete(`${url}/api/deletetrendAd1/${editid}`)
           .then((response) => {
             console.log(intialAd);
             const data = intialAd.filter((it) => it._id !== editid);
             console.log(data);
             // setInitialAd(data);
             axios
-              .post(`${url}/api/trendadd`, ad, {
+              .post(`${url}/api/trendadd1`, ad, {
                 headers: {
                   'Content-Type': 'multipart/form-data',
                 },
@@ -130,6 +160,8 @@ const Tranding2 = () => {
                 console.log(response.data);
                 setInitialAd([...data, response.data]);
                 setOpen(false);
+                setCatogery('');
+                setService('');
                 setNewAd({
                   name: '',
                   url: '',
@@ -149,12 +181,13 @@ const Tranding2 = () => {
     } else {
       const ad = {
         name: newad.name,
-        url: newad.url,
+        service: JSON.stringify(service),
+        catogery: JSON.stringify(catogery),
         photo: newad.photo,
       };
-      console.log(ad.photo);
+      console.log(ad);
       axios
-        .post(`${url}/api/trendadd`, ad, {
+        .post(`${url}/api/trendadd1`, ad, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -163,6 +196,8 @@ const Tranding2 = () => {
           console.log(response.data);
           setInitialAd([...intialAd, response.data]);
           setOpen(false);
+          setCatogery('');
+          setService('');
           setNewAd({
             name: '',
             url: '',
@@ -206,7 +241,7 @@ const Tranding2 = () => {
   };
   return (
     <Box mt={4}>
-      <DashboardCard title="Trending Services 2 Table">
+      <DashboardCard title="Trending Services Table">
         <Box
           m={1}
           //margin
@@ -226,7 +261,6 @@ const Tranding2 = () => {
                 <TableRow>
                   <TableCell>ID</TableCell>
                   <TableCell align="right">Name</TableCell>
-
                   <TableCell align="right">Image</TableCell>
                   <TableCell align="right">Action</TableCell>
                 </TableRow>
@@ -286,15 +320,45 @@ const Tranding2 = () => {
               </FormControl>
             </Box>
             <Box m={1}>
-              <FormControl fullWidth onChange={(e) => onchange(e)}>
-                <InputLabel htmlFor="component-outlined">URL</InputLabel>
-                <OutlinedInput
-                  fullWidth
-                  id="component-outlined"
-                  defaultValue={newad.url}
-                  name="url"
-                  label="Name"
-                />
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Service</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={service.name}
+                  label="Service"
+                  onChange={(e) => handleServices(e)}
+                  // onChange={handleChange}
+                >
+                  {services.map((it, x) => {
+                    return (
+                      <MenuItem key={x} value={it._id}>
+                        {it.name}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+            </Box>
+            <Box m={1}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Category</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={catogery.name}
+                  label="Category"
+                  onChange={(e) => handleCatogeries(e)}
+                  // onChange={handleChange}
+                >
+                  {catogeries.map((it, x) => {
+                    return (
+                      <MenuItem key={x} value={it._id}>
+                        {it.name}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
               </FormControl>
             </Box>
             <Box m={1}>
@@ -332,4 +396,4 @@ const Tranding2 = () => {
   );
 };
 
-export default Tranding2;
+export default Tranding;

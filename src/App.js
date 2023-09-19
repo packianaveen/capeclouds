@@ -11,6 +11,7 @@ import { shadows } from './theme/Shadows';
 import { useAuth } from 'src/routes/AuthProvider';
 import { AuthProvider } from './routes/AuthProvider';
 import './App.css';
+import ScrollToTop from './ScrollToTop';
 import { url } from './constant';
 function App() {
   const auth = useAuth();
@@ -114,7 +115,7 @@ function App() {
     <MyContext.Provider value={{ themeColor, setTheme }}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        {routing}
+        <ScrollToTop>{routing}</ScrollToTop>
       </ThemeProvider>
     </MyContext.Provider>
   );

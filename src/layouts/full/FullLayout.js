@@ -51,12 +51,12 @@ const FullLayout = () => {
             <img src={logo} style={{ margin: '10px' }} />
             <p
               style={{
+                margin: 'auto',
+                width: '50%',
                 display: 'flex',
-                alignContent: 'center',
-                justifyContent: 'center',
                 marginTop: '20px',
                 fontSize: '20px',
-                fontWeight: 'bold',
+                fontWeight: 'bolder',
               }}
             >
               Cape Clouds
