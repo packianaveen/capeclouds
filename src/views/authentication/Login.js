@@ -235,15 +235,18 @@ const Login2 = () => {
       <Modal open={open} onClose={handleClose}>
         <Box sx={style} component="form">
           <QrReader
-            // onResult={(result, error) => {
-            //   if (!!result) {
-            //     setData(result?.text);
-            //   }
+            constraints={{ facingMode: 'environment' }}
+            onResult={(result, error) => {
+              if (!!result) {
+                console.log(`/auth/login/${result?.text}`);
+                navigate(`/auth/login/${result?.text}`);
+                handleClose();
+              }
 
-            //   if (!!error) {
-            //     console.info(error);
-            //   }
-            // }}
+              if (!!error) {
+                console.info(error);
+              }
+            }}
             style={{ width: '100%' }}
           />
           {/* <p>{data}</p> */}

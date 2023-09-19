@@ -58,6 +58,7 @@ const Admin = () => {
   const [Status, Setstatus] = useState('Enable');
   const [qrOpen, setQrOpen] = useState(false);
   const [editid, setEditid] = useState('');
+  const [qrId, setQrid] = useState('');
   const [link, setLink] = useState('');
   const [page, setPage] = React.useState(0);
   const [defaultCat, setDefaultCat] = useState([]);
@@ -467,7 +468,13 @@ const Admin = () => {
                           <ContentCopyIcon />
                         </WhatsappShareButton>
                       </TableCell> */}
-                      <TableCell align="center" onClick={() => setQrOpen(true)}>
+                      <TableCell
+                        align="center"
+                        onClick={() => {
+                          setQrOpen(true);
+                          setQrid(it._id);
+                        }}
+                      >
                         <DownloadIcon style={{ cursor: 'pointer' }} />
                       </TableCell>
                       <TableCell align="center">
@@ -682,7 +689,7 @@ const Admin = () => {
           <Box m={1}>
             <QRCode
               id="qrCodeEl"
-              value="http://localhost:3000/auth/login/${userId}"
+              value={`${qrId}`}
               size={290}
               level={'H'}
               bgColor={'#ffffff'}
