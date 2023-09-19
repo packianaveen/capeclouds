@@ -91,7 +91,7 @@ const Tranding = () => {
       setCatogery(JSON.parse(response.data.catogery));
       setService(JSON.parse(response.data.service));
       setEditid(id);
-      console.log(newad.photo);
+      console.log(response.data.service);
       // setInitialAd(response.data);
     });
   };
@@ -239,6 +239,7 @@ const Tranding = () => {
     boxShadow: 24,
     p: 4,
   };
+  console.log(service);
   return (
     <Box mt={4}>
       <DashboardCard title="Trending Services Table">
@@ -325,7 +326,7 @@ const Tranding = () => {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={service.name}
+                  value={service._id}
                   label="Service"
                   onChange={(e) => handleServices(e)}
                   // onChange={handleChange}
@@ -346,7 +347,7 @@ const Tranding = () => {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={catogery.name}
+                  value={catogery._id}
                   label="Category"
                   onChange={(e) => handleCatogeries(e)}
                   // onChange={handleChange}

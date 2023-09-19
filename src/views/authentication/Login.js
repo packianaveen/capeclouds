@@ -17,12 +17,15 @@ import { useLocation } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import { url } from '../../constant';
 import { replace } from 'lodash';
+import Modal from '@mui/material/Modal';
+import { QrReader } from 'react-qr-reader';
 const Login2 = () => {
   const [phone, setPhone] = useState('');
   const [pin, setPin] = useState('');
   const [password, setPassword] = useState('');
   const [login, setLogin] = useState(false);
   const [reg, setReg] = useState(false);
+  const [open, setOpen] = React.useState(false);
   const [type, setType] = useState('password');
   // const navigate = useNavigate();
   let { id } = useParams();
@@ -30,6 +33,8 @@ const Login2 = () => {
   console.log(id);
   const navigate = useNavigate();
   const location = useLocation();
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const from = location.state?.from?.pathname || '/';
   console.log(auth.user);
   const verifyCaptcha = () => {
@@ -60,6 +65,17 @@ const Login2 = () => {
     } else {
       setType('password');
     }
+  };
+  const style = {
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '2px solid',
+    boxShadow: 24,
+    p: 4,
   };
   const submitAccLogin = () => {
     axios
@@ -209,10 +225,30 @@ const Login2 = () => {
                   </Stack>
                 }
               />
+              <p style={{ textAlign: 'center' }} onClick={handleOpen}>
+                Scan Qr Code
+              </p>
             </Card>
           </Grid>
         </Grid>
       </Box>
+      <Modal open={open} onClose={handleClose}>
+        <Box sx={style} component="form">
+          <QrReader
+            // onResult={(result, error) => {
+            //   if (!!result) {
+            //     setData(result?.text);
+            //   }
+
+            //   if (!!error) {
+            //     console.info(error);
+            //   }
+            // }}
+            style={{ width: '100%' }}
+          />
+          {/* <p>{data}</p> */}
+        </Box>
+      </Modal>
     </PageContainer>
   );
 };

@@ -132,18 +132,20 @@ const AuthLogin = ({
           Submit
         </Button>
       ) : (
-        <Button
-          color="primary"
-          variant="contained"
-          size="large"
-          fullWidth
-          // component={Link}
-          to="/"
-          type="submit"
-          onClick={submitLogin}
-        >
-          Login
-        </Button>
+        <Box>
+          <Button
+            color="primary"
+            variant="contained"
+            size="large"
+            fullWidth
+            // component={Link}
+            to="/"
+            type="submit"
+            onClick={submitLogin}
+          >
+            Login
+          </Button>
+        </Box>
       )}
     </Box>
     {/* {subtitle} */}

@@ -47,6 +47,7 @@ const FrontEnd = () => {
   const [intialAd, setInitialAd] = useState([]);
   const [editid, setEditid] = useState('');
   const [cat, setCat] = useState([]);
+  const [defaultCat, setDefaultCat] = useState([]);
   const [newad, setNewAd] = useState({
     name: '',
     url: '',
@@ -93,7 +94,8 @@ const FrontEnd = () => {
     axios
       .get(`${url}/api/get-service`)
       .then((response) => {
-        setCat(response.data.map((it) => ({ ...it, checked: false })));
+        setDefaultCat(response.data.map((it) => ({ ...it, checked: false })));
+        // setCat(response.data.map((it) => ({ ...it, checked: false })));
         console.log(response.data);
         console.log(response.data.map((it) => ({ ...it, checked: false })));
       })
@@ -305,7 +307,15 @@ const FrontEnd = () => {
           alignItems="flex-end"
           //   sx={boxDefault}
         >
-          <Button color="primary" variant="contained" size="large" onClick={() => setOpen(true)}>
+          <Button
+            color="primary"
+            variant="contained"
+            size="large"
+            onClick={() => {
+              setOpen(true);
+              setCat(defaultCat);
+            }}
+          >
             Add
           </Button>
         </Box>
@@ -359,7 +369,9 @@ const FrontEnd = () => {
       </DashboardCard>
       <Modal
         open={open}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          setOpen(false);
+        }}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >

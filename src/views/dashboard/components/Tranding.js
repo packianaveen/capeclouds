@@ -325,7 +325,7 @@ const Tranding = () => {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={service.name}
+                  value={service._id}
                   label="Service"
                   onChange={(e) => handleServices(e)}
                   // onChange={handleChange}
@@ -346,7 +346,7 @@ const Tranding = () => {
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
-                  value={catogery.name}
+                  value={catogery._id}
                   label="Category"
                   onChange={(e) => handleCatogeries(e)}
                   // onChange={handleChange}

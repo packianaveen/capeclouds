@@ -59,6 +59,12 @@ const AdSlide = () => {
     setCatogery(JSON.parse(trand[x].catogery));
     setOpen(true);
   };
+  const trendReq1 = (x) => {
+    console.log(trand[x]);
+    setService(JSON.parse(trand1[x].service));
+    setCatogery(JSON.parse(trand1[x].catogery));
+    setOpen(true);
+  };
   const handleClick = (id) => {
     navigate(`/agroservices/${id}`);
   };
@@ -198,7 +204,7 @@ const AdSlide = () => {
                 height="200px"
                 width="100%"
                 src={`${url}/Images/` + it.photo}
-                onClick={() => trendReq(x)}
+                onClick={() => trendReq1(x)}
               />
             </SwiperSlide>
           ))}
