@@ -38,6 +38,7 @@ const BottomSide = () => {
   const handleClose = () => setOpen(false);
   const [intialAd, setInitialAd] = useState([]);
   const [editid, setEditid] = useState();
+  const admin = JSON.parse(localStorage.getItem('user'))._id;
   const [newad, setNewAd] = useState({
     name: '',
     url: '',
@@ -55,7 +56,7 @@ const BottomSide = () => {
     axios.get(`${url}/api/getbottomAd`).then((response) => {
       if (response.data.length > 0) {
         console.log(response.data);
-        setInitialAd(response.data);
+        setInitialAd(response.data.filter((it) => it.admin == admin));
       }
     });
   }, []);
@@ -90,6 +91,7 @@ const BottomSide = () => {
       name: newad.name,
       url: newad.url,
       photo: newad.photo,
+      admin: admin,
     };
     // // formData.append('photo', newad.photo);
     if (editid) {
@@ -153,6 +155,7 @@ const BottomSide = () => {
         name: newad.name,
         url: newad.url,
         photo: newad.photo,
+        admin: admin,
       };
       console.log(ad.photo);
       axios

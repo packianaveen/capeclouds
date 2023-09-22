@@ -65,7 +65,7 @@ const Admin = () => {
   const [searchVal, setSearchVal] = useState('');
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
-
+  const admin = JSON.parse(localStorage.getItem('user'))._id;
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -129,7 +129,9 @@ const Admin = () => {
     axios
       .get(`${url}/api/get-catogery`)
       .then((response) => {
-        setDefaultCat(response.data.map((it) => ({ ...it, checked: false })));
+        setDefaultCat(
+          response.data.filter((it) => it.admin == admin).map((it) => ({ ...it, checked: false })),
+        );
       })
       .catch(function (error) {
         console.log(error);
@@ -138,7 +140,7 @@ const Admin = () => {
       .get(`${url}/api/getCenter`)
       .then((response) => {
         console.log(response.data);
-        setData(response.data);
+        setData(response.data.filter((it) => it.admin == admin));
       })
       .catch(function (error) {
         console.log(error);
@@ -184,6 +186,7 @@ const Admin = () => {
             phoneNo: phone,
             status: Status,
             address: address,
+            admin: admin,
             services: JSON.stringify(cat),
             photo: photo,
             pin: pin,
@@ -218,6 +221,7 @@ const Admin = () => {
                   address: address,
                   services: JSON.stringify(cat),
                   photo: photo,
+                  admin: admin,
                   pin: pin,
                 },
                 {
@@ -252,6 +256,7 @@ const Admin = () => {
             phoneNo: phone,
             status: Status,
             address: address,
+            admin: admin,
             services: JSON.stringify(cat),
             photo: photo,
             pin: pin,

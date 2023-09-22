@@ -66,6 +66,7 @@ const Catogery = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [searchVal, setSearchVal] = useState('');
   const [isChecked, setIsChecked] = React.useState();
+  const admin = JSON.parse(localStorage.getItem('user'))._id;
   // const { filteredData, loading } = useTableSearch({
   //   searchVal,
   //   retrieve: data,
@@ -160,7 +161,9 @@ const Catogery = () => {
     axios
       .get(`${url}/api/get-service`)
       .then((response) => {
-        setDefaultCat(response.data.map((it) => ({ ...it, checked: false })));
+        setDefaultCat(
+          response.data.filter((it) => it.admin == admin).map((it) => ({ ...it, checked: false })),
+        );
       })
       .catch(function (error) {
         console.log(error);
@@ -168,7 +171,7 @@ const Catogery = () => {
     axios
       .get(`${url}/api/get-catogery`)
       .then((response) => {
-        setData(response.data);
+        setData(response.data.filter((it) => it.admin == admin));
       })
       .catch(function (error) {
         console.log(error);
@@ -208,11 +211,12 @@ const Catogery = () => {
     if (editid) {
       if (typeof photo == 'string') {
         axios
-          .patch(`${url}/api/serviceedit/${editid}`, {
+          .patch(`${url}/api/catedit/${editid}`, {
             name: name,
             orderNo: order,
             status: Status,
             photo: photo,
+            admin: admin,
             services: JSON.stringify(cat),
           })
           .then((response) => {
@@ -243,6 +247,7 @@ const Catogery = () => {
                   orderNo: order,
                   status: Status,
                   photo: photo,
+                  admin: admin,
                   services: JSON.stringify(cat),
                 },
                 {
@@ -281,6 +286,7 @@ const Catogery = () => {
             orderNo: order,
             status: Status,
             photo: photo,
+            admin: admin,
             services: JSON.stringify(cat),
           },
           {
@@ -293,6 +299,10 @@ const Catogery = () => {
           console.log(response);
           setData([...data, response.data]);
           setOpen(false);
+          setName('');
+          setOrder('');
+          setPhoto('');
+          Setstatus('');
           toast.success('SucessFully Updated');
         })
         .catch((error) => {

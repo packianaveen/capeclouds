@@ -40,7 +40,7 @@ const Admin = () => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [name, setName] = useState('');
-  const [order, setOrder] = useState('');
+  const [font, setFont] = useState(20);
   const [data, setData] = useState([]);
   const [photo, setPhoto] = useState('');
   const [editid, setEditid] = useState('');
@@ -140,6 +140,8 @@ const Admin = () => {
               password: password,
               type: '3',
               status: Status,
+              font: font,
+              name: name,
             })
             .then((response) => {
               console.log(response);
@@ -165,6 +167,8 @@ const Admin = () => {
           password: password,
           type: '3',
           status: Status,
+          font: font,
+          name: name,
         })
         .then((response) => {
           console.log(response);
@@ -198,6 +202,8 @@ const Admin = () => {
   const editCatogory = (id) => {
     axios.get(`${url}/api/getuser/${id}`).then((response) => {
       console.log(response.data);
+      setName(response.data.name);
+      setFont(response.data.font);
       setPhone(response.data.phone);
       setPassword(response.data.password);
       Setstatus(response.data.status);
@@ -250,6 +256,7 @@ const Admin = () => {
                 <TableRow>
                   <TableCell>ID</TableCell>
                   <TableCell align="center">Phone</TableCell>
+                  <TableCell align="center">Name</TableCell>
                   <TableCell align="center">Password</TableCell>
                   <TableCell align="center">Pin</TableCell>
                   <TableCell align="center">Status</TableCell>
@@ -270,6 +277,7 @@ const Admin = () => {
                         {x + 1}
                       </TableCell>
                       <TableCell align="center">{it.phone}</TableCell>
+                      <TableCell align="center">{it.name}</TableCell>
                       <TableCell align="center">{it.password}</TableCell>
                       <TableCell align="center">{it.pin}</TableCell>
                       <TableCell align="center" style={{ width: '10%' }}>
@@ -368,6 +376,29 @@ const Admin = () => {
                   setPhone(value);
                 }}
               />
+            </Box>
+            <Box m={1}>
+              <FormControl fullWidth onChange={(e) => setName(e.target.value)}>
+                <InputLabel htmlFor="component-outlined">Name</InputLabel>
+                <OutlinedInput
+                  fullWidth
+                  id="component-outlined"
+                  defaultValue={name}
+                  label="Order No"
+                />
+              </FormControl>
+            </Box>
+            <Box m={1}>
+              <FormControl fullWidth onChange={(e) => setFont(e.target.value)}>
+                <InputLabel htmlFor="component-outlined">Font Size</InputLabel>
+                <OutlinedInput
+                  fullWidth
+                  id="component-outlined"
+                  type="number"
+                  defaultValue={font}
+                  label="Order No"
+                />
+              </FormControl>
             </Box>
             <Box m={1}>
               <FormControl fullWidth onChange={(e) => setPin(e.target.value)}>

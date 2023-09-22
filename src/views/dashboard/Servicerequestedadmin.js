@@ -57,6 +57,7 @@ const Servicerequestedadmin = () => {
   const [centerArr, setCenterArr] = useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const admin = JSON.parse(localStorage.getItem('user'))._id;
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
 
   const handleChangePage = (event, newPage) => {
@@ -112,24 +113,28 @@ const Servicerequestedadmin = () => {
           .get(`${url}/api/getRequestedservice`)
           .then((res) => {
             let out = [];
+            // console.log(
+            //   res.data
+            //     .filter((it) => it.type == '1')
+            //     .map((item, x) => {
+            //       item.adminName = 'Default';
+            //       let admin = JSON.parse(item.user).admin;
+            //       axios
+            //         .get(`${url}/api/editCenter/${admin}`)
+            //         .then((re) => {
+            //           out[x] = re.data.name;
+            //           console.log(out);
+            //           setCenterArr(out);
+            //           return out;
+            //         })
+            //         .catch((error) => {
+            //           // data.push('Default');
+            //         });
+            //     }),
+            // );
             console.log(
-              res.data
-                .filter((it) => it.type == '1')
-                .map((item, x) => {
-                  item.adminName = 'Default';
-                  let admin = JSON.parse(item.user).admin;
-                  axios
-                    .get(`${url}/api/editCenter/${admin}`)
-                    .then((re) => {
-                      out[x] = re.data.name;
-                      console.log(out);
-                      setCenterArr(out);
-                      return out;
-                    })
-                    .catch((error) => {
-                      // data.push('Default');
-                    });
-                }),
+              res.data.filter((it) => it.type == '1'),
+              response.data.filter((it) => it.admin == admin),
             );
             setData(res.data.filter((it) => it.type == '1'));
           })

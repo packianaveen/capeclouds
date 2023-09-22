@@ -28,13 +28,20 @@ const FullLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [topText, setToptext] = useState('');
+  const [name, setName] = useState('');
+  const [font, setFont] = useState('');
+  const admin = JSON.parse(localStorage.getItem('user')).admin;
   // const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
   useEffect(() => {
-    axios.get(`${url}/api/getTheme`).then((response) => {
-      if (response.data.length > 0) {
-        setToptext(response.data[0].topText);
-      }
-    });
+    if (admin) {
+      axios.get(`${url}/api/editCenter/${admin}`).then((response) => {
+        axios.get(`${url}/api/getuser/${response.data.admin}`).then((res) => {
+          console.log(res.data);
+          setName(res.data.name);
+          setFont(res.data.font);
+        });
+      });
+    }
   }, []);
   return (
     <>
@@ -61,14 +68,14 @@ const FullLayout = () => {
             <p
               style={{
                 margin: 'auto',
-                width: '50%',
+                width: '70%',
                 display: 'flex',
                 marginTop: '20px',
-                fontSize: '20px',
+                fontSize: font ? font : '20px',
                 fontWeight: 'bolder',
               }}
             >
-              {topText}
+              {name ? name : 'Cape Clouds'}
             </p>
           </Box>
         </Box>

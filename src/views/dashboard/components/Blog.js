@@ -26,32 +26,60 @@ const AdSlide = () => {
   const [service, setService] = useState('');
   const [catogery, setCatogery] = useState('');
   const navigate = useNavigate();
-
+  const admin = JSON.parse(localStorage.getItem('user')).admin;
   useEffect(() => {
-    axios.get(`${url}/api/getbottomAd`).then((response) => {
-      if (response.data.length > 0) {
-        setAdslide(response.data);
-        console.log(response.data);
-      }
+    axios.get(`${url}/api/editCenter/${admin}`).then((response) => {
+      console.log(response.data.admin);
+      // setData(JSON.parse(response.data.services));
+      axios.get(`${url}/api/getbottomAd`).then((res) => {
+        if (res.data.length > 0) {
+          setAdslide(res.data.filter((it) => it.admin == response.data.admin));
+          console.log(res.data.filter((it) => it.admin == response.data.admin));
+        }
+      });
+      axios.get(`${url}/api/gettrendAd1`).then((re) => {
+        if (re.data.length > 0) {
+          settrend1(re.data.filter((it) => it.admin == response.data.admin));
+          console.log(re.data);
+        }
+      });
+      axios.get(`${url}/api/gettrendAd`).then((re) => {
+        if (re.data.length > 0) {
+          settrend(re.data.filter((it) => it.admin == response.data.admin));
+          console.log(re.data);
+        }
+      });
+      axios.get(`${url}/api/getAd`).then((re) => {
+        if (re.data.length > 0) {
+          setNewad(re.data.filter((it) => it.admin == response.data.admin));
+          console.log(re.data);
+        }
+      });
     });
-    axios.get(`${url}/api/gettrendAd`).then((response) => {
-      if (response.data.length > 0) {
-        settrend(response.data);
-        console.log(response.data);
-      }
-    });
-    axios.get(`${url}/api/gettrendAd1`).then((response) => {
-      if (response.data.length > 0) {
-        settrend1(response.data);
-        console.log(response.data);
-      }
-    });
-    axios.get(`${url}/api/getAd`).then((response) => {
-      if (response.data.length > 0) {
-        setNewad(response.data);
-        console.log(response.data);
-      }
-    });
+    // axios.get(`${url}/api/getbottomAd`).then((response) => {
+    //   if (response.data.length > 0) {
+    //     setAdslide(response.data);
+    //     console.log(response.data);
+    //   }
+    // });
+    // axios.get(`${url}/api/gettrendAd`).then((response) => {
+    //   if (response.data.length > 0) {
+    //     settrend(response.data);
+    //     console.log(response.data);
+    //   }
+    // });
+    // axios.get(`${url}/api/gettrendAd1`).then((response) => {
+    //   if (response.data.length > 0) {
+    //     settrend1(response.data);
+    //     console.log(response.data);
+    //   }
+    // });
+    // axios.get(`${url}/api/getAd`).then((response) => {
+    //   if (response.data.length > 0) {
+    //     setNewad(response.data);
+    //     console.log(response.data);
+    //   }
+    // });
   }, []);
   const trendReq = (x) => {
     console.log(trand[x]);

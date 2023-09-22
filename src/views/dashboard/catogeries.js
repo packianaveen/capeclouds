@@ -19,23 +19,24 @@ import 'swiper/css/pagination';
 import { EffectFade, Navigation, Pagination } from 'swiper/modules';
 const SamplePage = () => {
   const [data, setData] = useState([]);
+  const [name, setName] = useState('');
+  const [font, setFont] = useState('');
   const [open, setOpen] = useState(false);
   const [cat, setCat] = useState('');
   const [selectdata, setSelectdata] = useState(true);
   const [adSlide, setAdslide] = useState([]);
   const navigate = useNavigate();
+  const admin = JSON.parse(localStorage.getItem('user')).admin;
   useEffect(() => {
-    axios.get(`${url}/api/get-catogery`).then((response) => {
-      if (response.data.length > 0) {
-        console.log(response.data);
-        setData(response.data);
-      }
-    });
-    axios.get(`${url}/api/getbottomAd`).then((response) => {
-      if (response.data.length > 0) {
-        setAdslide(response.data);
-        console.log(response.data);
-      }
+    console.log(admin);
+    axios.get(`${url}/api/editCenter/${admin}`).then((response) => {
+      setData(JSON.parse(response.data.services));
+      axios.get(`${url}/api/getbottomAd`).then((res) => {
+        if (res.data.length > 0) {
+          setAdslide(res.data.filter((it) => it.admin == response.data.admin));
+          console.log(res.data.filter((it) => it.admin == response.data.admin));
+        }
+      });
     });
   }, []);
   const showAlert = () => {

@@ -42,6 +42,7 @@ const Tranding = () => {
   const [catogeries, setCatogeries] = useState([]);
   const [service, setService] = useState('');
   const [catogery, setCatogery] = useState('');
+  const admin = JSON.parse(localStorage.getItem('user'))._id;
   const [newad, setNewAd] = useState({
     name: '',
     service: '',
@@ -67,19 +68,19 @@ const Tranding = () => {
     axios.get(`${url}/api/gettrendAd1`).then((response) => {
       if (response.data.length > 0) {
         console.log(response.data);
-        setInitialAd(response.data);
+        setInitialAd(response.data.filter((it) => it.admin == admin));
       }
     });
     axios.get(`${url}/api/get-catogery`).then((response) => {
       if (response.data.length > 0) {
         console.log(response.data);
-        setCatogeries(response.data);
+        setCatogeries(response.data.filter((it) => it.admin == admin));
       }
     });
     axios.get(`${url}/api/get-service`).then((response) => {
       if (response.data.length > 0) {
         console.log(response.data);
-        setServices(response.data);
+        setServices(response.data.filter((it) => it.admin == admin));
       }
     });
   }, []);
@@ -88,8 +89,8 @@ const Tranding = () => {
     axios.get(`${url}/api/edittrendAd1/${id}`).then((response) => {
       setNewAd({ name: response.data.name, photo: response.data.photo, url: response.data.url });
       setOpen(true);
-      setCatogery(JSON.parse(response.data.catogery));
-      setService(JSON.parse(response.data.service));
+      setCatogery(JSON.parse(response.data.catogery.filter((it) => it.admin == admin)));
+      setService(JSON.parse(response.data.service.filter((it) => it.admin == admin)));
       setEditid(id);
       console.log(response.data.service);
       // setInitialAd(response.data);
@@ -101,7 +102,7 @@ const Tranding = () => {
       .then((response) => {
         console.log(response);
         const data = intialAd.filter((it) => it._id !== response.data._id);
-        setInitialAd(data);
+        setInitialAd(data.filter((it) => it.admin == admin));
         toast.success('SucessFully Updated');
       })
       .catch((error) => {
@@ -116,6 +117,7 @@ const Tranding = () => {
       service: JSON.stringify(service),
       catogery: JSON.stringify(catogery),
       photo: newad.photo,
+      admin: admin,
     };
     // // formData.append('photo', newad.photo);
     if (editid) {
@@ -184,6 +186,7 @@ const Tranding = () => {
         service: JSON.stringify(service),
         catogery: JSON.stringify(catogery),
         photo: newad.photo,
+        admin: admin,
       };
       console.log(ad);
       axios

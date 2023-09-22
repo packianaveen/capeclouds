@@ -225,9 +225,13 @@ const Login2 = () => {
                   </Stack>
                 }
               />
-              <p style={{ textAlign: 'center' }} onClick={handleOpen}>
-                Scan Qr Code
-              </p>
+              {phone.length > 10 ? (
+                <p style={{ textAlign: 'center' }} onClick={handleOpen}>
+                  Scan Qr Code
+                </p>
+              ) : (
+                ''
+              )}
             </Card>
           </Grid>
         </Grid>

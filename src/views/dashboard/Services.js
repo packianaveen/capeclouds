@@ -47,6 +47,7 @@ const Admin = () => {
   const [searchVal, setSearchVal] = useState('');
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
+  const admin = JSON.parse(localStorage.getItem('user'))._id;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -95,7 +96,7 @@ const Admin = () => {
     axios
       .get(`${url}/api/get-service`)
       .then((response) => {
-        setData(response.data);
+        setData(response.data.filter((it) => it.admin == admin));
       })
       .catch(function (error) {
         console.log(error);
@@ -140,6 +141,7 @@ const Admin = () => {
             orderNo: order,
             status: Status,
             photo: photo,
+            admin: admin,
           })
           .then((response) => {
             console.log((data.find((it) => it._id == editid).name = name));
@@ -169,6 +171,7 @@ const Admin = () => {
                   orderNo: order,
                   status: Status,
                   photo: photo,
+                  admin: admin,
                 },
                 {
                   headers: {
@@ -206,6 +209,7 @@ const Admin = () => {
             orderNo: order,
             status: Status,
             photo: photo,
+            admin: admin,
           },
           {
             headers: {

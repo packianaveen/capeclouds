@@ -50,6 +50,7 @@ const FrontEnd = () => {
   const [cat, setCat] = useState([]);
   const [defaultCat, setDefaultCat] = useState([]);
   const [topText, setToptext] = useState('Cape Clouds');
+  const admin = JSON.parse(localStorage.getItem('user'))._id;
   const [newad, setNewAd] = useState({
     name: '',
     url: '',
@@ -90,17 +91,18 @@ const FrontEnd = () => {
     axios.get(`${url}/api/getAd`).then((response) => {
       if (response.data.length > 0) {
         console.log(response.data);
-        console.log(intialAd.filter((it) => it._id == response.data._id));
-        setInitialAd(response.data);
+        console.log(
+          intialAd.filter((it) => it.admin == admin).filter((it) => it._id == response.data._id),
+        );
+        setInitialAd(response.data.filter((it) => it.admin == admin));
       }
     });
     axios
       .get(`${url}/api/get-service`)
       .then((response) => {
-        setDefaultCat(response.data.map((it) => ({ ...it, checked: false })));
-        // setCat(response.data.map((it) => ({ ...it, checked: false })));
-        console.log(response.data);
-        console.log(response.data.map((it) => ({ ...it, checked: false })));
+        setDefaultCat(
+          response.data.filter((it) => it.admin == admin).map((it) => ({ ...it, checked: false })),
+        );
       })
       .catch(function (error) {
         console.log(error);
@@ -161,6 +163,7 @@ const FrontEnd = () => {
       name: newad.name,
       services: JSON.stringify(cat),
       photo: newad.photo,
+      admin: admin,
     };
     console.log(ad.photo);
     if (editid) {
@@ -189,7 +192,6 @@ const FrontEnd = () => {
         axios
           .delete(`${url}/api/deleteAd/${editid}`)
           .then((response) => {
-            console.log(intialAd);
             const data = intialAd.filter((it) => it._id !== editid);
             console.log(data);
             // setInitialAd(data);
@@ -224,8 +226,8 @@ const FrontEnd = () => {
         name: newad.name,
         services: JSON.stringify(cat),
         photo: newad.photo,
+        admin: admin,
       };
-      console.log(ad.photo);
       axios
         .post(`${url}/api/add`, ad, {
           headers: {

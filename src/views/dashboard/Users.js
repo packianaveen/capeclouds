@@ -43,7 +43,7 @@ const Users = () => {
   const [intialAd, setInitialAd] = useState([]);
   const [center, setCenter] = useState([]);
   const [searchVal, setSearchVal] = useState('');
-
+  const admin = JSON.parse(localStorage.getItem('user'))._id;
   const [newad, setNewAd] = useState({
     name: '',
     url: '',
@@ -121,19 +121,38 @@ const Users = () => {
   useEffect(() => {
     axios.get(`${url}/api/getusers`).then((response) => {
       if (response.data.length > 0) {
-        // setCenter(response.data);
-        setInitialAd(response.data.filter((it) => it.type == '2'));
+        axios
+          .get(`${url}/api/getCenter`)
+          .then((res) => {
+            console.log(
+              response.data
+                .filter((val) => val.type == '2')
+                .filter((item) =>
+                  res.data
+                    .filter((it) => it.admin == admin)
+                    .map((it) => it._id)
+                    .includes(item.admin),
+                ),
+
+              res.data.filter((it) => it.admin == admin).map((it) => it._id),
+            );
+            setInitialAd(
+              response.data
+                .filter((val) => val.type == '2')
+                .filter((item) =>
+                  res.data
+                    .filter((it) => it.admin == admin)
+                    .map((it) => it._id)
+                    .includes(item.admin),
+                ),
+            );
+            setCenter(res.data);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
       }
     });
-    axios
-      .get(`${url}/api/getCenter`)
-      .then((response) => {
-        console.log(response.data);
-        setCenter(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
   }, []);
 
   const editElement = (id) => {
@@ -231,7 +250,7 @@ const Users = () => {
     boxShadow: 24,
     p: 4,
   };
-  console.log(center);
+
   return (
     <Box mt={4}>
       <DashboardCard title="Users">
