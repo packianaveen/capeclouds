@@ -51,7 +51,7 @@ const Sidebar = (props) => {
                 minHeight: '70px',
               }}
             >
-              <Logo />
+              <h2 to="/"> {props.name ? props.name : 'Cape Clouds'}</h2>
             </Box>
             <Box>
               <SidebarItems />
@@ -89,7 +89,7 @@ const Sidebar = (props) => {
           minHeight: '70px',
         }}
       >
-        <Logo />
+        <h2 to="/"> {props.name ? props.name : 'Cape Clouds'}</h2>
       </Box>
       {/* ------------------------------------------- */}
       {/* Sidebar For Mobile */}

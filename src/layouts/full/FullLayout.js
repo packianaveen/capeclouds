@@ -28,8 +28,8 @@ const FullLayout = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const [isMobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [topText, setToptext] = useState('');
-  const [name, setName] = useState('');
-  const [font, setFont] = useState('');
+  const [name, setName] = useState('Cape Clouds');
+  const [font, setFont] = useState(20);
   const admin = JSON.parse(localStorage.getItem('user')).admin;
   // const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
   useEffect(() => {
@@ -41,6 +41,9 @@ const FullLayout = () => {
           setFont(res.data.font);
         });
       });
+    } else {
+      setName(JSON.parse(localStorage.getItem('user')).name);
+      setFont(JSON.parse(localStorage.getItem('user')).font);
     }
   }, []);
   return (
@@ -83,6 +86,8 @@ const FullLayout = () => {
         {/* Sidebar */}
         {/* ------------------------------------------- */}
         <Sidebar
+          name={name}
+          font={font}
           isSidebarOpen={isSidebarOpen}
           isMobileSidebarOpen={isMobileSidebarOpen}
           onSidebarClose={() => setMobileSidebarOpen(false)}
