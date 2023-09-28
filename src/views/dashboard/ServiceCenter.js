@@ -350,7 +350,7 @@ const Admin = () => {
       console.log(response.data);
       setName(response.data.name);
       setAddress(response.data.address);
-      setPhone(response.data.phone);
+      setPhone(response.data.phoneNo);
       setPin(response.data.pin);
       setPhoto(response.data.photo);
       setEditid(id);

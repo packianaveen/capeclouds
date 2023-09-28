@@ -38,7 +38,14 @@ import { TablePagination, tablePaginationClasses as classes } from '@mui/base/Ta
 const Admin = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setName('');
+    setPhone('');
+    setPassword('');
+    setFont(20);
+    setPin('');
+  };
   const [name, setName] = useState('');
   const [font, setFont] = useState(20);
   const [data, setData] = useState([]);
@@ -128,36 +135,65 @@ const Admin = () => {
   };
   const createAdmins = () => {
     if (editid) {
+      // axios
+      //   .delete(`${url}/api/deleteuser/${editid}`)
+      //   .then((response) => {
+      //     // toast.success('SucessFully Updated');
+      //     const data1 = data.filter((it) => it._id !== editid);
+      //     axios
+      //       .post(`${url}/api/updateUser`, {
+      //         phone: phone,
+      //         pin: pin,
+      //         password: password,
+      //         type: '3',
+      //         status: Status,
+      //         font: font,
+      //         name: name,
+      //         id: editid,
+      //       })
+      //       .then((response) => {
+      //         console.log(response);
+      //         setData([...data1, response.data]);
+      //         setOpen(false);
+      //         toast.success('SucessFully Updated');
+      //       })
+      //       .catch((error) => {
+      //         toast.error('failed');
+      //         console.log(error);
+      //         setOpen(false);
+      //       });
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //     toast.error('failed');
+      //   });
       axios
-        .delete(`${url}/api/deleteuser/${editid}`)
+        .post(`${url}/api/updateUser`, {
+          phone: phone,
+          pin: pin,
+          password: password,
+          type: '3',
+          status: Status,
+          font: font,
+          name: name,
+          _id: editid,
+        })
         .then((response) => {
-          // toast.success('SucessFully Updated');
           const data1 = data.filter((it) => it._id !== editid);
-          axios
-            .post(`${url}/api/userAd`, {
-              phone: phone,
-              pin: pin,
-              password: password,
-              type: '3',
-              status: Status,
-              font: font,
-              name: name,
-            })
-            .then((response) => {
-              console.log(response);
-              setData([...data1, response.data]);
-              setOpen(false);
-              toast.success('SucessFully Updated');
-            })
-            .catch((error) => {
-              toast.error('failed');
-              console.log(error);
-              setOpen(false);
-            });
+          console.log(response);
+          setData([...data1, response.data]);
+          setOpen(false);
+          setName('');
+          setPhone('');
+          setPassword('');
+          setFont(20);
+          setPin('');
+          toast.success('SucessFully Updated');
         })
         .catch((error) => {
-          console.log(error);
           toast.error('failed');
+          console.log(error);
+          setOpen(false);
         });
     } else {
       axios
@@ -173,6 +209,11 @@ const Admin = () => {
         .then((response) => {
           console.log(response);
           setData([...filteredData, response.data]);
+          setName('');
+          setPhone('');
+          setPassword('');
+          setFont(20);
+          setPin('');
           setOpen(false);
           toast.success('SucessFully Updated');
         })

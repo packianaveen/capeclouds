@@ -90,7 +90,7 @@ const Login2 = () => {
           toast.success('SucessFully Updated');
           localStorage.setItem('user', JSON.stringify(response.data[0]));
           auth.login(roles.type);
-          if (roles.type == 1) {
+          if (roles.type == 1 || roles.type == 3) {
             navigate('/', { replace: true });
           } else {
             navigate('/catogeries', { replace: true });

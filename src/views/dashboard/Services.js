@@ -36,7 +36,13 @@ import { styled } from '@mui/system';
 const Admin = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setName('');
+    setOrder('');
+    setPhoto('');
+    Setstatus('');
+  };
   const [name, setName] = useState('');
   const [order, setOrder] = useState('');
   const [data, setData] = useState([]);
