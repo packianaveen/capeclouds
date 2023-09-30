@@ -6,6 +6,7 @@ import Agroservices from 'src/views/dashboard/agroServices';
 import SmartServiceAdmin from 'src/views/dashboard/SmartserviceAdmin';
 import Profile from 'src/layouts/full/header/Profile';
 import ProfileUpdate from 'src/views/dashboard/Profile';
+import ForgetPass from 'src/views/authentication/ForgetPass';
 
 /* ***Layouts**** */
 const FullLayout = Loadable(lazy(() => import('../layouts/full/FullLayout')));
@@ -136,6 +137,7 @@ const Router = (auth) => {
         { path: '/auth/register/:phone?/:id?', element: <Register /> },
         { path: '/auth/option/:phone/:id?', element: <Option /> },
         { path: '/auth/login/:id?', element: <Login /> },
+        { path: '/auth/forgetpassword/:id?', element: <ForgetPass /> },
         { path: '*', element: <Navigate to="/auth/404" /> },
       ],
     },

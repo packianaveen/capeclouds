@@ -1,41 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Grid, Box, Card, Stack, Typography } from '@mui/material';
+import { Grid, Box, Card, Stack, Button } from '@mui/material';
 import axios from 'axios';
 // components
 import PageContainer from 'src/components/container/PageContainer';
 import Logo from 'src/layouts/full/shared/logo/Logo';
 import AuthLogin from './auth/AuthLogin';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
-import CustomTextField from '../../components/forms/theme-elements/CustomTextField';
+import { QrReader } from 'react-qr-reader';
 import { PhoneEnabled } from '@mui/icons-material';
 import bgvideo from 'src/assets/bg.mp4';
 import { ToastContainer, toast } from 'react-toastify';
 import { useAuth } from '../../routes/AuthProvider';
 import { useLocation } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
-import { url } from '../../constant';
-import { replace } from 'lodash';
+import CustomTextField from '../../components/forms/theme-elements/CustomTextField';
+import { url } from 'src/constant';
 import Modal from '@mui/material/Modal';
-import { QrReader } from 'react-qr-reader';
-const Login2 = () => {
-  const [phone, setPhone] = useState('');
+import { replace } from 'lodash';
+import { IconEye, IconEyeOff } from '@tabler/icons';
+import { InputAdornment, IconButton } from '@mui/material';
+const ForgetPass = () => {
+  // const [phone, setPhone] = useState('');
   const [pin, setPin] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPass, setconfirmPass] = useState('');
   const [login, setLogin] = useState(false);
   const [reg, setReg] = useState(false);
   const [open, setOpen] = React.useState(false);
-  const [current, setCurrent] = React.useState('');
   const [type, setType] = useState('password');
-  // const navigate = useNavigate();
-  let { id } = useParams();
-  const auth = useAuth();
-  console.log(id);
-  const navigate = useNavigate();
-  const location = useLocation();
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  let { phone, id } = useParams();
+  console.log(phone, id);
+  // const navigate = useNavigate();
+  const auth = useAuth();
+
+  const navigate = useNavigate();
+  const location = useLocation();
   const from = location.state?.from?.pathname || '/';
   console.log(auth.user);
   const verifyCaptcha = () => {
@@ -47,19 +50,6 @@ const Login2 = () => {
       },
     });
   };
-  const submitLogin = () => {
-    axios.get(`${url}/api/getPhone/${phone}`).then((response) => {
-      setCurrent(response.data[0]._id);
-      console.log(response.data[0]._id);
-      if (response.data.length > 0) {
-        setLogin(true);
-      } else {
-        navigate(`/auth/register/${phone}/${id}`, { replace: true });
-        // setLogin(false);
-        // setReg(true);
-      }
-    });
-  };
   const handleToggle = () => {
     console.log(type);
     if (type === 'password') {
@@ -67,6 +57,34 @@ const Login2 = () => {
     } else {
       setType('password');
     }
+  };
+
+  const changepass = () => {
+    axios
+      .post(`${url}/api/updateUser`, {
+        password: password,
+        _id: id,
+      })
+      .then((response) => {
+        console.log(response);
+        toast.success('SucessFully Updated');
+        navigate('/auth/login');
+      })
+      .catch((error) => {
+        toast.error('failed');
+        console.log(error);
+      });
+  };
+  const submitLogin = () => {
+    axios.get(`${url}/api/getPhone/${phone}`).then((response) => {
+      console.log(response.data);
+      if (response.data.length > 0) {
+        setLogin(true);
+      } else {
+        setLogin(false);
+        setReg(true);
+      }
+    });
   };
   const style = {
     position: 'fixed',
@@ -92,7 +110,7 @@ const Login2 = () => {
           toast.success('SucessFully Updated');
           localStorage.setItem('user', JSON.stringify(response.data[0]));
           auth.login(roles.type);
-          if (roles.type == 1 || roles.type == 3) {
+          if (roles.type == 1) {
             navigate('/', { replace: true });
           } else {
             navigate('/catogeries', { replace: true });
@@ -107,9 +125,6 @@ const Login2 = () => {
         toast.error('failed');
         console.log(error);
       });
-  };
-  const handleForget = () => {
-    navigate(`/auth/forgetpassword/${current}`, { replace: true });
   };
   const submitRegister = () => {
     axios
@@ -145,7 +160,7 @@ const Login2 = () => {
       />
       <section
         style={{
-          position: 'fixed',
+          position: 'absolute',
           top: 0,
           left: 0,
           width: '100%',
@@ -192,52 +207,66 @@ const Login2 = () => {
               <Box display="flex" alignItems="center" justifyContent="center">
                 <Logo />
               </Box>
-              <AuthLogin
-                type={type}
-                handleToggle={handleToggle}
-                phone={phone}
-                setPhone={setPhone}
-                login={login}
-                reg={reg}
-                pin={pin}
-                setPin={setPin}
-                password={password}
-                setPassword={setPassword}
-                submitLogin={submitLogin}
-                submitAccLogin={submitAccLogin}
-                submitRegister={submitRegister}
-                handleForget={handleForget}
-                subtext={
-                  <Typography variant="subtitle1" textAlign="center" color="textSecondary" mb={1}>
-                    Login
-                  </Typography>
-                }
-                subtitle={
-                  <Stack direction="row" spacing={1} justifyContent="center" mt={3}>
-                    <Typography color="textSecondary" variant="h6" fontWeight="500">
-                      New to Modernize?
-                    </Typography>
-                    <Typography
-                      component={Link}
-                      to="/auth/register"
-                      fontWeight="500"
-                      sx={{
-                        textDecoration: 'none',
-                        color: 'primary.main',
-                      }}
-                    >
-                      Create an account
-                    </Typography>
-                  </Stack>
-                }
-              />
-              {phone.length > 10 ? (
-                <p style={{ textAlign: 'center' }} onClick={handleOpen}>
-                  Scan Qr Code
-                </p>
-              ) : (
-                ''
-              )}
+              <Box m={2} display="flex" alignItems="center" justifyContent="center">
+                <CustomTextField
+                  id="otp"
+                  type={type}
+                  label="Password"
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                  value={password}
+                  variant="outlined"
+                  fullWidth
+                  InputProps={{
+                    // <-- This is where the toggle button is added.
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton aria-label="toggle password visibility" onClick={handleToggle}>
+                          {type == 'password' ? <IconEyeOff /> : <IconEye />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Box>
+              <Box m={2} display="flex" alignItems="center" justifyContent="center">
+                <CustomTextField
+                  id="otp"
+                  type={type}
+                  label="Confirm Password"
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                  value={password}
+                  variant="outlined"
+                  fullWidth
+                  InputProps={{
+                    // <-- This is where the toggle button is added.
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton aria-label="toggle password visibility" onClick={handleToggle}>
+                          {type == 'password' ? <IconEyeOff /> : <IconEye />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Box>
+              <Box m={2} display="flex" alignItems="center" justifyContent="center">
+                <Button
+                  color="primary"
+                  variant="contained"
+                  size="large"
+                  fullWidth
+                  // component={Link}
+                  to="/"
+                  type="submit"
+                  onClick={changepass}
+                >
+                  Submit
+                </Button>
+              </Box>
             </Card>
           </Grid>
         </Grid>
@@ -245,18 +274,15 @@ const Login2 = () => {
       <Modal open={open} onClose={handleClose}>
         <Box sx={style} component="form">
           <QrReader
-            constraints={{ facingMode: 'environment' }}
-            onResult={(result, error) => {
-              if (!!result) {
-                console.log(`/auth/login/${result?.text}`);
-                navigate(`/auth/login/${result?.text}`);
-                handleClose();
-              }
+            // onResult={(result, error) => {
+            //   if (!!result) {
+            //     setData(result?.text);
+            //   }
 
-              if (!!error) {
-                console.info(error);
-              }
-            }}
+            //   if (!!error) {
+            //     console.info(error);
+            //   }
+            // }}
             style={{ width: '100%' }}
           />
           {/* <p>{data}</p> */}
@@ -266,4 +292,4 @@ const Login2 = () => {
   );
 };
 
-export default Login2;
+export default ForgetPass;

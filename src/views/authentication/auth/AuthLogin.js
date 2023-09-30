@@ -28,6 +28,7 @@ const AuthLogin = ({
   submitAccLogin,
   submitRegister,
   handleToggle,
+  handleForget,
   type,
   reg,
 }) => (
@@ -97,6 +98,17 @@ const AuthLogin = ({
               />
             )}
           </span> */}
+          <span
+            style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              marginTop: '10px',
+              cursor: 'pointer',
+            }}
+            onClick={handleForget}
+          >
+            Forget password?
+          </span>
         </>
       ) : (
         ''
