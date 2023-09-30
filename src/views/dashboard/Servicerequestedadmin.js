@@ -104,47 +104,73 @@ const Servicerequestedadmin = () => {
     }
   `;
   useEffect(() => {
-    axios
-      .get(`${url}/api/getusers`)
-      .then((response) => {
-        console.log(response.data);
-        setUsers(response.data);
+    // axios
+    //   .get(`${url}/api/getusers`)
+    //   .then((response) => {
+    //     console.log(response.data);
+    //     setUsers(response.data);
+    //     axios
+    //       .get(`${url}/api/getRequestedservice`)
+    //       .then((res) => {
+    //         let out = [];
+    //         console.log(
+    //           res.data.filter((it) => it.type == '1'),
+    //           response.data.filter((it) => it.admin == admin),
+    //         );
+    //         setData(res.data.filter((it) => it.type == '1'));
+    //       })
+    //       .catch(function (error) {
+    //         console.log(error);
+    //       });
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
+    axios.get(`${url}/api/getRequestedservice`).then((response) => {
+      if (response.data.length > 0) {
         axios
-          .get(`${url}/api/getRequestedservice`)
+          .get(`${url}/api/getCenter`)
           .then((res) => {
-            let out = [];
-            // console.log(
-            //   res.data
-            //     .filter((it) => it.type == '1')
-            //     .map((item, x) => {
-            //       item.adminName = 'Default';
-            //       let admin = JSON.parse(item.user).admin;
-            //       axios
-            //         .get(`${url}/api/editCenter/${admin}`)
-            //         .then((re) => {
-            //           out[x] = re.data.name;
-            //           console.log(out);
-            //           setCenterArr(out);
-            //           return out;
-            //         })
-            //         .catch((error) => {
-            //           // data.push('Default');
-            //         });
-            //     }),
-            // );
-            console.log(
-              res.data.filter((it) => it.type == '1'),
-              response.data.filter((it) => it.admin == admin),
+            setData(
+              response.data
+                .filter((val) => val.type == '1')
+                .filter((item) =>
+                  res.data
+                    .filter((it) => it.admin == admin)
+                    .map((it) => it._id)
+                    .includes(JSON.parse(item.user).admin),
+                ),
+              response.data.filter((val) => val.type == '1'),
+              res.data.filter((it) => it.admin == admin).map((it) => it._id),
             );
-            setData(res.data.filter((it) => it.type == '1'));
+            // console.log(
+            //   response.data
+            //     .filter((val) => val.type == '2')
+            //     .filter((item) =>
+            //       res.data
+            //         .filter((it) => it.admin == admin)
+            //         .map((it) => it._id)
+            //         .includes(item.admin),
+            //     ),
+            // );
+            // setCenter(res.data);
+            // axios
+            //   .get(`${url}/api/getRequestedservice`)
+            //   .then((re) => {
+            //     let out = [];
+            //     console.log(res.data.filter((it) => it.admin == admin));
+            //     console.log(re.data.filter((it) => it.type == '1').filter((item) => item));
+            //     setData(re.data.filter((it) => it.type == '1'));
+            //   })
+            //   .catch(function (error) {
+            //     console.log(error);
+            //   });
           })
           .catch(function (error) {
             console.log(error);
           });
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+      }
+    });
   }, []);
   const handlereport = () => {
     const doc = new jsPDF();
