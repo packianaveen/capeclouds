@@ -49,9 +49,9 @@ const Login2 = () => {
   };
   const submitLogin = () => {
     axios.get(`${url}/api/getPhone/${phone}`).then((response) => {
-      setCurrent(response.data[0]._id);
-      console.log(response.data[0]._id);
       if (response.data.length > 0) {
+        setCurrent(response.data[0]._id);
+        console.log(response.data[0]._id);
         setLogin(true);
       } else {
         navigate(`/auth/register/${phone}/${id}`, { replace: true });

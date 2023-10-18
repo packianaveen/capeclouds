@@ -122,12 +122,7 @@ const SamplePage = () => {
           >
             {adSlide.map((it) => (
               <SwiperSlide style={{ width: '100% !important' }}>
-                <img
-                  height="120px"
-                  width="100%"
-                  src={`${url}/Images/` + it.photo}
-                  style={{ borderRadius: '15px' }}
-                />
+                <img height="120px" width="100%" src={it.photo} style={{ borderRadius: '15px' }} />
               </SwiperSlide>
             ))}
           </Swiper>
@@ -180,12 +175,7 @@ const SamplePage = () => {
               }}
             >
               <CardContent>
-                <img
-                  style={{ objectFit: 'contain' }}
-                  height="100%"
-                  width="100%"
-                  src={`${url}/Images/` + it.photo}
-                />
+                <img style={{ objectFit: 'contain' }} height="100%" width="100%" src={it.photo} />
               </CardContent>
             </Card>
             <div
@@ -245,7 +235,7 @@ const SamplePage = () => {
                           style={{ objectFit: 'fill' }}
                           height="80px"
                           width="100%"
-                          src={`${url}/Images/` + it.photo}
+                          src={it.photo}
                         />
                         <Typography
                           style={{

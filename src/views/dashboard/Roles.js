@@ -179,7 +179,7 @@ const Admin = () => {
                       <TableCell align="right">{it.status}</TableCell>
                       <TableCell align="right">{it.orderNo}</TableCell>
                       <TableCell align="right">
-                        <img height="40px" width="60px" src={`${url}/Images/` + it.photo} />
+                        <img height="40px" width="60px" src={it.photo} />
                       </TableCell>
                       <TableCell align="right">
                         <DeleteIcon

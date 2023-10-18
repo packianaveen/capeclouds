@@ -14,6 +14,8 @@ import {
   OutlinedInput,
   FilledInput,
 } from '@mui/material';
+import { Cloudinary } from '@cloudinary/url-gen';
+import { Buffer } from 'buffer';
 import PageContainer from 'src/components/container/PageContainer';
 import DashboardCard from '../../components/shared/DashboardCard';
 import Modal from '@mui/material/Modal';
@@ -63,7 +65,7 @@ const Admin = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
+  const cld = new Cloudinary({ cloud: { cloudName: 'dvteifdi3' } });
   const CustomTablePagination = styled(TablePagination)`
     & .${classes.toolbar} {
       display: flex;
@@ -103,6 +105,20 @@ const Admin = () => {
       .get(`${url}/api/get-service`)
       .then((response) => {
         setData(response.data.filter((it) => it.admin == admin));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    axios
+      .get(`https://api.cloudinary.com/v1_1/dvteifdi3/resources/image`, {
+        headers: {
+          Authorization: `Basic ${Buffer.from(
+            process.env.CLOUDINARY_API_KEY + ':' + process.env.CLOUDINARY_API_SECRET,
+          ).toString('base64')}`,
+        },
+      })
+      .then((response) => {
+        console.log(response);
       })
       .catch(function (error) {
         console.log(error);
@@ -408,7 +424,8 @@ const Admin = () => {
                       </TableCell>
                       <TableCell align="center">{it.orderNo}</TableCell>
                       <TableCell align="center">
-                        <img height="40px" width="60px" src={`${url}/Images/` + it.photo} />
+                        {/* <img height="40px" width="60px" src={`${url}/Images/` + it.photo} /> */}
+                        <img height="40px" width="60px" src={it.photo} />
                       </TableCell>
                       <TableCell align="center">
                         <DeleteIcon

@@ -360,7 +360,7 @@ const FrontEnd = () => {
                       <TableCell align="right">{it.name}</TableCell>
                       {/* <TableCell align="right">{it.url}</TableCell> */}
                       <TableCell align="right">
-                        <img height="40px" width="60px" src={`${url}/Images/` + it.photo} />
+                        <img height="40px" width="60px" src={it.photo} />
                       </TableCell>
                       <TableCell align="right">
                         <Box>

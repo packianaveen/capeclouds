@@ -430,7 +430,7 @@ const Admin = () => {
                       <TableCell align="center">{it.pin}</TableCell>
 
                       <TableCell align="center">
-                        <img height="40px" width="60px" src={`${url}/Images/` + it.photo} />
+                        <img height="40px" width="60px" src={it.photo} />
                       </TableCell>
                       <TableCell align="center">
                         <div

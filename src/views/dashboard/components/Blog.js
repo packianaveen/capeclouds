@@ -174,12 +174,7 @@ const AdSlide = () => {
           <div>
             <div onClick={() => handleClick(it._id)}>
               {' '}
-              <img
-                height="auto"
-                width="100%"
-                src={`${url}/Images/` + it.photo}
-                style={{ borderRadius: '15px' }}
-              />
+              <img height="auto" width="100%" src={it.photo} style={{ borderRadius: '15px' }} />
             </div>
           </div>
         ))}
@@ -201,12 +196,7 @@ const AdSlide = () => {
         >
           {trand.map((it, x) => (
             <SwiperSlide>
-              <img
-                height="200px"
-                width="100%"
-                src={`${url}/Images/` + it.photo}
-                onClick={() => trendReq(x)}
-              />
+              <img height="200px" width="100%" src={it.photo} onClick={() => trendReq(x)} />
             </SwiperSlide>
           ))}
         </Swiper>
@@ -228,12 +218,7 @@ const AdSlide = () => {
         >
           {trand1.map((it, x) => (
             <SwiperSlide>
-              <img
-                height="200px"
-                width="100%"
-                src={`${url}/Images/` + it.photo}
-                onClick={() => trendReq1(x)}
-              />
+              <img height="200px" width="100%" src={it.photo} onClick={() => trendReq1(x)} />
             </SwiperSlide>
           ))}
         </Swiper>

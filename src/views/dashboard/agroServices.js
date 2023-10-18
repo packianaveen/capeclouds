@@ -123,12 +123,7 @@ const Agroservices = () => {
               }}
             >
               <CardContent>
-                <img
-                  style={{ objectFit: 'contain' }}
-                  height="100%"
-                  width="100%"
-                  src={`${url}/Images/` + it.photo}
-                />
+                <img style={{ objectFit: 'contain' }} height="100%" width="100%" src={it.photo} />
               </CardContent>
             </Card>
             <div
