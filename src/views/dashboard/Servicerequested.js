@@ -160,31 +160,37 @@ const Servicerequested = () => {
               {data && (
                 <TableBody>
                   {data.map((it, x) => (
-                    <TableRow
-                      key={it._id}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {x + 1}
-                      </TableCell>
-                      <TableCell align="center">{JSON.parse(it.catagery).name}</TableCell>
-                      <TableCell align="center">{JSON.parse(it.service).name}</TableCell>
-                      <TableCell align="center">
-                        <p
-                          style={{
-                            color: 'white',
-                            background: 'green',
-                            borderRadius: '5px',
-                            padding: '3px',
-                          }}
+                    <>
+                      {it.status == 'open' ? (
+                        <TableRow
+                          key={it._id}
+                          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
-                          {it.status}
-                        </p>
-                      </TableCell>
-                      <TableCell align="center">
-                        {moment(it.createdAt).format('DD/MM/YYYY')}
-                      </TableCell>
-                    </TableRow>
+                          <TableCell component="th" scope="row">
+                            {x + 1}
+                          </TableCell>
+                          <TableCell align="center">{JSON.parse(it.catagery).name}</TableCell>
+                          <TableCell align="center">{JSON.parse(it.service).name}</TableCell>
+                          <TableCell align="center">
+                            <p
+                              style={{
+                                color: 'white',
+                                background: 'green',
+                                borderRadius: '5px',
+                                padding: '3px',
+                              }}
+                            >
+                              {it.status}
+                            </p>
+                          </TableCell>
+                          <TableCell align="center">
+                            {moment(it.createdAt).format('DD/MM/YYYY')}
+                          </TableCell>
+                        </TableRow>
+                      ) : (
+                        ''
+                      )}
+                    </>
                   ))}
                 </TableBody>
               )}

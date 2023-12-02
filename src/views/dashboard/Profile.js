@@ -30,6 +30,7 @@ const ProfileUpdate = () => {
   const [address, setAddress] = useState('');
   const [type, setType] = useState('');
   const [photo, setPhoto] = useState('');
+  const [editid, setEditid] = useState('');
   const [userDb, setuserDb] = useState('');
   const handlePhoto = (e) => {
     console.log(e.target.files[0]);
@@ -53,40 +54,65 @@ const ProfileUpdate = () => {
     setPhone(user.phone);
   }, []);
   const handleSave = () => {
-    if (userDb.length > 0) {
-      axios
-        .delete(`${url}/api/delete-profile/${userDb}`)
-        .then((response) => {
-          axios
-            .post(
-              `${url}/api/profileSave`,
-              {
-                name: name,
-                phone: phone,
-                city: city,
-                photo: photo,
-                address: address,
-                user: JSON.parse(localStorage.getItem('user'))._id,
-              },
-              {
-                headers: {
-                  'Content-Type': 'multipart/form-data',
+    if (userDb) {
+      if (typeof photo == 'string') {
+        axios
+          .patch(`${url}/api/profileEdit/${userDb}`, {
+            name: name,
+            phone: phone,
+            city: city,
+            photo: photo,
+            address: address,
+            user: JSON.parse(localStorage.getItem('user'))._id,
+          })
+          .then((response) => {
+            // console.log((data.find((it) => it._id == editid).name = name));
+
+            // intialAd.find((it) => it._id == editid).photo = newad.photo;
+            // setInitialAd([...intialAd, response.data]);
+            // setOpen(false);
+
+            toast.success('SucessFully Updated');
+          })
+          .catch((err) => {
+            toast.error('failed');
+            // setOpen(false);
+          });
+      } else {
+        axios
+          .delete(`${url}/api/delete-profile/${userDb}`)
+          .then((response) => {
+            axios
+              .post(
+                `${url}/api/profileSave`,
+                {
+                  name: name,
+                  phone: phone,
+                  city: city,
+                  photo: photo,
+                  address: address,
+                  user: JSON.parse(localStorage.getItem('user'))._id,
                 },
-              },
-            )
-            .then((response) => {
-              console.log(response.data[0]);
-              toast.success('SucessFully Updated');
-            })
-            .catch((error) => {
-              toast.error('failed');
-              console.log(error);
-            });
-        })
-        .catch((error) => {
-          console.log(error);
-          toast.error('failed');
-        });
+                {
+                  headers: {
+                    'Content-Type': 'multipart/form-data',
+                  },
+                },
+              )
+              .then((response) => {
+                console.log(response.data[0]);
+                toast.success('SucessFully Updated');
+              })
+              .catch((error) => {
+                toast.error('failed');
+                console.log(error);
+              });
+          })
+          .catch((error) => {
+            console.log(error);
+            toast.error('failed');
+          });
+      }
     } else {
       axios
         .post(
@@ -115,6 +141,68 @@ const ProfileUpdate = () => {
         });
     }
   };
+  // if (userDb.length > 0) {
+  //   axios
+  //     .delete(`${url}/api/delete-profile/${userDb}`)
+  //     .then((response) => {
+  //       axios
+  //         .post(
+  //           `${url}/api/profileSave`,
+  //           {
+  //             name: name,
+  //             phone: phone,
+  //             city: city,
+  //             photo: photo,
+  //             address: address,
+  //             user: JSON.parse(localStorage.getItem('user'))._id,
+  //           },
+  //           {
+  //             headers: {
+  //               'Content-Type': 'multipart/form-data',
+  //             },
+  //           },
+  //         )
+  //         .then((response) => {
+  //           console.log(response.data[0]);
+  //           toast.success('SucessFully Updated');
+  //         })
+  //         .catch((error) => {
+  //           toast.error('failed');
+  //           console.log(error);
+  //         });
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       toast.error('failed');
+  //     });
+  // } else {
+  //   axios
+  //     .post(
+  //       `${url}/api/profileSave`,
+  //       {
+  //         name: name,
+  //         phone: phone,
+  //         city: city,
+  //         photo: photo,
+  //         address: address,
+  //         user: JSON.parse(localStorage.getItem('user'))._id,
+  //       },
+  //       {
+  //         headers: {
+  //           'Content-Type': 'multipart/form-data',
+  //         },
+  //       },
+  //     )
+  //     .then((response) => {
+  //       console.log(response.data[0]);
+  //       toast.success('SucessFully Updated');
+  //     })
+  //     .catch((error) => {
+  //       toast.error('failed');
+  //       console.log(error);
+  //     });
+  // }
+
   console.log(photo);
   return (
     <PageContainer title="Profile Page">

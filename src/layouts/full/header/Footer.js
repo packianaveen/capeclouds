@@ -81,7 +81,7 @@ const Footer = (props) => {
             <YouTube />
           </Link>
         </Item>
-        <Item>Call Center (24X7) : 155 257</Item>{' '}
+        <Item>Call Center (24X7) : +91 9345278844</Item>{' '}
         <Item>Copyright © 2023 Cape clouds - All rights reserved</Item>
         <Item>Terms and conditions</Item>
       </Box>

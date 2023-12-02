@@ -30,26 +30,27 @@ import moment from 'moment/moment';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { url } from 'src/constant';
-const ServiceHistory = () => {
+const Servicerequested = () => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [name, setName] = useState('');
   const [order, setOrder] = useState('');
-  const [data, setData] = useState('');
+  const [data, setData] = useState([]);
   const [photo, setPhoto] = useState('');
   const [Status, Setstatus] = useState('Enable');
-  //   useEffect(() => {
-  //     axios
-  //       .get('${url}/api/getRequestedservice')
-  //       .then((response) => {
-  //         console.log(response.data);
-  //         setData(response.data);
-  //       })
-  //       .catch(function (error) {
-  //         console.log(error);
-  //       });
-  //   }, []);
+  let id = JSON.parse(localStorage.getItem('user'))._id;
+  useEffect(() => {
+    axios
+      .get(`${url}/api/getRequestedservice`)
+      .then((response) => {
+        console.log(response.data.filter((it) => JSON.parse(it.user)._id == id));
+        setData(response.data.filter((it) => JSON.parse(it.user)._id == id));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }, []);
 
   const style = {
     position: 'fixed',
@@ -159,45 +160,37 @@ const ServiceHistory = () => {
               {data && (
                 <TableBody>
                   {data.map((it, x) => (
-                    <TableRow
-                      key={it._id}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {x + 1}
-                      </TableCell>
-                      <TableCell align="center">{JSON.parse(it.catagery).name}</TableCell>
-                      <TableCell align="center">
-                        {JSON.parse(it.service)
-                          .filter((it) => it.req == true)
-                          .map((item) => item.name)}
-                      </TableCell>
-                      <TableCell align="center">
-                        <p
-                          style={{
-                            color: 'white',
-                            background: 'green',
-                            borderRadius: '5px',
-                            padding: '3px',
-                          }}
+                    <>
+                      {it.status == 'close' ? (
+                        <TableRow
+                          key={it._id}
+                          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >
-                          <div
-                            style={{
-                              background: it.status == 'Enable' ? '#34c38f' : '#ef6767',
-                              padding: '2px',
-                              width: '100%',
-                              color: 'white',
-                              borderRadius: '5px',
-                            }}
-                          >
-                            {it.status}
-                          </div>
-                        </p>
-                      </TableCell>
-                      <TableCell align="center">
-                        {moment(it.createdAt).format('DD/MM/YYYY')}
-                      </TableCell>
-                    </TableRow>
+                          <TableCell component="th" scope="row">
+                            {x + 1}
+                          </TableCell>
+                          <TableCell align="center">{JSON.parse(it.catagery).name}</TableCell>
+                          <TableCell align="center">{JSON.parse(it.service).name}</TableCell>
+                          <TableCell align="center">
+                            <p
+                              style={{
+                                color: 'white',
+                                background: 'red',
+                                borderRadius: '5px',
+                                padding: '3px',
+                              }}
+                            >
+                              {it.status}
+                            </p>
+                          </TableCell>
+                          <TableCell align="center">
+                            {moment(it.createdAt).format('DD/MM/YYYY')}
+                          </TableCell>
+                        </TableRow>
+                      ) : (
+                        ''
+                      )}
+                    </>
                   ))}
                 </TableBody>
               )}
@@ -209,4 +202,4 @@ const ServiceHistory = () => {
   );
 };
 
-export default ServiceHistory;
+export default Servicerequested;
