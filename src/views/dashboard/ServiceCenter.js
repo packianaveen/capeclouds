@@ -483,7 +483,7 @@ const Admin = () => {
                         <DownloadIcon style={{ cursor: 'pointer' }} />
                       </TableCell>
                       <TableCell align="center">
-                        <DeleteIcon
+                        {/* <DeleteIcon
                           style={{
                             fontSize: '30px',
                             color: 'white',
@@ -493,7 +493,7 @@ const Admin = () => {
                             background: '#ef6767',
                           }}
                           onClick={() => deleteCatogory(it._id)}
-                        />
+                        /> */}
 
                         <EditIcon
                           style={{

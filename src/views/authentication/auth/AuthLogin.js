@@ -98,17 +98,21 @@ const AuthLogin = ({
               />
             )}
           </span> */}
-          <span
-            style={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              marginTop: '10px',
-              cursor: 'pointer',
-            }}
-            onClick={handleForget}
-          >
-            Forget password?
-          </span>
+          {JSON.parse(localStorage.getItem('user'))?.type == 2 ? (
+            <span
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                marginTop: '10px',
+                cursor: 'pointer',
+              }}
+              onClick={handleForget}
+            >
+              Forget password?
+            </span>
+          ) : (
+            ''
+          )}
         </>
       ) : (
         ''
@@ -131,18 +135,28 @@ const AuthLogin = ({
     </Stack>
     <Box mt={3}>
       {login || reg ? (
-        <Button
-          color="primary"
-          variant="contained"
-          size="large"
-          fullWidth
-          // component={Link}
-          to="/"
-          type="submit"
-          onClick={reg ? submitRegister : submitAccLogin}
-        >
-          Submit
-        </Button>
+        <>
+          <Button
+            color="primary"
+            variant="contained"
+            size="large"
+            fullWidth
+            // component={Link}
+            to="/"
+            disabled={JSON.parse(localStorage.getItem('user'))?.status == 'Disable'}
+            type="submit"
+            onClick={reg ? submitRegister : submitAccLogin}
+          >
+            Submit
+          </Button>
+          {JSON.parse(localStorage.getItem('user'))?.status == 'Disable' ? (
+            <span className="center" style={{ textAlign: 'center' }}>
+              Account suspended call the admin
+            </span>
+          ) : (
+            ''
+          )}
+        </>
       ) : (
         <Box>
           <Button
