@@ -19,6 +19,8 @@ import PageContainer from 'src/components/container/PageContainer';
 import DashboardCard from '../../components/shared/DashboardCard';
 import CustomTextField from '../../components/forms/theme-elements/CustomTextField';
 import MuiPhoneNumber from 'mui-phone-number';
+import { Cloudinary } from '@cloudinary/url-gen';
+import { Buffer } from 'buffer';
 import { ToastContainer, toast } from 'react-toastify';
 import { url } from 'src/constant';
 
@@ -51,95 +53,47 @@ const ProfileUpdate = () => {
         setuserDb(response.data[0]._id);
       }
     });
+    axios
+      .get(`https://api.cloudinary.com/v1_1/dvteifdi3/resources/image`, {
+        headers: {
+          Authorization: `Basic ${Buffer.from(
+            process.env.CLOUDINARY_API_KEY + ':' + process.env.CLOUDINARY_API_SECRET,
+          ).toString('base64')}`,
+        },
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     setPhone(user.phone);
   }, []);
   const handleSave = () => {
-    if (userDb) {
-      if (typeof photo == 'string') {
-        axios
-          .patch(`${url}/api/profileEdit/${userDb}`, {
-            name: name,
-            phone: phone,
-            city: city,
-            photo: photo,
-            address: address,
-            user: JSON.parse(localStorage.getItem('user'))._id,
-          })
-          .then((response) => {
-            // console.log((data.find((it) => it._id == editid).name = name));
+    const user = JSON.parse(localStorage.getItem('user'));
+    console.log(photo);
+    axios
+      .patch(`${url}/api/profileEdit/${user._id}`, {
+        name: name,
+        phone: phone,
+        city: city,
+        photo: photo,
+        address: address,
+        user: JSON.parse(localStorage.getItem('user'))._id,
+      })
+      .then((response) => {
+        // console.log((data.find((it) => it._id == editid).name = name));
 
-            // intialAd.find((it) => it._id == editid).photo = newad.photo;
-            // setInitialAd([...intialAd, response.data]);
-            // setOpen(false);
+        // intialAd.find((it) => it._id == editid).photo = newad.photo;
+        // setInitialAd([...intialAd, response.data]);
+        // setOpen(false);
 
-            toast.success('SucessFully Updated');
-          })
-          .catch((err) => {
-            toast.error('failed');
-            // setOpen(false);
-          });
-      } else {
-        axios
-          .delete(`${url}/api/delete-profile/${userDb}`)
-          .then((response) => {
-            axios
-              .post(
-                `${url}/api/profileSave`,
-                {
-                  name: name,
-                  phone: phone,
-                  city: city,
-                  photo: photo,
-                  address: address,
-                  user: JSON.parse(localStorage.getItem('user'))._id,
-                },
-                {
-                  headers: {
-                    'Content-Type': 'multipart/form-data',
-                  },
-                },
-              )
-              .then((response) => {
-                console.log(response.data[0]);
-                toast.success('SucessFully Updated');
-              })
-              .catch((error) => {
-                toast.error('failed');
-                console.log(error);
-              });
-          })
-          .catch((error) => {
-            console.log(error);
-            toast.error('failed');
-          });
-      }
-    } else {
-      axios
-        .post(
-          `${url}/api/profileSave`,
-          {
-            name: name,
-            phone: phone,
-            city: city,
-            photo: photo,
-            address: address,
-            user: JSON.parse(localStorage.getItem('user'))._id,
-          },
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          },
-        )
-        .then((response) => {
-          console.log(response.data[0]);
-          toast.success('SucessFully Updated');
-        })
-        .catch((error) => {
-          toast.error('failed');
-          console.log(error);
-        });
-    }
+        toast.success('SucessFully Updated');
+      })
+      .catch((err) => {
+        toast.error('failed');
+        // setOpen(false);
+      });
   };
   // if (userDb.length > 0) {
   //   axios
